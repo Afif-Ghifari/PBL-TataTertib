@@ -7,7 +7,7 @@ body {
 
 .faq-item {
     width: 100%; 
-    margin: 10px 0; 
+    margin: 5px 0; /* Kurangi jarak vertikal antar FAQ */
 }
 
 .faq-header {
@@ -15,7 +15,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
+    padding: 0 10px;
     border: 2px dashed #aaa;
     border-radius: 12px;
     cursor: pointer;
@@ -41,11 +41,12 @@ body {
 }
 
 .faq-content {
-    display: none;
+    display: block;  /* Konten tetap di dalam DOM tapi tersembunyi */
     overflow: hidden;
-    max-height: 0;
-    padding: 0;
-    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+    max-height: 0; /* Konten disembunyikan dengan max-height 0 */
+    opacity: 0; /* Tersembunyi dengan opacity 0 */
+    transform: translateY(-20px); /* Mulai di atas */
+    transition: max-height 0.6s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out;
     background-color: #f9fafb;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -53,9 +54,11 @@ body {
 }
 
 .faq-content.show {
-    display: block;
-    max-height: 300px;
-    padding: 20px;
+    display: block; /* Konten tampil */
+    max-height: 600px; /* Max-height cukup besar */
+    padding: 20px; 
+    opacity: 1; /* Konten muncul */
+    transform: translateY(0); /* Konten turun ke posisi normal */
 }
 
 .icon {
@@ -63,5 +66,44 @@ body {
 }
 
 .icon.rotate {
-    transform: rotate(180deg);
+    transform: rotate(180deg); /* Ikon berputar 180 derajat */
+}
+
+.slider {
+    display: none; /* Awalnya disembunyikan */
+    overflow: hidden;
+    max-height: 0; /* Konten tidak terlihat */
+    padding: 0;
+    opacity: 0;
+    transform: translateY(-20px); /* Mulai dari atas */
+    transition: max-height 0.4s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out;
+    background-color: #f9fafb;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.slider.show {
+    display: block; /* Menampilkan konten */
+    max-height: 600px; /* Max-height cukup besar agar konten bisa lebih panjang */
+    padding: 20px; 
+    opacity: 1; /* Membuat konten terlihat */
+    transform: translateY(0); /* Konten turun ke posisi normal */
+}
+
+.slider-text {
+    font-size: 1.25rem;
+    font-weight: 500; 
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slider-icon {
+    transition: transform 0.2s ease;
+}
+
+.slider-icon.rotate {
+    transform: rotate(180deg); /* Ikon diputar saat konten terbuka */
 }
