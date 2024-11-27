@@ -1,9 +1,7 @@
 <?php
 $host = "DESKTOP-5O8DG63"; // nama server\nama_instance
 $connInfo = array(
-    "Database" => "master",
-    "UID" => "sa", // ganti dengan username SQL Server
-    "PWD" => "123"  // ganti dengan password SQL Server
+    "Database" => "PelanggaranTataTertib",
 );
 
 $conn = sqlsrv_connect($host, $connInfo);
