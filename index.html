@@ -250,12 +250,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const faqItems = document.querySelectorAll(".faq-item");
-
+    
             faqItems.forEach(item => {
                 const header = item.querySelector(".faq-header");
                 const content = item.querySelector(".faq-content");
                 const icon = header.querySelector(".icon");
-
+    
                 header.addEventListener("click", () => {
                     faqItems.forEach(i => {
                         const otherContent = i.querySelector(".faq-content");
@@ -266,14 +266,14 @@
                             otherIcon.classList.remove("rotate");
                         }
                     });
-
+    
                     if (content.classList.contains("show")) {
                         content.classList.remove("show");
-                        content.style.maxHeight = null; 
+                        content.style.maxHeight = null;
                         icon.classList.remove("rotate");
                     } else {
                         content.classList.add("show");
-                        content.style.maxHeight = content.scrollHeight + "px"; 
+                        content.style.maxHeight = content.scrollHeight + "px";
                         icon.classList.add("rotate");
                     }
                 });
