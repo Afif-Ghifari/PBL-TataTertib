@@ -7,7 +7,7 @@ body {
 
 .faq-item {
     width: 100%; 
-    margin: 5px 0; /* Kurangi jarak vertikal antar FAQ */
+    margin: 5px 0; 
 }
 
 .faq-header {
@@ -41,11 +41,11 @@ body {
 }
 
 .faq-content {
-    display: block;  /* Konten tetap di dalam DOM tapi tersembunyi */
+    display: block;  
     overflow: hidden;
-    max-height: 0; /* Konten disembunyikan dengan max-height 0 */
-    opacity: 0; /* Tersembunyi dengan opacity 0 */
-    transform: translateY(-20px); /* Mulai di atas */
+    max-height: 0; 
+    opacity: 0; 
+    transform: translateY(-20px); 
     transition: max-height 0.6s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out;
     background-color: #f9fafb;
     border: 1px solid #ddd;
@@ -54,11 +54,11 @@ body {
 }
 
 .faq-content.show {
-    display: block; /* Konten tampil */
-    max-height: 600px; /* Max-height cukup besar */
+    display: block; 
+    max-height: 600px; 
     padding: 20px; 
-    opacity: 1; /* Konten muncul */
-    transform: translateY(0); /* Konten turun ke posisi normal */
+    opacity: 1; 
+    transform: translateY(0); 
 }
 
 .icon {
@@ -66,16 +66,16 @@ body {
 }
 
 .icon.rotate {
-    transform: rotate(180deg); /* Ikon berputar 180 derajat */
+    transform: rotate(180deg); 
 }
 
 .slider {
-    display: none; /* Awalnya disembunyikan */
+    display: none; 
     overflow: hidden;
-    max-height: 0; /* Konten tidak terlihat */
+    max-height: 0; 
     padding: 0;
     opacity: 0;
-    transform: translateY(-20px); /* Mulai dari atas */
+    transform: translateY(-20px); 
     transition: max-height 0.4s ease-out, opacity 0.4s ease-out, transform 0.4s ease-out;
     background-color: #f9fafb;
     border: 1px solid #ddd;
@@ -84,11 +84,11 @@ body {
 }
 
 .slider.show {
-    display: block; /* Menampilkan konten */
-    max-height: 600px; /* Max-height cukup besar agar konten bisa lebih panjang */
+    display: block; 
+    max-height: 600px; 
     padding: 20px; 
-    opacity: 1; /* Membuat konten terlihat */
-    transform: translateY(0); /* Konten turun ke posisi normal */
+    opacity: 1; 
+    transform: translateY(0); 
 }
 
 .slider-text {
@@ -105,5 +105,5 @@ body {
 }
 
 .slider-icon.rotate {
-    transform: rotate(180deg); /* Ikon diputar saat konten terbuka */
+    transform: rotate(180deg); 
 }

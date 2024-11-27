@@ -269,11 +269,11 @@
 
                     if (content.classList.contains("show")) {
                         content.classList.remove("show");
-                        content.style.maxHeight = null; // Set max-height to null when closing
+                        content.style.maxHeight = null; 
                         icon.classList.remove("rotate");
                     } else {
                         content.classList.add("show");
-                        content.style.maxHeight = content.scrollHeight + "px"; // Set max-height dynamically
+                        content.style.maxHeight = content.scrollHeight + "px"; 
                         icon.classList.add("rotate");
                     }
                 });
