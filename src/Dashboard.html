@@ -59,6 +59,24 @@
         </div>
     </nav>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const closeNotifButton = document.getElementById("closeNotif");  
+    const notifList = document.getElementById("NotifList");  
+    const notifBtn = document.getElementById("NotifBtn");  
+
+    closeNotifButton.addEventListener("click", () => {
+        notifList.classList.add("hidden"); 
+    });
+
+    notifBtn.addEventListener("click", () => {
+        notifList.classList.toggle("hidden");  
+    });
+});
+
+    </script>
+    
+
     <header class="flex flex-col justify-center items-center w-full h-full text-center text-white px-24">
         <h1 class="text-6xl font-bold text-blue-600 my-8">
             Campus Harmony<br/><span class="text-white">Begins With Clear Rules</span>
