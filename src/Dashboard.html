@@ -36,14 +36,25 @@
                         <i class="bi bi-x-lg"></i>
                     </button>
                 </div>
-                <div class="flex flex-col gap-4 mt-4 overflow-auto">
-                    <div class="">
-
+                <div class="flex flex-col gap-4 mt-4 overflow-auto max-h-80">
+                    <div class="flex flex-col gap-2 text-black border-b-2 pb-3">
+                        <span class="flex items-center gap-3">
+                            <h3>Aditya Nathanael</h3>
+                            <p class="text-sm text-red-600">Peringatan!</p>
+                        </span>
+                        <span class="flex items-center justify-between text-sm text-slate-500">
+                            <p>Jumat 12.30PM</p>
+                            <p>2 Jam yang lalu</p>
+                        </span>
+                        <a href="../src/DetailPelanggaran.html" class="btn btn-primary">Detail</a>
                     </div>
+                    
                 </div>
             </div>
 
-            <a href="src/Profile.html" class="size-10 rounded-full border"><img src="../assets/img/ICON ADMIN.pdf.png" class="w-fit" alt=""></a>
+            <a href="../src/Profile.html" class="size-10 rounded-full border overflow-hidden">
+                <img src="../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
+            </a>
         </div>
     </nav>
 
@@ -59,7 +70,7 @@
             style="font-family: 'product Sans Bold'">View Book</a>
     </header>
 
-    <section class="flex justify-center flex-wrap -mt-12 lg:-mt-32 gap-10" id="features">
+    <section class="flex justify-center flex-wrap -mt-12 lg:-mt-32 gap-10 z-10" id="features">
         <div class="relative">
             <img src="../assets/img/Vector_garis.png" class="relative w-52 z-10" alt="" /><img src="../assets/img/Vector.png"
                 class="absolute w-44 top-4 left-4 z-20" alt="" />
@@ -115,9 +126,33 @@
     </section>
 
     <section class="flex flex-row justify-evenly gap-5 px-28 my-36" id="data">
-        <div class="w-80 h-72 shadow-xl rounded-xl border"></div>
-        <div class="w-80 h-72 shadow-xl rounded-xl border"></div>
-        <div class="w-80 h-72 shadow-xl rounded-xl border"></div>
+        <div class="w-80 h-96 shadow-xl rounded-xl border flex flex-col justify-between px-10 py-6 text-center">
+            <img src="../assets/img/fine-cuate 1.png" class="-mt-36" alt="">
+            <div class="flex flex-col">
+                <h3 class="text-xl">Pelaksanaan Sanksi</h3>
+                <p class="text-base text-slate-600">Jumlah hasil dari pelanggaran anda</p>
+            </div>
+            <h1 class="text-4xl">05</h1>
+            <a href="" class="btn btn-primary" style="font-family: 'product Sans Bold'">Lihat</a>
+        </div>
+        <div class="w-80 h-96 shadow-xl rounded-xl border flex flex-col justify-between px-10 py-6 text-center">
+            <img src="../assets/img/Law firm-rafiki 1.png" class="-mt-36" alt="">
+            <div class="flex flex-col">
+                <h3 class="text-xl">Ajukan Banding</h3>
+                <p class="text-base text-slate-600">Ajuan bading anda saat ini Dengan jumlah</p>
+            </div>
+            <h1 class="text-4xl">05</h1>
+            <a href="" class="btn btn-primary" style="font-family: 'product Sans Bold'">Lihat</a>
+        </div>
+        <div class="w-80 h-96 shadow-xl rounded-xl border flex flex-col justify-between px-10 py-6 text-center">
+            <img src="../assets/img/All the data-rafiki 1.png" class="-mt-36" alt="">
+            <div class="flex flex-col">
+                <h3 class="text-xl">Total Pelanggaran</h3>
+                <p class="text-base text-slate-600">Total dari semua pelanggaran dan juga banding</p>
+            </div>
+            <h1 class="text-4xl">05</h1>
+            <a href="" class="btn btn-primary" style="font-family: 'product Sans Bold'">Lihat</a>
+        </div>
     </section>
 
     <section class="flex justify-between gap-10 px-28 my-36" id="importantInfo">
@@ -138,7 +173,7 @@
                 <h1 class="text-6xl">Full PDF of the rules</h1>
                 <p class="text-xl">Silakan baca PDF ini untuk lebih lengkap nya dan agar mahasiswa lebih mengetahui
                     peraturan di kampus.</p>
-                <a href="../PDF/BukuPedoman.pdf" class="btn btn-primary w-fit px-9 py-2" style="font-family: 'product Sans Bold'">View
+                <a href="../PDF/BukuPedoman.pdf" target="_blank" class="btn btn-primary w-fit px-9 py-2" style="font-family: 'product Sans Bold'">View
                     Rules</a> 
             </div>
         </div>
@@ -198,4 +233,32 @@
     </footer>
 </body>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const notifBtn = document.getElementById("NotifBtn");
+    const notifList = document.getElementById("NotifList");
+    const closeNotif = document.getElementById("closeNotif");
+
+    notifList.style.display = "none";
+
+    notifBtn.addEventListener("click", () => {
+        if (notifList.style.display === "none") {
+            notifList.style.display = "block";
+        } else {
+            notifList.style.display = "none";
+        }
+    });
+
+    closeNotif.addEventListener("click", () => {
+        notifList.style.display = "none";
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!notifList.contains(event.target) && !notifBtn.contains(event.target)) {
+            notifList.style.display = "none";
+        }
+    });
+});
+
+</script>
 </html>
