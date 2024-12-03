@@ -61,9 +61,50 @@
         <section class="flex flex-col my-36" id="listPelanggaran">
             <div class="flex px-6 py-2 justify-between gap-3 bg-slate-300 rounded-full" style="font-family: 'product Sans Bold';" id="filterList">
                 <button class="w-full px-12 py-2 bg-blue-600 text-white rounded-3xl">Semua</button>
-                <button class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Banding</button>
+                <button type="button" onclick="window.location.href='Banding.html'" class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Banding</button>
                 <button class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Proses</button>
             </div>
+            <script>
+                const filterButtons = document.querySelectorAll("#filterList button");
+                const gridTunggu = document.getElementById("gridListTunggu");
+                const gridKonfirmasi = document.getElementById("gridListKonfirmasi");
+                const gridTolak = document.getElementById("gridListTolak");
+            
+                function resetGrids() {
+                    gridTunggu.style.display = "none";
+                    gridKonfirmasi.style.display = "none";
+                    gridTolak.style.display = "none";
+                }
+            
+                filterButtons.forEach((button, index) => {
+                    button.addEventListener("click", () => {
+                        resetGrids(); 
+                        
+                        switch (index) {
+                            case 0:
+                                gridTunggu.style.display = "grid";
+                                gridKonfirmasi.style.display = "grid";
+                                gridTolak.style.display = "grid";
+                                break;
+                            case 1:
+                                gridTunggu.style.display = "grid"; 
+                                break;
+                            case 2:
+                                gridKonfirmasi.style.display = "grid"; 
+                                break;
+                        }
+            
+                        filterButtons.forEach((btn) => btn.classList.remove("bg-blue-600", "text-white"));
+                        button.classList.add("bg-blue-600", "text-white");
+                    });
+                });
+            
+                resetGrids();
+                gridTunggu.style.display = "grid";
+                gridKonfirmasi.style.display = "grid";
+                gridTolak.style.display = "grid";
+            </script>
+            
 
             <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
                 <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
@@ -78,6 +119,7 @@
                 </div>
             </div>
         </section>
+        
     </main>
     <footer class="w-full h-32 flex items-center justify-between text-white text-xl px-12">
         <h5>TatibHub By Politeknik Negeri Malang</h5>
