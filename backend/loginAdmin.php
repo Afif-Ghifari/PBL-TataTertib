@@ -1,39 +1,29 @@
 <?php
-include_once 'database.php'; // Pastikan file koneksi database benar
+include_once 'database.php'; 
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $user = $_POST['username'];
     $pass = $_POST['password'];
 
-    // Validasi input kosong
     if (empty($user) || empty($pass)) {
         echo "Username dan Password tidak boleh kosong.";
     } else {
-        // Query untuk mencari pengguna berdasarkan username
         $sql = "SELECT * FROM Admin WHERE Username = ?";
-        $params = array($user); // Parameter untuk prepared statement
+        $params = array($user); 
 
-        // Mempersiapkan dan menjalankan statement
         $stmt = sqlsrv_prepare($conn, $sql, $params);
 
         if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
+            die(print_r(sqlsrv_errors(), true));
         }
 
-        // Eksekusi query
         if (sqlsrv_execute($stmt)) {
             $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
             if ($userData) {
-                // Pastikan kolom 'Pw' ada dalam tabel
                 if (isset($userData['Pw'])) {
-                    // Verifikasi password
                     if ($pass === $userData['Pw']) {
-                        // Simpan data user di session
-                        $_SESSION['NIM'] = $userData['NIM'];
-                        $_SESSION['Nama'] = $userData['Nama'];
-                        $_SESSION['Username'] = $userData['Username'];
                         header("Location: ../src/Dashboard.html"); // Redirect ke halaman dashboard
                         exit;
                     } else {
