@@ -18,6 +18,33 @@
         <a class="text-xl btn btn-transparent font-bold" href="../Mahasiswa/Dashboard.html"><i class="bi bi-chevron-left"></i>
             Kembali</a>
     </nav>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const closeNotifButton = document.getElementById("closeNotif");
+            const notifList = document.getElementById("NotifList");
+            const notifBtn = document.getElementById("NotifBtn");
+
+            function saveNotifStatus(isHidden) {
+                localStorage.setItem("notifStatus", isHidden ? "hidden" : "visible");
+            }
+
+            const savedStatus = localStorage.getItem("notifStatus");
+            if (savedStatus === "hidden") {
+                notifList.classList.add("hidden");
+            }
+
+            closeNotifButton.addEventListener("click", () => {
+                notifList.classList.add("hidden");
+                saveNotifStatus(true);
+            });
+
+            notifBtn.addEventListener("click", () => {
+                notifList.classList.toggle("hidden");
+                saveNotifStatus(notifList.classList.contains("hidden"));
+            });
+        });
+
+    </script>
     <main class="mx-28 mb-32 mt-8 flex">
         <section class="w-2/3 h-fit">
             <img src="../../assets/img/sample_pelanggaran.png" class="max-w-2xl rounded-2xl mb-10" alt="">
