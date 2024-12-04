@@ -104,18 +104,52 @@
                 gridTolak.style.display = "grid";
             </script>
             
-
             <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
+            <?php
+                // Include database connection
+                include "../../backend/database.php";
+
+                // SQL query to fetch data
+                $qry_laporan = "
+                    SELECT 
+                        l.laporan, 
+                        p.Nama_Pelanggaran, 
+                        p.Tingkat 
+                    FROM 
+                        laporan l 
+                    JOIN 
+                        pelanggaran p 
+                    ON 
+                        l.pelanggaran_id = p.id_pelanggaran 
+                    WHERE 
+                        l.id_dosen = ?";
+                
+                // Prepare the statement
+                $params = [$_SESSION['id_dosen']];
+                $stmt = sqlsrv_prepare($conn, $qry_laporan, $params);
+
+                // Execute the statement
+                if (!sqlsrv_execute($stmt)) {
+                    die("Query Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                // Loop through the records
+                while ($data_laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            ?>
                 <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">II</div>
-                    <h3 class="text-xl">Ketahuan merokok ditempat yang dilarang</h3>
-                    <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang dilarang oleh kampus </p>
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">
+                        <?= htmlspecialchars($data_laporan['Tingkat']) ?>
+                    </div>
+                    <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
-                        <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p>Dosen</p>
+                        <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
+                            Detail
+                        </a>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
+            <?php
+                } // End of while loop
+            ?>
             </div>
         </section>
         

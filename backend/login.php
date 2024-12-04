@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Verifikasi password
                     if ($pass === $userData['Pw']) {
                         // Simpan data user di session
-                        $_SESSION['NIM'] = $userData['NIP'];
+                        $_SESSION['NIP'] = $userData['NIP'];
                         $_SESSION['Nama'] = $userData['Nama'];
                         $_SESSION['Username'] = $userData['Username'];
                         header("Location: ../src/Dosen/Dashboard.html"); // Redirect ke halaman dashboard
