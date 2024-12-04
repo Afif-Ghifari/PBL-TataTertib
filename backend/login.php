@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo "Username dan Password tidak boleh kosong.";
     } else {
         // Query untuk mencari pengguna berdasarkan username
-        $sql = "SELECT * FROM Mahasiswa WHERE Username = ?";
+        if ($sql = "SELECT * FROM Mahasiswa WHERE Username = ?" ) {
+            
         $params = array($user); // Parameter untuk prepared statement
 
         // Mempersiapkan dan menjalankan statement
@@ -48,6 +49,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         } else {
             echo "Gagal mengeksekusi query.";
             die(print_r(sqlsrv_errors(), true)); // Debugging jika eksekusi gagal
+        }
+        } if ( $sql = "SELECT * FROM Dosen WHERE Username = ?") {
+
+        $params = array($user); // Parameter untuk prepared statement
+
+        // Mempersiapkan dan menjalankan statement
+        $stmt = sqlsrv_prepare($conn, $sql, $params);
+
+        if ($stmt === false) {
+            die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
+        }
+
+        // Eksekusi query
+        if (sqlsrv_execute($stmt)) {
+            $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+            if ($userData) {
+                // Pastikan kolom 'Pw' ada dalam tabel
+                if (isset($userData['Pw'])) {
+                    // Verifikasi password
+                    if ($pass === $userData['Pw']) {
+                        // Simpan data user di session
+                        $_SESSION['NIM'] = $userData['NIP'];
+                        $_SESSION['Nama'] = $userData['Nama'];
+                        $_SESSION['Username'] = $userData['Username'];
+                        header("Location: ../src/Dosen/Dashboard.html"); // Redirect ke halaman dashboard
+                        exit;
+                    } else {
+                        echo "Password salah.";
+                    }
+                } else {
+                    echo "Kolom 'Pw' tidak ditemukan dalam tabel Dosen.";
+                }
+            } else {
+                echo "Username tidak ditemukan.";
+            }
+        } else {
+            echo "Gagal mengeksekusi query.";
+            die(print_r(sqlsrv_errors(), true)); // Debugging jika eksekusi gagal
+        }
         }
     }
 }
