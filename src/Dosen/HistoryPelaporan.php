@@ -13,44 +13,8 @@
 </head>
 
 <body>
-    <nav
-        class="absolute top-0 flex justify-between items-center w-full py-8 px-12 md:px-28 bg-transparent text-slate-100">
-        <a href="" class="w-1/3 flex items-center gap-4 text-xl text-black" id="NavBrand"><img
-                src="../../assets/img/LOGO BREN.pdf.png" class="w-14 rounded-lg" alt="" />TertibHub</a>
-        <div class="flex justify-evenly gap-2 w-1/3 text-black">
-            <a href="../Mahasiswa/Dashboard.html"
-                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white">Home</a>
-            <a href="#" class="border-2 pb-1 border-transparent border-b-2 border-b-black">Histori
-                Pelanggaran</a>
-            <a href="" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white">Guide Book</a>
-        </div>
-        <div class="relative w-1/3 flex justify-end items-center gap-8" id="LoginBtn">
-            <button class="relative inline-flex items-center" id="NotifBtn">
-                <i class="bi bi-bell text-3xl text-black"></i>
-                <div
-                    class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900">
-                </div>
-            </button>
-            <div class="absolute hidden flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6"
-                id="NotifList">
-                <div class="w-full flex justify-between text-black text-xl">
-                    <h4>Notifikasi</h4>
-                    <button id="closeNotif">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <div class="flex flex-col gap-4 mt-4 overflow-auto">
-                    <div class="">
+<?php include 'Navbar.php'; ?>
 
-                    </div>
-                </div>
-            </div>
-
-            <a href="../Mahasiswa/Profile.html" class="size-10 rounded-full border overflow-hidden">
-                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-            </a>
-        </div>
-    </nav>
     <main class="flex flex-col px-28 my-36">
         <header class="flex flex-col gap-4 justify-start text-start w-1/2">
             <h1 class="text-4xl font-bold">Histori Pelanggaran</h1>
@@ -63,46 +27,6 @@
                 <button class="w-full px-12 py-2 bg-blue-600 text-white rounded-3xl">Semua</button>
                 <button class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Proses</button>
             </div>
-            <script>
-                const filterButtons = document.querySelectorAll("#filterList button");
-                const gridTunggu = document.getElementById("gridListTunggu");
-                const gridKonfirmasi = document.getElementById("gridListKonfirmasi");
-                const gridTolak = document.getElementById("gridListTolak");
-            
-                function resetGrids() {
-                    gridTunggu.style.display = "none";
-                    gridKonfirmasi.style.display = "none";
-                    gridTolak.style.display = "none";
-                }
-            
-                filterButtons.forEach((button, index) => {
-                    button.addEventListener("click", () => {
-                        resetGrids(); 
-                        
-                        switch (index) {
-                            case 0:
-                                gridTunggu.style.display = "grid";
-                                gridKonfirmasi.style.display = "grid";
-                                gridTolak.style.display = "grid";
-                                break;
-                            case 1:
-                                gridTunggu.style.display = "grid"; 
-                                break;
-                            case 2:
-                                gridKonfirmasi.style.display = "grid"; 
-                                break;
-                        }
-            
-                        filterButtons.forEach((btn) => btn.classList.remove("bg-blue-600", "text-white"));
-                        button.classList.add("bg-blue-600", "text-white");
-                    });
-                });
-            
-                resetGrids();
-                gridTunggu.style.display = "grid";
-                gridKonfirmasi.style.display = "grid";
-                gridTolak.style.display = "grid";
-            </script>
             
             <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
             <?php
@@ -159,5 +83,37 @@
         <h5>© 2024 Alleviate. All rights reserved.</h5>
     </footer>
 </body>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const faqItems = document.querySelectorAll(".faq-item");
 
+            faqItems.forEach(item => {
+                const header = item.querySelector(".faq-header");
+                const content = item.querySelector(".faq-content");
+                const icon = header.querySelector(".icon");
+
+                header.addEventListener("click", () => {
+                    faqItems.forEach(i => {
+                        const otherContent = i.querySelector(".faq-content");
+                        const otherIcon = i.querySelector(".icon");
+                        if (otherContent !== content && otherContent.classList.contains("show")) {
+                            otherContent.classList.remove("show");
+                            otherContent.style.maxHeight = null;
+                            otherIcon.classList.remove("rotate");
+                        }
+                    });
+
+                    if (content.classList.contains("show")) {
+                        content.classList.remove("show");
+                        content.style.maxHeight = null;
+                        icon.classList.remove("rotate");
+                    } else {
+                        content.classList.add("show");
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.classList.add("rotate");
+                    }
+                });
+            });
+        });
+    </script>
 </html>

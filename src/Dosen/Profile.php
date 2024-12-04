@@ -16,8 +16,8 @@
         include "../../backend/database.php";
         session_start();
 
-        $qry_profil = "SELECT * FROM Mahasiswa WHERE NIM = ?";
-        $params = [$_SESSION['NIM']];
+        $qry_profil = "SELECT * FROM Dosen WHERE NIP = ?";
+        $params = [$_SESSION['NIP']];
         $stmt = sqlsrv_prepare($conn, $qry_profil, $params);
 
         if (!$stmt) {
@@ -44,7 +44,7 @@
                 <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
             </div>
             <h4 class="text-2xl text-center" id="Nama"><?= htmlspecialchars($row['Nama'])?></h4>
-            <h4 class="text-xl text-slate-500 text-center" id="NIM"><?= htmlspecialchars($row['NIM'])?></h4>
+            <h4 class="text-xl text-slate-500 text-center" id="NIM"><?= htmlspecialchars($row['NIP'])?></h4>
         </span>
     </header>
 
@@ -79,4 +79,37 @@
         <h5>© 2024 Alleviate. All rights reserved.</h5>
     </footer>
 </body>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const faqItems = document.querySelectorAll(".faq-item");
+
+            faqItems.forEach(item => {
+                const header = item.querySelector(".faq-header");
+                const content = item.querySelector(".faq-content");
+                const icon = header.querySelector(".icon");
+
+                header.addEventListener("click", () => {
+                    faqItems.forEach(i => {
+                        const otherContent = i.querySelector(".faq-content");
+                        const otherIcon = i.querySelector(".icon");
+                        if (otherContent !== content && otherContent.classList.contains("show")) {
+                            otherContent.classList.remove("show");
+                            otherContent.style.maxHeight = null;
+                            otherIcon.classList.remove("rotate");
+                        }
+                    });
+
+                    if (content.classList.contains("show")) {
+                        content.classList.remove("show");
+                        content.style.maxHeight = null;
+                        icon.classList.remove("rotate");
+                    } else {
+                        content.classList.add("show");
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.classList.add("rotate");
+                    }
+                });
+            });
+        });
+    </script>
 </html>

@@ -14,44 +14,8 @@
 </head>
 
 <body>
-    <nav
-        class="absolute top-0 flex justify-between items-center w-full py-8 px-12 md:px-28 bg-transparent text-slate-100">
-        <a href="" class="w-1/3 flex items-center gap-4 text-xl text-black" id="NavBrand"><img
-                src="../../assets/img/LOGO BREN.pdf.png" class="w-14 rounded-lg" alt="" />TertibHub</a>
-        <div class="flex justify-evenly gap-2 w-1/3 text-black">
-            <a href="../Dosen/Dashboard.html"
-                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white">Home</a>
-            <a href="#" class="border-2 pb-1 border-transparent border-b-2 border-b-black ">Form Pelaporan</a>
-            <a href="../Dosen/HistoryPelaporan.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-black">History
-                Pelaporan</a>
-        </div>
-        <div class="relative w-1/3 flex justify-end items-center gap-8" id="LoginBtn">
-            <button class="relative inline-flex items-center" id="NotifBtn">
-                <i class="bi bi-bell text-3xl text-black"></i>
-                <div
-                    class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900">
-                </div>
-            </button>
-            <div class="absolute hidden flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6"
-                id="NotifList">
-                <div class="w-full flex justify-between text-black text-xl">
-                    <h4>Notifikasi</h4>
-                    <button id="closeNotif">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </div>
-                <div class="flex flex-col gap-4 mt-4 overflow-auto">
-                    <div class="">
+<?php include 'Navbar.php'; ?>
 
-                    </div>
-                </div>
-            </div>
-
-            <a href="../Dosen/Profile.html" class="size-10 rounded-full border overflow-hidden">
-                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-            </a>
-        </div>
-    </nav>
     <main class="px-28 my-36">
         <h2 class="text-3xl text-center my-2">Form Pelaporan</h2>
         <p class="text-center">Silakan lengkapi form pelaporan ini dengan informasi yang sesuai dan jelas. Pastikan
@@ -115,5 +79,37 @@
         <h5>© 2024 Alleviate. All rights reserved.</h5>
     </footer>
 </body>
+<script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const faqItems = document.querySelectorAll(".faq-item");
 
+            faqItems.forEach(item => {
+                const header = item.querySelector(".faq-header");
+                const content = item.querySelector(".faq-content");
+                const icon = header.querySelector(".icon");
+
+                header.addEventListener("click", () => {
+                    faqItems.forEach(i => {
+                        const otherContent = i.querySelector(".faq-content");
+                        const otherIcon = i.querySelector(".icon");
+                        if (otherContent !== content && otherContent.classList.contains("show")) {
+                            otherContent.classList.remove("show");
+                            otherContent.style.maxHeight = null;
+                            otherIcon.classList.remove("rotate");
+                        }
+                    });
+
+                    if (content.classList.contains("show")) {
+                        content.classList.remove("show");
+                        content.style.maxHeight = null;
+                        icon.classList.remove("rotate");
+                    } else {
+                        content.classList.add("show");
+                        content.style.maxHeight = content.scrollHeight + "px";
+                        icon.classList.add("rotate");
+                    }
+                });
+            });
+        });
+    </script>
 </html>
