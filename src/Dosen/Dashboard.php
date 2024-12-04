@@ -279,10 +279,8 @@
         });
     </script>
 
-    <footer class="w-full h-32 flex items-center justify-between text-white text-xl px-12">
-        <h5>TatibHub By Politeknik Negeri Malang</h5>
-        <h5>© 2024 Alleviate. All rights reserved.</h5>
-    </footer>
+<?php include '../Footer.php' ?>
+
 </body>
 
 

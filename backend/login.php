@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $_SESSION['NIM'] = $userData['NIM'];
                         $_SESSION['Nama'] = $userData['Nama'];
                         $_SESSION['Username'] = $userData['Username'];
-                        header("Location: ../src/Mahasiswa/Dashboard.html"); // Redirect ke halaman dashboard
+                        header("Location: ../src/Mahasiswa/Dashboard.php"); // Redirect ke halaman dashboard
                         exit;
                     } else {
                         echo "Password salah.";

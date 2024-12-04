@@ -35,7 +35,7 @@
         }
     ?>
     <nav class="w-full px-28 py-10">
-        <a class="text-xl btn btn-transparent font-bold" href="../Mahasiswa/Dashboard.html"><i class="bi bi-chevron-left"></i> Kembali</a>
+        <a class="text-xl btn btn-transparent font-bold" href="../Mahasiswa/Dashboard.php"><i class="bi bi-chevron-left"></i> Kembali</a>
     </nav>
     <header class="flex flex-col justify-between items-center w-full px-28 h-80">
         <div class="w-full h-1/2 bg-slate-600 rounded-t-xl"></div>
@@ -50,23 +50,24 @@
 
     <main class="mx-28 mb-32 mt-12 px-24 py-20 border h-fit">
         <h3 class="text-3xl">About Me</h3>
-        <p><?= htmlspecialchars(isset($row['Profil']) ? $row['Profil'] : '-')?></p>
+        <!-- <p><?= htmlspecialchars(isset($row['Profil']) ? $row['Profil'] : '-')?></p> -->
         <form action="" class="flex flex-col justify-between">
+        <textarea class="form-control" value="" name="Profil" id="profil"><?= htmlspecialchars(isset($row['Profil']) ? $row['Profil'] : '-') ?></textarea>
             <div class="flex justify-between my-6">
                 <label for="" class="flex flex-col gap-2">Alamat
-                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Alamat'])?>" placeholder="Alamat">
+                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Alamat'])?>" placeholder="Alamat" name="Alamat">
                 </label>
                 <label for="" class="flex flex-col gap-2">Nomor Telepon
-                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['No_Tlp'])?>" placeholder="NoTelp">
+                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['No_Tlp'])?>" placeholder="NoTelp" name="No_Tlp">
                 </label>
             </div>
             
             <div class="flex justify-between my-6">
                 <label for="" class="flex flex-col gap-2">Username
-                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Username'])?>" placeholder="Username">
+                    <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Username'])?>" placeholder="Username" name="Username">
                 </label>
                 <label for="" class="flex flex-col gap-2">Password
-                    <input type="password" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Pw'])?>" placeholder="Password">
+                    <input type="password" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Pw'])?>" placeholder="Password" name="Pw">
                 </label>
             </div>
 
@@ -74,10 +75,8 @@
         </form>
     </main>
     
-    <footer class="w-full h-32 flex items-center justify-between text-white text-xl px-12">
-        <h5>TatibHub By Politeknik Negeri Malang</h5>
-        <h5>© 2024 Alleviate. All rights reserved.</h5>
-    </footer>
+    <?php include '../Footer.php' ?>
+
 </body>
 <script>
         document.addEventListener("DOMContentLoaded", () => {

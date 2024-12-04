@@ -1,4 +1,5 @@
 @import "font.css";
+@import "footer.css";
 
 nav {
     font-family: 'Poppins-Regular';
@@ -26,10 +27,5 @@ header a {
 section#FAQJumbotron div {
     background: rgb(31, 58, 147);
     background: linear-gradient(145deg, rgba(31, 58, 147, 1) 29%, rgba(9, 18, 45, 1) 67%);
-}
-
-footer {
-    background: rgb(31, 58, 147);
-    background: linear-gradient(90deg, rgba(31, 58, 147, 1) 0%, rgba(19, 36, 91, 1) 32%, rgba(9, 18, 45, 1) 62%);
 }
 

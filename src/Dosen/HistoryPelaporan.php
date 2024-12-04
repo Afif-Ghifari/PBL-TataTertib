@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <html lang="en">
 
 <head>
@@ -13,7 +17,7 @@
 </head>
 
 <body>
-<?php include 'Navbar.php'; ?>
+    <?php include 'Navbar.php'; ?>
 
     <main class="flex flex-col px-28 my-36">
         <header class="flex flex-col gap-4 justify-start text-start w-1/2">
@@ -27,16 +31,20 @@
                 <button class="w-full px-12 py-2 bg-blue-600 text-white rounded-3xl">Semua</button>
                 <button class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Proses</button>
             </div>
-            
+
             <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
-            <?php
+                <?php
                 // Include database connection
                 include "../../backend/database.php";
 
                 // SQL query to fetch data
                 $qry_laporan = "
                     SELECT 
-                        l.laporan, 
+                        l.ID_Laporan, 
+                        l.ID_Pelanggaran,
+                        l.ID_Pelapor,
+                        l.ID_Dilapor,
+                        m.Nama,
                         p.Nama_Pelanggaran, 
                         p.Tingkat 
                     FROM 
@@ -44,76 +52,91 @@
                     JOIN 
                         pelanggaran p 
                     ON 
-                        l.pelanggaran_id = p.id_pelanggaran 
+                        l.ID_Pelanggaran = p.ID_Pelanggaran
+                    JOIN 
+                        mahasiswa m 
+                    ON 
+                        l.ID_Dilapor = m.NIM 
                     WHERE 
-                        l.id_dosen = ?";
-                
+                        l.ID_Pelapor = ?";
+
                 // Prepare the statement
-                $params = [$_SESSION['id_dosen']];
+                $params = [$_SESSION['NIP']];
                 $stmt = sqlsrv_prepare($conn, $qry_laporan, $params);
 
                 // Execute the statement
-                if (!sqlsrv_execute($stmt)) {
-                    die("Query Error: " . print_r(sqlsrv_errors(), true));
+                if (!$stmt) {
+                    die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
                 }
 
-                // Loop through the records
-                while ($data_laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-            ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">
-                        <?= htmlspecialchars($data_laporan['Tingkat']) ?>
-                    </div>
-                    <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
-                    <span class="flex gap-3 items-center">
-                        <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
-                            Detail
-                        </a>
-                    </span>
-                </div>
-            <?php
-                } // End of while loop
-            ?>
+                if (!sqlsrv_execute($stmt)) {
+                    die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                if (!sqlsrv_has_rows($stmt)) {
+                    echo "<p>No data found.</p>";
+                } else {
+
+
+                    // Loop through the records
+                    while ($data_laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                ?>
+                        <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
+                            <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">
+                                <?= htmlspecialchars($data_laporan['Tingkat']) ?>
+                            </div>
+                            <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
+
+                            <h4>Terlapor: <?= htmlspecialchars($data_laporan['Nama']) ?></h4>
+                            <!-- <span class="flex gap-3 items-center">
+                                <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
+                                    Detail
+                                </a>
+                            </span> -->
+                        </div>
+                <?php
+                    } // End of while loop
+                }
+                ?>
             </div>
         </section>
-        
+
     </main>
-    <footer class="w-full h-32 flex items-center justify-between text-white text-xl px-12">
-        <h5>TatibHub By Politeknik Negeri Malang</h5>
-        <h5>© 2024 Alleviate. All rights reserved.</h5>
-    </footer>
+    <?php include '../Footer.php' ?>
+
 </body>
 <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const faqItems = document.querySelectorAll(".faq-item");
+    document.addEventListener("DOMContentLoaded", () => {
+        const faqItems = document.querySelectorAll(".faq-item");
 
-            faqItems.forEach(item => {
-                const header = item.querySelector(".faq-header");
-                const content = item.querySelector(".faq-content");
-                const icon = header.querySelector(".icon");
+        faqItems.forEach(item => {
+            const header = item.querySelector(".faq-header");
+            const content = item.querySelector(".faq-content");
+            const icon = header.querySelector(".icon");
 
-                header.addEventListener("click", () => {
-                    faqItems.forEach(i => {
-                        const otherContent = i.querySelector(".faq-content");
-                        const otherIcon = i.querySelector(".icon");
-                        if (otherContent !== content && otherContent.classList.contains("show")) {
-                            otherContent.classList.remove("show");
-                            otherContent.style.maxHeight = null;
-                            otherIcon.classList.remove("rotate");
-                        }
-                    });
-
-                    if (content.classList.contains("show")) {
-                        content.classList.remove("show");
-                        content.style.maxHeight = null;
-                        icon.classList.remove("rotate");
-                    } else {
-                        content.classList.add("show");
-                        content.style.maxHeight = content.scrollHeight + "px";
-                        icon.classList.add("rotate");
+            header.addEventListener("click", () => {
+                faqItems.forEach(i => {
+                    const otherContent = i.querySelector(".faq-content");
+                    const otherIcon = i.querySelector(".icon");
+                    if (otherContent !== content && otherContent.classList.contains("show")) {
+                        otherContent.classList.remove("show");
+                        otherContent.style.maxHeight = null;
+                        otherIcon.classList.remove("rotate");
                     }
                 });
+
+                if (content.classList.contains("show")) {
+                    content.classList.remove("show");
+                    content.style.maxHeight = null;
+                    icon.classList.remove("rotate");
+                } else {
+                    content.classList.add("show");
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add("rotate");
+                }
             });
         });
-    </script>
+    });
+</script>
+
 </html>

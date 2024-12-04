@@ -1,0 +1,11 @@
+<?php
+session_start();
+unset($_SESSION["NIM"]);
+unset($_SESSION["Username"]);
+unset($_SESSION["Pw"]);
+unset($_SESSION["NIP"]);
+unset($_SESSION["Username"]);
+unset($_SESSION["Pw"]);
+session_destroy();
+header("Location:../../PBL-TataTertib/");
+?>

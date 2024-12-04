@@ -15,9 +15,9 @@
 
 <body>
     <nav class="w-full px-28 py-6">
-        <button id="backButton" class="text-xl btn btn-transparent font-bold">
+        <a href="../Mahasiswa/HistoriPelanggaran.php" id="backButton" class="text-xl btn btn-transparent font-bold">
             <i class="bi bi-chevron-left"></i> Kembali
-        </button>
+        </a>
     </nav>
     <script>
         document.getElementById("backButton").addEventListener("click", () => {
@@ -85,10 +85,8 @@
             </div>
         </aside>
     </main>
-    <footer class="w-full h-32 flex items-center justify-between text-white text-xl px-12">
-        <h5>TatibHub By Politeknik Negeri Malang</h5>
-        <h5>© 2024 Alleviate. All rights reserved.</h5>
-    </footer>
+
+    <?php include '../Footer.php' ?>
 </body>
 
 </html>

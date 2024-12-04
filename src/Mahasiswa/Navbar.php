@@ -20,11 +20,11 @@
         <a href="#" class="w-1/3 flex items-center gap-4 text-xl no-underline" id="NavBrand"><img src="../../assets/img/LOGO BREN.pdf.png"
                 class="w-14 rounded-lg" alt="" />TertibHub</a>
         <div class="flex justify-evenly gap-2 w-1/3">
-            <a href="../Dosen/Dashboard.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Home</a>
-            <a href="../Dosen/FormPelaporan.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Form
-                Pelaporan</a>
-            <a href="../Dosen/HistoryPelaporan.php"
-                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">History Pelaporan</a>
+            <a href="../Mahasiswa/Dashboard.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Home</a>
+            <a href="../Mahasiswa/HistoriPelanggaran.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Histori
+                Pelanggaran</a>
+            <a href="../Mahasiswa/GuideBook.php"
+                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Guide Book</a>
         </div>
         <div class="relative w-1/3 flex justify-end items-center gap-8" id="LoginBtn">
             <button class="relative inline-flex items-center" id="NotifBtn">
@@ -44,20 +44,20 @@
                 <div class="flex flex-col gap-4 mt-4 overflow-auto max-h-80">
                     <div class="flex flex-col gap-2 text-black border-b-2 pb-3">
                         <span class="flex items-center gap-3">
-                            <h3 class="text-lg">Aditya Nathanael</h3>
+                            <h3>Aditya Nathanael</h3>
                             <p class="text-sm text-red-600">Peringatan!</p>
                         </span>
                         <span class="flex items-center justify-between text-sm text-slate-500">
                             <p>Jumat 12.30PM</p>
                             <p>2 Jam yang lalu</p>
                         </span>
-                        <a href="../Dosen/DetailPelanggaran.html" class="btn btn-primary">Detail</a>
+                        <a href="../Mahasiswa/DetailPelanggaran.php" class="btn btn-primary">Detail</a>
                     </div>
 
                 </div>
             </div>
 
-            <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
+            <a href="../Mahasiswa/Profile.php" class="size-10 rounded-full border overflow-hidden">
                 <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
             </a>
         </div>
@@ -129,7 +129,6 @@
                 saveNotifStatus(notifList.classList.contains("hidden"));
             });
         });
-
     </script>
 </body>
 
