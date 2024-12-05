@@ -59,11 +59,11 @@
         <aside class="w-1/3">
             <div class="w-full border shadow-lg rounded-lg px-12 py-8">
                 <h3>Lihat Pedoman tatib</h3>
-                <a href="../PDF/BukuPedoman.pdf" download="Pedoman Tata Tertib" class="btn btn-transparent items-center flex justify-between border border-black my-8 py-2 px-8">
+                <a href="../PDF/BukuPedoman.pdf" download="Pedoman Tata Tertib" class="flex flex-row w-full justify-between items-center text-black no-underline h-fit border border-black px-4 py-2 rounded-xl">
                     <i class="bi bi-file-earmark-pdf-fill text-blue-600 text-2xl"></i>
                     <span class="text-start">
-                        <p class="text-sm">Pedoman Tata Tertib.pdf</p>
-                        <p class="text-sm">4.3 MB</p>
+                        <h6 class="text-sm my-0">Pedoman Tata Tertib.pdf</h6>
+                        <p   class="text-sm my-0">4.3 MB</p>
                     </span>
                     <i class="bi bi-download text-2xl"></i>
                 </a>
@@ -79,8 +79,8 @@
                     Apakah itu anda? kalau itu benar anda silakan konfirmasi!!
                 </p>
                 <div class="flex flex-col gap-3 my-6">
-                    <button class="btn btn-primary w-full"><p>Konfirmasi</p></button>
-                    <button class="btn btn-light w-full border border-black"><p>Ajukan banding</p></button>
+                    <a href="EditPelaksanaanSanksi.php" class="btn btn-primary w-full">Konfirmasi</a>
+                    <a href="FormBanding.php" class="btn btn-light w-full border border-black">Ajukan banding</a>
                 </div>
             </div>
         </aside>

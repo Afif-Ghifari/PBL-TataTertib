@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin</title>
+    <title>Pelanggaran</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../assets/font.css">
     <link rel="icon" href="../../assets/img/LOGO BREN.pdf.png" />
@@ -16,9 +16,9 @@
 
 <body class="flex">
     <?php include "Sidebar.php"; ?>
-    
-    <main class="w-full h-screen bg-slate-200 ml-72">
-        <nav class="flex top-0 gap-10 w-full items-center justify-end px-28 py-6 bg-white">
+
+    <main class="w-full h-fullbg-slate-200 ml-72">
+        <nav class="flex gap-10 w-full items-center justify-end px-28 py-6 bg-white">
             <button class="relative inline-flex items-center" id="NotifBtn">
                 <i class="bi bi-bell text-3xl text-slate-300"></i>
                 <div class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900"></div>
@@ -28,23 +28,15 @@
             </a>
         </nav>
         <section class="flex flex-col w-full px-14 py-12 gap-10">
-            <h1 class="text-3xl">Dashboard</h1>
-            <div class="grid grid-cols-2 gap-4">
-                <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Pelanggaran</h3>
-                    <h4 class="text-xl text-blue-600">10</h4>
-                </div>
-                <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Pelaporan</h3>
-                    <h4 class="text-xl text-blue-600">10</h4>
-                </div>
-                <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Banding</h3>
-                    <h4 class="text-xl text-blue-600">10</h4>
-                </div>
-                <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Keseluruhan</h3>
-                    <h4 class="text-xl text-blue-600">10</h4>
+            <h1 class="text-3xl">Laporan Pelanggaran Baru</h1>
+
+            <div class="grid grid-cols-3 gap-4">
+                <div class="w-72 bg-white rounded-xl mx-auto px-6 py-3">
+                    <img src="../../assets/img/sample_pelanggaran.png" class="w-56 mx-auto my-3" alt="">
+                    <h3 class="text-lg my-2">Ketahuan merokok ditempat dilarang</h3>
+                    <h4 class="text-blue-600 text-base">Nama dosen</h4>
+                    <p class="text-slate-400 text-sm">Tanggal</p>
+                    <a href="TerimaPelanggaran.php" class="btn btn-primary w-24 my-6">Detail</a>
                 </div>
             </div>
         </section>

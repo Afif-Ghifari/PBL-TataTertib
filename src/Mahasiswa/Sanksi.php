@@ -14,13 +14,38 @@
 
 <body>
     <div class="grid grid-cols-2 justify-between gap-4 my-12" id="gridSanksi">
-        <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
-            <h2 class="text-black">Nama Sanksi</h2>
-            <img src="../../assets/img/pp_sample.jpg" class="mx-auto rounded-xl max-w-52" alt="">
-            <p class="text-black">Deskripsi</p>
-            <a href="../Mahasiswa/EditPelaksanaanSanksi.php" class="btn btn-primary w-24"
-                style="font-family: 'product Sans Bold';">Detail</a>
-        </div>
+        <?php
+        include "../../backend/database.php";
+
+        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat 
+                    FROM Laporan l
+                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    WHERE l.ID_Dilapor = ?";
+        $params = [$_SESSION['NIM']];
+        $stmt = sqlsrv_query($conn, $query, $params);
+
+        if (!$stmt) {
+            die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+        }
+
+        if (!sqlsrv_has_rows($stmt)) {
+            echo "<p>No data found.</p>";
+        } else {
+
+            while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+        ?>
+                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
+                    <h2 class="text-black">Nama Sanksi</h2>
+                    <img src="../../assets/img/pp_sample.jpg" class="mx-auto rounded-xl max-w-52" alt="">
+                    <p class="text-black">Deskripsi</p>
+                    <a href="../Mahasiswa/EditPelaksanaanSanksi.php" class="btn btn-primary w-24"
+                        style="font-family: 'product Sans Bold';">Detail</a>
+                </div>
+        <?php
+            }
+        }
+        ?>
     </div>
 </body>
 
