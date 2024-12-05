@@ -22,7 +22,7 @@
             semua data yang
             dimasukkan valid agar laporan dapat diproses dengan baik.</p>
 
-        <form class="w-full px-20 py-12 rounded-xl shadow-lg my-20" action="" method="post">
+        <form class="w-full px-20 py-12 rounded-xl shadow-lg my-20" action="../../backend/tambahLaporan.php" method="post">
 
             <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Upload
                 file</label>

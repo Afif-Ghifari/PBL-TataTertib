@@ -29,6 +29,7 @@
         </nav>
         <section class="flex flex-col w-full h-full bg-slate-100 px-14 py-12 gap-10">
             <h1 class="text-3xl">Manajemen Data Dosen</h1>
+            <a href="TambahDataDosen.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a>
             
             <table class="w-full table-fixed bg-white max-w-4xl mx-auto">
                 <thead class="bg-blue-600 text-white">
@@ -66,7 +67,7 @@
                         <td><?= htmlspecialchars($dosen['No_Tlp'])?></td>
                         <td>
                             <a href="EditDataDosen.php?NIP=<?= $dosen['NIP']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
-                            <a href="" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                            <a href="../../backend/hapusDataDosen.php?NIP=<?= $dosen['NIP']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>
                 <?php

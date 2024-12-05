@@ -24,7 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($userData) {
                 if (isset($userData['Pw'])) {
                     if ($pass === $userData['Pw']) {
-                        header("Location: ../src/Mahasiswa/Dashboard.html"); // Redirect ke halaman dashboard
+                        $_SESSION['ID_Admin'] = $userData['ID_Admin'];
+                        header("Location: ../src/Admin/Dashboard.php"); // Redirect ke halaman dashboard
                         exit;
                     } else {
                         echo "Password salah.";

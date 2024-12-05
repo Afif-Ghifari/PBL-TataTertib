@@ -20,11 +20,11 @@
         <a href="#" class="w-1/3 flex items-center gap-4 text-xl no-underline" id="NavBrand"><img src="../../assets/img/LOGO BREN.pdf.png"
                 class="w-14 rounded-lg" alt="" />TertibHub</a>
         <div class="flex justify-evenly gap-2 w-1/3">
-            <a href="../Mahasiswa/Dashboard.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Home</a>
-            <a href="../Mahasiswa/HistoriPelanggaran.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Histori
+            <a href="Dashboard.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Home</a>
+            <a href="HistoriPelanggaran.php" class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Histori
                 Pelanggaran</a>
-            <a href="../Mahasiswa/GuideBook.php"
-                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Guide Book</a>
+            <!-- <a href="GuideBook.php"
+                class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">Guide Book</a> -->
         </div>
         <div class="relative w-1/3 flex justify-end items-center gap-8" id="LoginBtn">
             <button class="relative inline-flex items-center" id="NotifBtn">

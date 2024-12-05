@@ -52,10 +52,11 @@
 
     <main class="mx-28 mb-32 mt-12 px-24 py-20 border h-fit">
         <h3 class="text-3xl">About Me</h3>
-        <!-- <p><?= htmlspecialchars(isset($row['Profil']) ? $row['Profil'] : '-') ?></p> -->
-        <form action="" class="flex flex-col justify-between">
+        <form action="../../backend/ubahDataMahasiswa.php" class="flex flex-col justify-between" method="POST">
             <textarea class="form-control" value="" name="Profil" id="profil"><?= htmlspecialchars(isset($row['Profil']) ? $row['Profil'] : '-') ?></textarea>
             <input type="text" value="<?= htmlspecialchars($row['NIM']) ?>" class="hidden" name="NIM">
+            <input type="text" value="<?= htmlspecialchars($row['Nama']) ?>" class="hidden" name="Nama">
+            <input type="text" value="<?= htmlspecialchars($row['ID_Kelas']) ?>" class="hidden" name="ID_Kelas">
             <div class="flex justify-between my-6">
                 <label for="" class="flex flex-col gap-2">Alamat
                     <input type="text" class="border py-2 px-4 rounded-xl bg-slate-200 focus:outline-none w-96" value="<?= htmlspecialchars($row['Alamat']) ?>" placeholder="Alamat" name="Alamat">

@@ -29,7 +29,7 @@
         </nav>
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <h1 class="text-3xl">Manajemen Data Mahasiswa</h1>
-            
+            <a href="TambahDataMahasiswa.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a>
             <table class="w-full table-fixed bg-white max-w-4xl mx-auto">
                 <thead class="bg-blue-600 text-white">
                     <tr>
@@ -70,7 +70,7 @@
                         <td><?= htmlspecialchars($mhs['No_Tlp'])?></td>
                         <td>
                             <a href="EditDataMahasiswa.php?NIM=<?= $mhs['NIM']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
-                            <a href="" class="btn btn-danger"><i class="bi bi-trash"></i></a>
+                            <a href="../../backend/hapusDataMahasiswa.php?NIM=<?= $mhs['NIM']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>
                 <?php
