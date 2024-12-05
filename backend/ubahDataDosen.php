@@ -24,5 +24,5 @@ if (!sqlsrv_execute($stmt)) {
     echo '<script type="text/javascript">';
     echo 'alert("Terjadi kesalahan");';
     echo '</script>';
-    header("Location: ../src/Mahasiswa/Profile.php");
+    header("Location: ../src/Dosen/Profile.php");
 }

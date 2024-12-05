@@ -1,15 +1,18 @@
 <?php
-$host = "DESKTOP-5O8DG63"; // nama server\nama_instance
-$connInfo = array(
-    "Database" => "PelanggaranTataTertib",
-);
+    try {
+    $serverName = "DESKTOP-5O8DG63"; // Nama server SQL Server
+    $database = "PelanggaranTataTertib"; // Nama database
+    $username = "sa"; // Username SQL Server
+    $password = "123"; // Password SQL Server
 
-$conn = sqlsrv_connect($host, $connInfo);
+    // Koneksi menggunakan PDO dengan driver sqlsrv
+    $conn = new PDO("sqlsrv:server=$serverName;Database=$database", $username, $password);
 
-if ($conn) {
-    echo "Koneksi berhasil.<br />";
-} else {
-    echo "Koneksi Gagal";
-    die(print_r(sqlsrv_errors(), true));
+    // Mengatur mode error agar menampilkan exception jika terjadi kesalahan
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    echo "Koneksi berhasil.";
+} catch (PDOException $e) {
+    die("Koneksi database gagal: " . $e->getMessage());
 }
 ?>
