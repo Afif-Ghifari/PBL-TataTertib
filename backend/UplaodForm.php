@@ -14,6 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             throw new Exception("Gagal memulai transaksi: " . print_r(sqlsrv_errors(), true));
         }
 
+        // Pastikan ID Pelapor ada dalam sesi
+        if (!isset($_SESSION['ID'])) {
+            die("ID Pelapor tidak ditemukan dalam sesi. Silakan login terlebih dahulu.");
+        }
+        $idPelapor = $_SESSION['ID'];  // Mengambil ID Pelapor dari sesi yang diset saat login
+
         // Ambil data dari form
         $namaTerlapor = $_POST['NamaTerlapor'];
         $admin = $_POST['Admin'];
@@ -40,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $idDilapor = $terlaporData['ID_Dilapor'];
 
-        // Validasi ID_Admin yang dipilih
-        $sqlAdmin = "SELECT ID_Admin FROM Admin WHERE ID_Admin = ?";
+        // Validasi nama admin di database
+        $sqlAdmin = "SELECT ID_Admin FROM Admin WHERE Nama LIKE ?";
         $stmtAdmin = sqlsrv_prepare($conn, $sqlAdmin, [$admin]);
         if (!$stmtAdmin || !sqlsrv_execute($stmtAdmin)) {
             throw new Exception("Gagal mengeksekusi query admin: " . print_r(sqlsrv_errors(), true));
@@ -49,15 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $adminData = sqlsrv_fetch_array($stmtAdmin, SQLSRV_FETCH_ASSOC);
 
         if (!$adminData) {
-            throw new Exception("Admin tidak ditemukan di database. Pastikan ID admin yang dipilih benar.");
+            throw new Exception("Nama admin tidak ditemukan di database. Pastikan nama admin sudah benar.");
         }
         $idAdmin = $adminData['ID_Admin'];
 
-        // ID pelapor dari session
-        $idPelapor = $_SESSION['ID'];
-
         // Proses file bukti jika ada
-        $idBukti = null;
+        $idBukti = null; // Defaultkan ID_Bukti menjadi NULL
         $fileName = null;
         if (isset($_FILES['bukti']) && $_FILES['bukti']['error'] == 0) {
             $fileName = $_FILES['bukti']['name'];
@@ -78,10 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("Gagal menyimpan bukti: " . print_r(sqlsrv_errors(), true));
             }
 
+            // Ambil ID bukti yang baru saja dimasukkan
             $idBuktiQuery = "SELECT SCOPE_IDENTITY() AS ID";
             $stmtBuktiID = sqlsrv_query($conn, $idBuktiQuery);
             $idBuktiResult = sqlsrv_fetch_array($stmtBuktiID, SQLSRV_FETCH_ASSOC);
-            $idBukti = $idBuktiResult['ID'];
+            $idBukti = $idBuktiResult['ID']; // Ambil ID Bukti yang baru saja disimpan
         }
 
         // Simpan laporan ke tabel Laporan
@@ -97,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $status,
             $sanksi,
             $tanggal,
-            $idBukti,
-            $fileName
+            $idBukti, // ID_Bukti bisa NULL jika tidak ada file
+            $fileName // Jika tidak ada file, ini akan NULL
         ];
         $stmtLaporan = sqlsrv_prepare($conn, $sqlLaporan, $paramsLaporan);
         if (!$stmtLaporan || !sqlsrv_execute($stmtLaporan)) {
@@ -114,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../src/Admin/Dosen/Dashboard.php?success=1");
         exit;
     } catch (Exception $e) {
-        // Rollback transaksi jika terjadi kesalahan
+        // Rollback transaksi jika ada error
         sqlsrv_rollback($conn);
         die("Gagal menyimpan laporan: " . $e->getMessage());
     }
