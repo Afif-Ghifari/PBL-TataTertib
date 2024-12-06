@@ -40,33 +40,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idDilapor = $terlaporData['ID_Dilapor'];
 
         // Proses file bukti jika ada
-        $idBukti = null;
         $fileName = null;
         if (isset($_FILES['bukti']) && $_FILES['bukti']['error'] == 0) {
-            $fileName = basename($_FILES['bukti']['name']);
-            $uploadDir = './uploads/';
+            $fileName = time() . "_" . basename($_FILES['bukti']['name']); // Tambahkan timestamp untuk unik
+            $uploadDir = 'UploadBuktiPelanggaran';
             $uploadPath = $uploadDir . $fileName;
+
+            // Buat folder jika belum ada
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
 
             if (!move_uploaded_file($_FILES['bukti']['tmp_name'], $uploadPath)) {
                 throw new Exception("Gagal mengunggah file bukti.");
             }
-
-            $sqlBukti = "INSERT INTO Bukti_Pengerjaan (Foto, Deskripsi) VALUES (?, ?)";
-            $stmtBukti = sqlsrv_prepare($conn, $sqlBukti, [$fileName, $deskripsi]);
-            if (!$stmtBukti || !sqlsrv_execute($stmtBukti)) {
-                throw new Exception("Gagal menyimpan data bukti: " . print_r(sqlsrv_errors(), true));
-            }
-
-            $idBuktiQuery = "SELECT SCOPE_IDENTITY() AS ID";
-            $stmtBuktiID = sqlsrv_query($conn, $idBuktiQuery);
-            $idBuktiResult = sqlsrv_fetch_array($stmtBuktiID, SQLSRV_FETCH_ASSOC);
-            $idBukti = $idBuktiResult['ID'];
         }
 
         // Simpan laporan
-        $sqlLaporan = "INSERT INTO Laporan (ID_Pelapor, ID_Dilapor, ID_Pelanggaran, Status, Sanksi, TanggalDibuat, ID_Bukti, Foto_Bukti)
-                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $paramsLaporan = [$idPelapor, $idDilapor, $jenisPelanggaran, 'Pending', null, $tanggal, $idBukti, $fileName];
+        $sqlLaporan = "INSERT INTO Laporan (ID_Pelapor, ID_Dilapor, ID_Pelanggaran, Status, Sanksi, TanggalDibuat, Foto_Bukti)
+                       VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $paramsLaporan = [$idPelapor, $idDilapor, $jenisPelanggaran, 'Pending', null, $tanggal, $fileName];
         $stmtLaporan = sqlsrv_prepare($conn, $sqlLaporan, $paramsLaporan);
 
         if (!$stmtLaporan || !sqlsrv_execute($stmtLaporan)) {
@@ -77,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ../src/Admin/Dosen/Dashboard.php?success=1");
         exit;
     } catch (Exception $e) {
-        sqlsrv_rollback($conn);
         die("Gagal menyimpan laporan: " . $e->getMessage());
     }
 }
