@@ -1,19 +1,3 @@
-<?php
-// Mengambil data admin dari database
-include_once '../../backend/database.php';
-
-$sqlAdmin = "SELECT ID_Admin, Nama FROM Admin";
-$stmtAdmin = sqlsrv_query($conn, $sqlAdmin);
-if ($stmtAdmin === false) {
-    die(print_r(sqlsrv_errors(), true));
-}
-
-$admins = [];
-while ($row = sqlsrv_fetch_array($stmtAdmin, SQLSRV_FETCH_ASSOC)) {
-    $admins[] = $row;
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,15 +28,6 @@ while ($row = sqlsrv_fetch_array($stmtAdmin, SQLSRV_FETCH_ASSOC)) {
                 <span class="w-full">
                     <label for="NamaTerlapor">Nama Terlapor</label>
                     <input type="text" class="form-control" id="NamaTerlapor" name="NamaTerlapor" required>
-                </span>
-                <span class="w-full">
-                    <label for="Admin">Admin Yang Akan Menangani</label>
-                    <select class="form-control" id="Admin" name="Admin" required>
-                        <option value="" selected>Pilih Admin</option>
-                        <?php foreach ($admins as $admin): ?>
-                            <option value="<?= $admin['ID_Admin'] ?>"><?= $admin['Nama'] ?></option>
-                        <?php endforeach; ?>
-                    </select>
                 </span>
             </div>
 
