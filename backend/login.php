@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($userData) {
         if ($pass === $userData['Pw']) {
-            $_SESSION['ID'] = $userData['NIM'];
+            $_SESSION['ID'] = $userData['NIM'];  // ID untuk mahasiswa adalah NIM
             $_SESSION['Nama'] = $userData['Nama'];
             $_SESSION['Role'] = 'Mahasiswa';
             header("Location: ../src/Mahasiswa/Dashboard.php");
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($userData) {
         if ($pass === $userData['Pw']) {
-            $_SESSION['ID'] = $userData['NIP'];
+            $_SESSION['ID'] = $userData['NIP'];  // ID untuk dosen adalah NIP
             $_SESSION['Nama'] = $userData['Nama'];
             $_SESSION['Role'] = 'Dosen';
             header("Location: ../src/Dosen/Dashboard.php");

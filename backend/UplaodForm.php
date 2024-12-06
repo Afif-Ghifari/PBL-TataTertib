@@ -1,76 +1,63 @@
 <?php
-include_once './database.php'; // Pastikan file koneksi database benar
+include_once 'database.php'; // Pastikan koneksi database sudah benar
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // Pastikan user login
-        if (!isset($_SESSION['ID'])) {
-            die("Anda harus login terlebih dahulu.");
+// Jika form disubmit
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Ambil data dari form
+    $namaTerlapor = $_POST['NamaTerlapor'];
+    $tempat = $_POST['Tempat'];
+    $tanggal = $_POST['Tanggal'];
+    $jenisPelanggaran = $_POST['JenisPelanggaran'];
+    $deskripsi = $_POST['Deskripsi'];
+
+    // Ambil ID pelapor dari session
+    $idPelapor = $_SESSION['ID']; // Pastikan ID diset saat login
+
+    // Direktori tujuan untuk menyimpan file bukti
+    $uploadDir = 'D:/kuliah/smt3/Desain_pemograman_web/laragon/www/PBL/PBL-TataTertib/backend/UploadButkiPelanggaran/'; // Ganti dengan path absolut
+
+    // Cek jika direktori tidak ada, buat direktori
+    if (!file_exists($uploadDir)) {
+        if (!mkdir($uploadDir, 0777, true)) {  // Membuat direktori jika belum ada
+            die("Gagal membuat direktori untuk mengunggah file.");
         }
+    }
 
-        // Periksa koneksi database
-        if (!$conn) {
-            throw new Exception("Koneksi database gagal: " . print_r(sqlsrv_errors(), true));
+    // Nama file yang diunggah
+    $fileName = basename($_FILES['bukti']['name']);
+    $uploadPath = $uploadDir . $fileName;
+
+    // Pindahkan file yang diunggah ke direktori tujuan
+    if (move_uploaded_file($_FILES['bukti']['tmp_name'], $uploadPath)) {
+        echo "File berhasil diunggah.";
+
+        // Masukkan data laporan ke database
+        $sql = "INSERT INTO Laporan (ID_Pelapor, Nama_Terlapor, Tempat, Tanggal, Jenis_Pelanggaran, Deskripsi, Bukti) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)";
+        
+        $params = [
+            $idPelapor, 
+            $namaTerlapor, 
+            $tempat, 
+            $tanggal, 
+            $jenisPelanggaran, 
+            $deskripsi, 
+            $fileName // Hanya menyimpan nama file, path absolut tidak perlu disimpan
+        ];
+
+        // Menyiapkan dan mengeksekusi query
+        $stmt = sqlsrv_prepare($conn, $sql, $params);
+        if (!$stmt) {
+            die("Query preparation failed: " . print_r(sqlsrv_errors(), true));
         }
-
-        // Ambil data dari form
-        $idPelapor = $_SESSION['ID'];
-        $namaTerlapor = trim($_POST['NamaTerlapor']);
-        $tempat = trim($_POST['Tempat']);
-        $tanggal = trim($_POST['Tanggal']);
-        $jenisPelanggaran = trim($_POST['JenisPelanggaran']);
-        $deskripsi = trim($_POST['Deskripsi']);
-
-        // Validasi input
-        if (empty($namaTerlapor) || empty($tempat) || empty($tanggal) || empty($jenisPelanggaran) || empty($deskripsi)) {
-            throw new Exception("Semua kolom wajib diisi.");
+        if (sqlsrv_execute($stmt)) {
+            echo "Laporan berhasil disimpan.";
+        } else {
+            echo "Gagal menyimpan laporan: " . print_r(sqlsrv_errors(), true);
         }
-
-        // Validasi nama terlapor di database
-        $sqlTerlapor = "SELECT NIM AS ID_Dilapor FROM Mahasiswa WHERE Nama = ?";
-        $stmtTerlapor = sqlsrv_prepare($conn, $sqlTerlapor, [$namaTerlapor]);
-        if (!$stmtTerlapor || !sqlsrv_execute($stmtTerlapor)) {
-            throw new Exception("Gagal mengeksekusi query terlapor: " . print_r(sqlsrv_errors(), true));
-        }
-        $terlaporData = sqlsrv_fetch_array($stmtTerlapor, SQLSRV_FETCH_ASSOC);
-        if (!$terlaporData) {
-            throw new Exception("Nama terlapor tidak ditemukan.");
-        }
-        $idDilapor = $terlaporData['ID_Dilapor'];
-
-        // Proses file bukti jika ada
-        $fileName = null;
-        if (isset($_FILES['bukti']) && $_FILES['bukti']['error'] == 0) {
-            $fileName = time() . "_" . basename($_FILES['bukti']['name']); // Tambahkan timestamp untuk unik
-            $uploadDir = 'UploadBuktiPelanggaran';
-            $uploadPath = $uploadDir . $fileName;
-
-            // Buat folder jika belum ada
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
-            }
-
-            if (!move_uploaded_file($_FILES['bukti']['tmp_name'], $uploadPath)) {
-                throw new Exception("Gagal mengunggah file bukti.");
-            }
-        }
-
-        // Simpan laporan
-        $sqlLaporan = "INSERT INTO Laporan (ID_Pelapor, ID_Dilapor, ID_Pelanggaran, Status, Sanksi, TanggalDibuat, Foto_Bukti)
-                       VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $paramsLaporan = [$idPelapor, $idDilapor, $jenisPelanggaran, 'Pending', null, $tanggal, $fileName];
-        $stmtLaporan = sqlsrv_prepare($conn, $sqlLaporan, $paramsLaporan);
-
-        if (!$stmtLaporan || !sqlsrv_execute($stmtLaporan)) {
-            throw new Exception("Gagal menyimpan laporan: " . print_r(sqlsrv_errors(), true));
-        }
-
-        // Redirect dengan notifikasi sukses
-        header("Location: ../src/Admin/Dosen/Dashboard.php?success=1");
-        exit;
-    } catch (Exception $e) {
-        die("Gagal menyimpan laporan: " . $e->getMessage());
+    } else {
+        echo "Gagal mengunggah file bukti.";
     }
 }
 ?>
