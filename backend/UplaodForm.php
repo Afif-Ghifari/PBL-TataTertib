@@ -1,5 +1,5 @@
 <?php
-include_once './database.php'; // Pastikan file koneksi database benar
+include_once 'database.php'; // Pastikan file koneksi database benar
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Validasi nama terlapor di database
-        $sqlTerlapor = "SELECT ID_Dilapor FROM Mahasiswa WHERE Nama = ?";
+        $sqlTerlapor = "SELECT NIM FROM Mahasiswa WHERE Nama = ?";
         $stmtTerlapor = $conn->prepare($sqlTerlapor);
         $stmtTerlapor->execute([$namaTerlapor]);
         $terlaporData = $stmtTerlapor->fetch(PDO::FETCH_ASSOC);
