@@ -1,3 +1,19 @@
+<?php
+// Mengambil data admin dari database
+include_once '../../backend/database.php';
+
+$sqlAdmin = "SELECT ID_Admin, Nama FROM Admin";
+$stmtAdmin = sqlsrv_query($conn, $sqlAdmin);
+if ($stmtAdmin === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
+
+$admins = [];
+while ($row = sqlsrv_fetch_array($stmtAdmin, SQLSRV_FETCH_ASSOC)) {
+    $admins[] = $row;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,27 +42,32 @@
 
             <div class="flex justify-between gap-24 w-full my-8">
                 <span class="w-full">
-                    <label for="">Nama Terlapor</label>
+                    <label for="NamaTerlapor">Nama Terlapor</label>
                     <input type="text" class="form-control" id="NamaTerlapor" name="NamaTerlapor" required>
                 </span>
                 <span class="w-full">
-                    <label for="">Admin Yang Akan Menangani</label>
-                    <input type="text" class="form-control" id="Admin" name="Admin" required>
+                    <label for="Admin">Admin Yang Akan Menangani</label>
+                    <select class="form-control" id="Admin" name="Admin" required>
+                        <option value="" selected>Pilih Admin</option>
+                        <?php foreach ($admins as $admin): ?>
+                            <option value="<?= $admin['ID_Admin'] ?>"><?= $admin['Nama'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </span>
             </div>
 
             <div class="flex justify-between gap-24 w-full my-8">
                 <span class="w-full">
-                    <label for="">Tempat Kejadian</label>
+                    <label for="Tempat">Tempat Kejadian</label>
                     <input type="text" class="form-control" id="Tempat" name="Tempat" required>
                 </span>
                 <span class="w-full">
-                    <label for="">Tanggal Kejadian</label>
+                    <label for="Tanggal">Tanggal Kejadian</label>
                     <input type="date" class="form-control" id="Tanggal" name="Tanggal" required>
                 </span>
             </div>
 
-            <label for="">Jenis Pelanggaran</label>
+            <label for="JenisPelanggaran">Jenis Pelanggaran</label>
             <select name="JenisPelanggaran" class="form-control mb-8" id="JenisPelanggaran" required>
                 <option value="" selected>Pilih Jenis Pelanggaran</option>
                 <option value="Pelanggaran 1">Pelanggaran 1</option>
@@ -56,7 +77,7 @@
                 <option value="Pelanggaran 5">Pelanggaran 5</option>
             </select>
 
-            <label for="">Deskripsi</label>
+            <label for="Deskripsi">Deskripsi</label>
             <textarea class="form-control" name="Deskripsi" id="Deskripsi" required></textarea>
 
             <input type="submit" value="Submit" class="btn btn-primary rounded-xl w-full mx-auto my-6 py-2">
@@ -98,4 +119,5 @@
         });
     });
 </script>
+
 </html>
