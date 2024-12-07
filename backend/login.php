@@ -3,93 +3,57 @@ include_once 'database.php'; // Pastikan file koneksi database benar
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = $_POST['username'];
-    $pass = $_POST['password'];
+    $user = trim($_POST['username']);
+    $pass = trim($_POST['password']);
 
     // Validasi input kosong
     if (empty($user) || empty($pass)) {
-        echo "Username dan Password tidak boleh kosong.";
-    } else {
-        // Query untuk mencari pengguna berdasarkan username
-        if ($sql = "SELECT * FROM Mahasiswa WHERE Username = ?" ) {
-            
-        $params = array($user); // Parameter untuk prepared statement
+        die("Username dan Password tidak boleh kosong.");
+    }
 
-        // Mempersiapkan dan menjalankan statement
-        $stmt = sqlsrv_prepare($conn, $sql, $params);
+    // Fungsi untuk memeriksa pengguna di tabel tertentu
+    function checkUser($conn, $table, $user, $pass) {
+        $sql = "SELECT * FROM $table WHERE Username = :username";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':username', $user);
 
-        if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
-        }
+        if ($stmt->execute()) {
+            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Eksekusi query
-        if (sqlsrv_execute($stmt)) {
-            $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-            if ($userData) {
-                // Pastikan kolom 'Pw' ada dalam tabel
-                if (isset($userData['Pw'])) {
-                    // Verifikasi password
-                    if ($pass === $userData['Pw']) {
-                        // Simpan data user di session
-                        $_SESSION['NIM'] = $userData['NIM'];
-                        $_SESSION['Nama'] = $userData['Nama'];
-                        $_SESSION['Username'] = $userData['Username'];
-                        header("Location: ../src/Mahasiswa/Dashboard.php"); // Redirect ke halaman dashboard
-                        exit;
-                    } else {
-                        echo "Password salah.";
-                    }
-                } else {
-                    echo "Kolom 'Pw' tidak ditemukan dalam tabel Mahasiswa.";
-                }
-            } else {
-                echo "Username tidak ditemukan.";
+            if ($userData && isset($userData['Pw']) && $userData['Pw'] === $pass) {
+                return $userData;
             }
-        } else {
-            echo "Gagal mengeksekusi query.";
-            die(print_r(sqlsrv_errors(), true)); // Debugging jika eksekusi gagal
         }
-        } if ( $sql = "SELECT * FROM Dosen WHERE Username = ?") {
+        return false; // Jika user tidak ditemukan atau password salah
+    }
 
-        $params = array($user); // Parameter untuk prepared statement
-
-        // Mempersiapkan dan menjalankan statement
-        $stmt = sqlsrv_prepare($conn, $sql, $params);
-
-        if ($stmt === false) {
-            die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
+    try {
+        // Cek di tabel Mahasiswa
+        $userData = checkUser($conn, 'Mahasiswa', $user, $pass);
+        if ($userData) {
+            $_SESSION['NIM'] = $userData['NIM'];
+            $_SESSION['Nama'] = $userData['Nama'];
+            $_SESSION['Username'] = $userData['Username'];
+            $_SESSION['Role'] = 'Mahasiswa';
+            header("Location: ../src/Mahasiswa/Dashboard.php");
+            exit;
         }
 
-        // Eksekusi query
-        if (sqlsrv_execute($stmt)) {
-            $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+        // Cek di tabel Dosen
+        $userData = checkUser($conn, 'Dosen', $user, $pass);
+        if ($userData) {
+            $_SESSION['NIP'] = $userData['NIP'];
+            $_SESSION['Nama'] = $userData['Nama'];
+            $_SESSION['Username'] = $userData['Username'];
+            $_SESSION['Role'] = 'Dosen';
+            header("Location: ../src/Dosen/Dashboard.php");
+            exit;
+        }
 
-            if ($userData) {
-                // Pastikan kolom 'Pw' ada dalam tabel
-                if (isset($userData['Pw'])) {
-                    // Verifikasi password
-                    if ($pass === $userData['Pw']) {
-                        // Simpan data user di session
-                        $_SESSION['NIP'] = $userData['NIP'];
-                        $_SESSION['Nama'] = $userData['Nama'];
-                        $_SESSION['Username'] = $userData['Username'];
-                        header("Location: ../src/Dosen/Dashboard.php"); // Redirect ke halaman dashboard
-                        exit;
-                    } else {
-                        echo "Password salah.";
-                    }
-                } else {
-                    echo "Kolom 'Pw' tidak ditemukan dalam tabel Dosen.";
-                }
-            } else {
-                echo "Username tidak ditemukan.";
-            }
-        } else {
-            echo "Gagal mengeksekusi query.";
-            die(print_r(sqlsrv_errors(), true)); // Debugging jika eksekusi gagal
-        }
-        }
+        // Jika tidak ditemukan di kedua tabel
+        die("Username atau Password salah.");
+    } catch (PDOException $e) {
+        die("Error: " . $e->getMessage());
     }
 }
 ?>
