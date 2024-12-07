@@ -3,57 +3,75 @@ include_once 'database.php'; // Pastikan file koneksi database benar
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = trim($_POST['username']);
-    $pass = trim($_POST['password']);
+    $user = $_POST['username'];
+    $pass = $_POST['password'];
 
     // Validasi input kosong
     if (empty($user) || empty($pass)) {
-        die("Username dan Password tidak boleh kosong.");
+        echo "Username dan Password tidak boleh kosong.";
+        exit;
     }
 
-    // Fungsi untuk memeriksa pengguna di tabel tertentu
-    function checkUser($conn, $table, $user, $pass) {
-        $sql = "SELECT * FROM $table WHERE Username = :username";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':username', $user);
+    // Query pertama: Mahasiswa
+    $sql = "SELECT * FROM Mahasiswa WHERE Username = ?";
+    $params = array($user); // Parameter untuk prepared statement
 
-        if ($stmt->execute()) {
-            $userData = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Mempersiapkan dan menjalankan statement
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
 
-            if ($userData && isset($userData['Pw']) && $userData['Pw'] === $pass) {
-                return $userData;
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
+    }
+
+    if (sqlsrv_execute($stmt)) {
+        $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+        if ($userData) {
+            if ($pass === $userData['Pw']) {
+                // Simpan data user di session
+                $_SESSION['NIM'] = $userData['NIM'];
+                $_SESSION['Nama'] = $userData['Nama'];
+                $_SESSION['Username'] = $userData['Username'];
+                header("Location: ../src/Mahasiswa/Dashboard.php");
+                exit;
+            } else {
+                echo "Password salah.";
+                exit;
             }
         }
-        return false; // Jika user tidak ditemukan atau password salah
+    } else {
+        die("Gagal mengeksekusi query: " . print_r(sqlsrv_errors(), true));
     }
 
-    try {
-        // Cek di tabel Mahasiswa
-        $userData = checkUser($conn, 'Mahasiswa', $user, $pass);
+    // Query kedua: Dosen (jika username tidak ditemukan di Mahasiswa)
+    $sql = "SELECT * FROM Dosen WHERE Username = ?";
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
+
+    if ($stmt === false) {
+        die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
+    }
+
+    if (sqlsrv_execute($stmt)) {
+        $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
         if ($userData) {
-            $_SESSION['NIM'] = $userData['NIM'];
-            $_SESSION['Nama'] = $userData['Nama'];
-            $_SESSION['Username'] = $userData['Username'];
-            $_SESSION['Role'] = 'Mahasiswa';
-            header("Location: ../src/Mahasiswa/Dashboard.php");
+            if ($pass === $userData['Pw']) {
+                // Simpan data user di session
+                $_SESSION['NIP'] = $userData['NIP'];
+                $_SESSION['Nama'] = $userData['Nama'];
+                $_SESSION['Username'] = $userData['Username'];
+                header("Location: ../src/Dosen/Dashboard.php");
+                exit;
+            } else {
+                echo "Password salah.";
+                exit;
+            }
+        } else {
+            echo "Username tidak ditemukan.";
             exit;
         }
-
-        // Cek di tabel Dosen
-        $userData = checkUser($conn, 'Dosen', $user, $pass);
-        if ($userData) {
-            $_SESSION['NIP'] = $userData['NIP'];
-            $_SESSION['Nama'] = $userData['Nama'];
-            $_SESSION['Username'] = $userData['Username'];
-            $_SESSION['Role'] = 'Dosen';
-            header("Location: ../src/Dosen/Dashboard.php");
-            exit;
-        }
-
-        // Jika tidak ditemukan di kedua tabel
-        die("Username atau Password salah.");
-    } catch (PDOException $e) {
-        die("Error: " . $e->getMessage());
+    } else {
+        die("Gagal mengeksekusi query: " . print_r(sqlsrv_errors(), true));
     }
 }
 ?>
