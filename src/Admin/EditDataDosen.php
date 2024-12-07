@@ -46,15 +46,16 @@
 
             $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
             ?>
-            <form action="update_mahasiswa.php" method="POST" class="flex flex-col justify-between">
-                <label for="NIM" class="flex flex-col gap-2">
-                    NIM
-                    <input type="text" value="<?= htmlspecialchars($row['NIP']) ?>" class="border py-2 px-4 rounded-xl form-control" readonly name="NIP">
+            <form action="../../backend/ubahDataDosen.php" method="POST" class="flex flex-col justify-between">
+                <label for="NIP" class="flex flex-col gap-2">
+                    NP
+                    <input type="text" value="<?= htmlspecialchars($row['NIP']) ?>" class="border py-2 px-4 rounded-xl form-control" name="NIP">
                 </label>
                 <label for="Nama" class="flex flex-col gap-2">
-                    Nama Mahasiswa
+                    Nama Dosen
                     <input type="text" value="<?= htmlspecialchars($row['Nama']) ?>" class="border py-2 px-4 rounded-xl form-control" name="Nama" required>
                 </label>
+                <input type="text" value="<?= htmlspecialchars($row['Profil']) ?>" class="hidden" name="Profil" required>
                 
                 </label>
                 <div class="flex justify-between my-6 gap-6">
@@ -70,11 +71,11 @@
                 <div class="flex justify-between my-6 gap-6">
                     <label for="Username" class="flex flex-col w-full gap-2">
                         Username
-                        <input type="text" class="border py-2 px-4 rounded-xl form-control" value="<?= htmlspecialchars($row['Username']) ?>" name="Username" disabled>
+                        <input type="text" class="border py-2 px-4 rounded-xl form-control" value="<?= htmlspecialchars($row['Username']) ?>" name="Username" readonly>
                     </label>
                     <label for="Pw" class="flex flex-col w-full gap-2">
                         Password
-                        <input type="password" class="border py-2 px-4 rounded-xl form-control" value="<?= htmlspecialchars($row['Pw']) ?>" placeholder="Enter new password" name="Pw" disabled>
+                        <input type="password" class="border py-2 px-4 rounded-xl form-control" value="<?= htmlspecialchars($row['Pw']) ?>" placeholder="Enter new password" name="Pw" readonly>
                     </label>
                 </div>
                 <input type="submit" value="Update" class="btn btn-primary w-1/2 mx-auto my-8">

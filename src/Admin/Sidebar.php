@@ -17,10 +17,10 @@
     <a href="#" class="flex justify-center text-black no-underline items-center text-xl"><img src="../../assets/img/LOGO BREN.pdf.png" class="w-16" alt="">TertibHub</a>
     <a href="Dashboard.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-house-door text-2xl"></i>Dashboard</a>
     <a href="PelanggaranPage.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-exclamation-triangle text-2xl"></i>Pelanggaran Baru</a>
-    <a href="PelanggaranPage.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Data Pelanggaran</a>
+    <a href="DataLaporan.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Data Pelanggaran</a>
+    <a href="DataBanding.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Banding</a>
     <a href="DataMahasiswa.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Mahasiswa</a>
     <a href="DataDosen.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Dosen</a>
-    <a href="" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Peraturan</a>
     <a href="../../backend/logout.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-box-arrow-in-right text-2xl"></i>Logout</a>
 
 </aside>

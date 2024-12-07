@@ -1,3 +1,10 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['NIM'])) {
+        header("Location: ../Login.php");
+    }
+?>
+
 <html lang="en">
 
 <head>

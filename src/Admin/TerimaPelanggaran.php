@@ -38,13 +38,13 @@
                         <label for="">
                             Nama Terlapor
                         </label>
-                        <input type="text" class="form-control" id="NamaTerlapor">
+                        <input type="text" class="form-control" readonly id="NamaTerlapor">
                     </span>
                     <span class="w-full">
                         <label for="">
                             NIM
                         </label>
-                        <input type="text" class="form-control" id="Admin">
+                        <input type="text" class="form-control" readonly id="Admin">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
@@ -52,13 +52,13 @@
                         <label for="">
                             Nama Pelapor
                         </label>
-                        <input type="text" class="form-control" id="NamaTerlapor">
+                        <input type="text" class="form-control" readonly id="NamaTerlapor">
                     </span>
                     <span class="w-full">
                         <label for="">
                             NIP
                         </label>
-                        <input type="text" class="form-control" id="Admin">
+                        <input type="text" class="form-control" readonly id="Admin">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
@@ -66,13 +66,13 @@
                         <label for="">
                             Tempat Kejadian
                         </label>
-                        <input type="text" class="form-control" id="Tempat">
+                        <input type="text" class="form-control" readonly id="Tempat">
                     </span>
                     <span class="w-full">
                         <label for="">
                             Tanggal Kejadian
                         </label>
-                        <input type="text" class="form-control" id="Tanggal">
+                        <input type="text" class="form-control" readonly id="Tanggal">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
@@ -80,13 +80,13 @@
                         <label for="">
                             Jenis Pelanggaran
                         </label>
-                        <input type="text" class="form-control" id="Tempat">
+                        <input type="text" class="form-control" readonly id="Tempat">
                     </span>
-                    <span class="w-full">
+                    <span class="w-1/3">
                         <label for="">
                             Tingkat Pelanggaran
                         </label>
-                        <input type="text" class="form-control" id="Tanggal">
+                        <input type="text" class="form-control" readonly id="Tanggal">
                     </span>
                 </div>
                 <!-- <label for="">Jenis Pelanggaran</label>
@@ -100,10 +100,11 @@
                 </select> -->
 
                 <label for="">Deskripsi</label>
-                <textarea class="form-control" name="" id="Deskripsi"></textarea>
+                <textarea class="form-control" readonly name="" id="Deskripsi"></textarea>
 
                 <input type="submit" value="Terima" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
                 <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2">
+            </form>
         </section>
     </main>
 </body>

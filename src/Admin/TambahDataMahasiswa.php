@@ -39,6 +39,8 @@
                     Nama Mahasiswa
                     <input type="text" value="" class="border py-2 px-4 rounded-xl form-control" placeholder="Masukkan Nama" name="Nama" required>
                 </label>
+                <input type="text" value="" class="hidden" placeholder="Masukkan Nama" name="Profil">
+
                 <label for="Kelas" class="flex flex-col gap-2 my-2">
                     Kelas
                     <select name="ID_Kelas" class="border py-2 px-4 rounded-xl form-control" required>

@@ -29,16 +29,17 @@
                     <label for="">Nama Terlapor</label>
                     <input type="text" class="form-control" id="NamaTerlapor" name="NamaTerlapor" required>
                 </span>
-                <span class="w-full">
+                <span class="w-full hidden">
                     <label for="">Admin Yang Akan Menangani</label>
-                    <input type="text" class="form-control" id="Admin" name="Admin" required>
+                    <input type="text" class="form-control" id="Admin" name="Admin" value="1">
                 </span>
             </div>
 
             <div class="flex justify-between gap-24 w-full my-8">
-                <span class="w-full">
+                <span class="w-full hidden
+                ">
                     <label for="">Tempat Kejadian</label>
-                    <input type="text" class="form-control" id="Tempat" name="Tempat" required>
+                    <input type="text" class="form-control" id="Tempat" name="Tempat" >
                 </span>
                 <span class="w-full">
                     <label for="">Tanggal Kejadian</label>
@@ -48,16 +49,25 @@
 
             <label for="">Jenis Pelanggaran</label>
             <select name="JenisPelanggaran" class="form-control mb-8" id="JenisPelanggaran" required>
-                <option value="" selected>Pilih Jenis Pelanggaran</option>
-                <option value="Pelanggaran 1">Pelanggaran 1</option>
-                <option value="Pelanggaran 2">Pelanggaran 2</option>
-                <option value="Pelanggaran 3">Pelanggaran 3</option>
-                <option value="Pelanggaran 4">Pelanggaran 4</option>
-                <option value="Pelanggaran 5">Pelanggaran 5</option>
+            <option value="" class="hidden">Pilih Jenis Pelanggaran</option>
+                <?php
+                include "../../backend/database.php";
+
+                $qry_pelanggaran = "SELECT * FROM pelanggaran";
+                $stmt = sqlsrv_query($conn, $qry_pelanggaran);
+
+                if (!$stmt) {
+                    die("Query Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                while ($pelanggaran = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                    echo "<option class=\"w-96\" value=\"" . htmlspecialchars($pelanggaran['ID_Pelanggaran']) . "\" $selected>" . htmlspecialchars($pelanggaran['Nama_Pelanggaran']) . "</option>";
+                }
+                ?>
             </select>
 
-            <label for="">Deskripsi</label>
-            <textarea class="form-control" name="Deskripsi" id="Deskripsi" required></textarea>
+            <!-- <label for="">Deskripsi</label>
+            <textarea class="form-control" name="Deskripsi" id="Deskripsi" required></textarea> -->
 
             <input type="submit" value="Submit" class="btn btn-primary rounded-xl w-full mx-auto my-6 py-2">
         </form>
@@ -98,4 +108,5 @@
         });
     });
 </script>
+
 </html>
