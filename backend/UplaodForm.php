@@ -1,95 +1,83 @@
 <?php
-include_once 'database.php'; // Pastikan file koneksi database benar
-session_start();
+// Koneksi ke database
+include "database.php";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // Validasi session (Pastikan Dosen yang login)
-        if (!isset($_SESSION['ID']) || !isset($_SESSION['Role']) || $_SESSION['Role'] !== 'Dosen') {
-            throw new Exception("Error: Anda harus login sebagai Dosen terlebih dahulu.");
-        }
-        
-        // ID Pelapor adalah Dosen yang login
-        $idPelapor = $_SESSION['ID'];
+// Proses penyimpanan data form laporan
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $namaTerlapor = htmlspecialchars($_POST['NamaTerlapor']);
+    $tanggal = htmlspecialchars($_POST['Tanggal']);
+    $jenisPelanggaran = htmlspecialchars($_POST['JenisPelanggaran']);
+    $bukti = $_FILES['bukti'];
 
-        // Validasi koneksi database
-        if (!$conn || !is_resource($conn)) {
-            throw new Exception("Koneksi database tidak valid.");
-        }
+    // Dapatkan ID_Terlapor berdasarkan NamaTerlapor
+    $idTerlaporQuery = "
+        SELECT NIM
+        FROM [PelanggaranTataTertib].[dbo].[Mahasiswa]
+        WHERE Nama = ?
+    ";
+    $stmtTerlapor = sqlsrv_query($conn, $idTerlaporQuery, array($namaTerlapor));
 
-        // Ambil data dari form
-        $namaTerlapor = trim($_POST['NamaTerlapor']);
-        $tanggal = trim($_POST['Tanggal']);
-        $jenisPelanggaran = trim($_POST['JenisPelanggaran']);
-        $fileName = null;
-
-        // Validasi data kosong
-        if (empty($namaTerlapor) || empty($tanggal) || empty($jenisPelanggaran)) {
-            throw new Exception("Semua kolom wajib diisi.");
-        }
-
-        // Validasi nama terlapor (Mahasiswa) di database
-        $sqlTerlapor = "SELECT NIM AS ID FROM Mahasiswa WHERE Nama = ?";
-        $stmtTerlapor = sqlsrv_prepare($conn, $sqlTerlapor, [$namaTerlapor]);
-
-        if (!$stmtTerlapor) {
-            throw new Exception("Gagal mempersiapkan query: " . print_r(sqlsrv_errors(), true));
-        }
-
-        if (!sqlsrv_execute($stmtTerlapor)) {
-            throw new Exception("Gagal mengeksekusi query: " . print_r(sqlsrv_errors(), true));
-        }
-
-        $terlaporData = sqlsrv_fetch_array($stmtTerlapor, SQLSRV_FETCH_ASSOC);
-        if (!$terlaporData) {
-            throw new Exception("Nama terlapor tidak ditemukan di database.");
-        }
-        $idDilapor = $terlaporData['ID'];
-
-        // Proses file bukti jika ada
-        if (isset($_FILES['bukti']) && $_FILES['bukti']['error'] === UPLOAD_ERR_OK) {
-            $fileName = $_FILES['bukti']['name'];
-            $fileTmpName = $_FILES['bukti']['tmp_name'];
-
-            // Validasi ekstensi file
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
-            $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-
-            if (!in_array($fileExtension, $allowedExtensions)) {
-                throw new Exception("Ekstensi file tidak diizinkan. Hanya file JPG, JPEG, PNG, dan PDF yang diperbolehkan.");
-            }
-
-            // Path upload directory
-            $uploadDir = __DIR__ . '/uploads/';
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true); // Buat direktori jika belum ada
-            }
-
-            $uploadPath = $uploadDir . basename($fileName);
-
-            // Pindahkan file yang diunggah
-            if (!move_uploaded_file($fileTmpName, $uploadPath)) {
-                throw new Exception("Gagal mengunggah file bukti.");
-            }
-        }
-
-        // Simpan laporan ke tabel Laporan
-        $sqlLaporan = "INSERT INTO Laporan (ID_Pelapor, ID_Dilapor, TanggalDibuat, ID_Pelanggaran, Foto_Bukti)
-                        VALUES (?, ?, ?, ?, ?)";
-        $params = [$idPelapor, $idDilapor, $tanggal, $jenisPelanggaran, $fileName];
-        $stmtLaporan = sqlsrv_prepare($conn, $sqlLaporan, $params);
-
-        if (!$stmtLaporan || !sqlsrv_execute($stmtLaporan)) {
-            throw new Exception("Gagal menyimpan laporan: " . print_r(sqlsrv_errors(), true));
-        }
-
-        // Redirect dengan notifikasi sukses
-        header("Location: ../src/Admin/Dosen/Dashboard.php?success=1");
-        exit;
-    } catch (Exception $e) {
-        die("Gagal menyimpan laporan: " . $e->getMessage());
+    if ($stmtTerlapor === false) {
+        die(print_r(sqlsrv_errors(), true));
     }
-} else {
-    die("Metode request tidak valid.");
+
+    // Ambil ID_Terlapor
+    $idTerlapor = null;
+    if ($row = sqlsrv_fetch_array($stmtTerlapor, SQLSRV_FETCH_ASSOC)) {
+        $idTerlapor = $row['NIM'];
+    } else {
+        echo "Nama Terlapor tidak ditemukan!";
+        exit;
+    }
+
+    // Simpan file bukti
+    $uploadDir = "../../uploads/";
+    $fileName = time() . "_" . basename($bukti["name"]);
+    $uploadFilePath = $uploadDir . $fileName;
+
+    if (move_uploaded_file($bukti["tmp_name"], $uploadFilePath)) {
+        // Masukkan data ke tabel laporan
+        $insertQuery = "
+            INSERT INTO [PelanggaranTataTertib].[dbo].[Laporan] 
+            (ID_Dilapor, ID_Pelanggaran, TanggalDibuat, Foto_Bukti, Status) 
+            VALUES (?, ?, GETDATE(), ?, 'Pending')
+        ";
+        $params = [$idTerlapor, $jenisPelanggaran, $uploadFilePath];
+        $stmt = sqlsrv_query($conn, $insertQuery, $params);
+
+        if ($stmt === false) {
+            die(print_r(sqlsrv_errors(), true));
+        }
+
+        echo "Laporan berhasil ditambahkan!";
+    } else {
+        echo "Gagal mengunggah file bukti.";
+    }
 }
+
+// Sintaks join untuk mendapatkan data tambahan (termasuk ID Mahasiswa)
+$joinQuery = "
+    SELECT 
+        L.ID_Laporan,
+        L.ID_Dilapor AS ID_Terlapor,
+        M.Nama AS Nama_Terlapor,
+        L.ID_Pelanggaran,
+        PL.Nama_Pelanggaran
+    FROM 
+        [PelanggaranTataTertib].[dbo].[Laporan] L
+    LEFT JOIN [PelanggaranTataTertib].[dbo].[Mahasiswa] M ON L.ID_Dilapor = M.NIM
+    LEFT JOIN [PelanggaranTataTertib].[dbo].[Pelanggaran] PL ON L.ID_Pelanggaran = PL.ID_Pelanggaran
+
+";
+
+$stmtJoin = sqlsrv_query($conn, $joinQuery);
+
+if ($stmtJoin === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
+
+header("Location: ../src/Dosen/Dashboard.php");
+
+// Tutup koneksi
+sqlsrv_close($conn);
 ?>
