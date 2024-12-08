@@ -3,20 +3,23 @@ include_once 'database.php'; // Pastikan file koneksi database benar
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user = $_POST['username'];
-    $pass = $_POST['password'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
     // Validasi input kosong
-    if (empty($user) || empty($pass)) {
+    if (empty($username) || empty($password)) {
         echo "Username dan Password tidak boleh kosong.";
         exit;
     }
 
-    // Query pertama: Mahasiswa
-    $sql = "SELECT * FROM Mahasiswa WHERE Username = ?";
-    $params = array($user); // Parameter untuk prepared statement
+    // Gabungkan login Mahasiswa dan Dosen
+    $sql = "SELECT 'Mahasiswa' AS Role, NIM AS ID, Nama, Username, Pw 
+            FROM Mahasiswa WHERE Username = ? 
+            UNION 
+            SELECT 'Dosen' AS Role, NIP AS ID, Nama, Username, Pw 
+            FROM Dosen WHERE Username = ?";
 
-    // Mempersiapkan dan menjalankan statement
+    $params = [$username, $username];
     $stmt = sqlsrv_prepare($conn, $sql, $params);
 
     if ($stmt === false) {
@@ -27,40 +30,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
 
         if ($userData) {
-            if ($pass === $userData['Pw']) {
+            // Periksa password dengan password_verify jika password di-hash
+            if (password_verify($password, $userData['Pw'])) {
                 // Simpan data user di session
-                $_SESSION['NIM'] = $userData['NIM'];
+                $_SESSION['ID'] = $userData['ID'];
                 $_SESSION['Nama'] = $userData['Nama'];
                 $_SESSION['Username'] = $userData['Username'];
-                header("Location: ../src/Mahasiswa/Dashboard.php");
-                exit;
-            } else {
-                echo "Password salah.";
-                exit;
-            }
-        }
-    } else {
-        die("Gagal mengeksekusi query: " . print_r(sqlsrv_errors(), true));
-    }
+                $_SESSION['Role'] = $userData['Role'];
 
-    // Query kedua: Dosen (jika username tidak ditemukan di Mahasiswa)
-    $sql = "SELECT * FROM Dosen WHERE Username = ?";
-    $stmt = sqlsrv_prepare($conn, $sql, $params);
-
-    if ($stmt === false) {
-        die(print_r(sqlsrv_errors(), true)); // Debugging jika persiapan gagal
-    }
-
-    if (sqlsrv_execute($stmt)) {
-        $userData = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-
-        if ($userData) {
-            if ($pass === $userData['Pw']) {
-                // Simpan data user di session
-                $_SESSION['NIP'] = $userData['NIP'];
-                $_SESSION['Nama'] = $userData['Nama'];
-                $_SESSION['Username'] = $userData['Username'];
-                header("Location: ../src/Dosen/Dashboard.php");
+                // Redirect ke dashboard sesuai role
+                if ($userData['Role'] === 'Mahasiswa') {
+                    header("Location: ../src/Mahasiswa/Dashboard.php");
+                } else {
+                    header("Location: ../src/Dosen/Dashboard.php");
+                }
                 exit;
             } else {
                 echo "Password salah.";
