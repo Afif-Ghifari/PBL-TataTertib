@@ -12,13 +12,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $fileName = time() . "_" . basename($bukti["name"]);
         $uploadFilePath = $uploadDir . $fileName;
 
-        // Validasi file upload (opsional)
-        $allowedExtensions = ['jpg', 'jpeg', 'png', 'pdf'];
-        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-        if (!in_array($fileExtension, $allowedExtensions)) {
-            echo "Format file tidak didukung. Hanya jpg, jpeg, png, dan pdf yang diizinkan.";
-            exit;
-        }
 
         // Pastikan direktori upload ada
         if (!is_dir($uploadDir)) {
