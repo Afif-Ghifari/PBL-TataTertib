@@ -6,8 +6,5 @@ $connInfo = array(
 
     // Koneksi menggunakan PDO dengan driver sqlsrv
     $conn = sqlsrv_connect($host, $connInfo);
-    if ($conn) {
-        echo "benar ";
-    } else {
-        echo "Koneksi gagal: " . print_r(sqlsrv_errors(),true);}
+
 ?>

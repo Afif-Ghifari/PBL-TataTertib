@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Simpan file bukti
-    $uploadDir = "uploads/";
+    $uploadDir = "UploadButkiPelanggaran/";
     $fileName = time() . "_" . basename($bukti["name"]);
     $uploadFilePath = $uploadDir . $fileName;
     $id_laporan = time();
@@ -58,6 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Gagal mengunggah file bukti.";
     }
 }
-
+?>
 // Sintaks join untuk mendapatkan data tambahan (termasuk ID Mahasiswa)
 // c
