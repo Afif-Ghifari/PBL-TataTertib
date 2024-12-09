@@ -32,28 +32,44 @@
     
     
     <main class="mx-28 mb-32 mt-8 flex">
+    <?php
+    include "../../backend/database.php";
+    session_start();
+
+    $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status
+                    FROM Laporan l
+                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    WHERE l.ID_Dilapor = ?";
+    $params = [$_SESSION['NIM']];
+    $stmt = sqlsrv_prepare($conn, $qry_detail, $params);
+
+    if (!$stmt) {
+        die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+    }
+
+    if (!sqlsrv_execute($stmt)) {
+        die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+    }
+
+    // Fetch the result
+    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+    if (!$row) {
+        die("No data found.");
+    }
+    ?>
         <section class="w-2/3 h-fit">
             <img src="../../assets/img/sample_pelanggaran.png" class="max-w-2xl rounded-2xl mb-10" alt="">
             <div class="pr-24">
-                <h2 class="text-xl">Ketahuan merokok ditempat yang dilarang</h2>
-                <h4 class="text-sm text-slate-600">Pelanggaran Tingkat III</h4>
+                <h2 class="text-xl"><?= htmlspecialchars($row['Nama_Pelanggaran']) ?></h2>
+                <h4 class="text-sm text-slate-600">Pelanggaran Tingkat <?= htmlspecialchars($row['Tingkat']) ?></h4>
                 <span class="flex items-center gap-3 my-7">
                     <div class="size-10 rounded-full border overflow-hidden">
                         <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
                     </div>
-                    <h6>Dwi Setiawan Spd, Mpd</h6>
+                    <h6 class="my-0"><?= htmlspecialchars($row['Nama']) ?></h6>
                 </span>
-                <h5 class="my-2 text-lg">Deskripsi Pelaporan</h5>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat aperiam necessitatibus cumque labore
-                    iusto
-                    sint veniam, accusamus aliquam officiis. Facilis error eos itaque quasi neque obcaecati eum placeat
-                    aliquam,
-                    qui, soluta esse labore maiores accusantium odio distinctio culpa, aperiam vel? Fugiat quos corrupti
-                    praesentium modi. Provident ad placeat alias officia inventore ut cupiditate harum impedit et. Odio
-                    e
-                    xcepturi, harum eius natus distinctio nesciunt illum veniam? Magnam rem tenetur perferendis hic
-                    alias ipsa
-                    adipisci suscipit ipsum repellat!</p>
+                
             </div>
         </section>
         <aside class="w-1/3">
@@ -68,19 +84,23 @@
                     <i class="bi bi-download text-2xl"></i>
                 </a>
                 <div class="w-full px-8 py-3 my-8 bg-gradient-to-r from-blue-900 to-black rounded-lg text-white">
-                    <h4>Tempat Kejadian</h4>
-                    <p class="text-slate-300">Di sana</p>
+                    <h4>Status</h4>
+                    <p class="text-slate-300"><?= htmlspecialchars($row['Status']) ?></p>
                 </div>
                 <div class="w-full px-8 py-3 mt-8 mb-6 bg-gradient-to-r from-blue-900 to-black rounded-lg text-white">
-                    <h4>Tempat Kejadian</h4>
-                    <p class="text-slate-300">Di sana</p>
+                    <h4>Tanggal Dilaporkan</h4>
+                    <p class="text-slate-300"><?= htmlspecialchars(
+                                    $row['TanggalDibuat'] instanceof DateTime
+                                        ? $row['TanggalDibuat']->format('Y-m-d')
+                                        : $row['TanggalDibuat']
+                                ) ?></p>
                 </div>
                 <p class="text-red-600">
                     Apakah itu anda? kalau itu benar anda silakan konfirmasi!!
                 </p>
                 <div class="flex flex-col gap-3 my-6">
                     <a href="EditPelaksanaanSanksi.php" class="btn btn-primary w-full">Konfirmasi</a>
-                    <a href="FormBanding.php" class="btn btn-light w-full border border-black">Ajukan banding</a>
+                    <a href="FormBanding.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-light w-full border border-black">Ajukan banding</a>
                 </div>
             </div>
         </aside>

@@ -63,12 +63,12 @@
                 <div id="listSemua" class="inline">
                     <?php include 'SemuaPelanggaran.php' ?>
                 </div>
-                <div id="listBanding" class="hidden">
+                <!-- <div id="listBanding" class="hidden">
                     <?php include 'Banding.php' ?>
                 </div>
                 <div id="listProses" class="hidden">
                     <?php include 'Sanksi.php' ?>
-                </div>
+                </div> -->
             </div>
         </section>
 

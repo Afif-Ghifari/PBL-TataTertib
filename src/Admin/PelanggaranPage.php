@@ -31,13 +31,44 @@
             <h1 class="text-3xl">Laporan Pelanggaran Baru</h1>
 
             <div class="grid grid-cols-3 gap-4">
-                <div class="w-72 bg-white rounded-xl mx-auto px-6 py-3">
-                    <img src="../../assets/img/sample_pelanggaran.png" class="w-56 mx-auto my-3" alt="">
-                    <h3 class="text-lg my-2">Ketahuan merokok ditempat dilarang</h3>
-                    <h4 class="text-blue-600 text-base">Nama dosen</h4>
-                    <p class="text-slate-400 text-sm">Tanggal</p>
-                    <a href="TerimaPelanggaran.php" class="btn btn-primary w-24 my-6">Detail</a>
-                </div>
+                <?php
+                include "../../backend/database.php";
+
+                $qry_pelanggaran = "SELECT l.ID_Laporan, p.ID_Pelanggaran, p.Nama_Pelanggaran, l.TanggalDibuat, l.Foto_Bukti
+                                        FROM laporan l
+                                        JOIN pelanggaran p 
+                                        ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                                        WHERE l.Status = 'Pending'";
+
+                $stmt = sqlsrv_query($conn, $qry_pelanggaran);
+
+                if (!$stmt) {
+                    die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                if (!sqlsrv_has_rows($stmt)) {
+                    echo "<p>No data found.</p>";
+                } else {
+
+                    while ($pelanggaran = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                ?>
+                        <div class="w-72 bg-white rounded-xl mx-auto px-6 py-3">
+                            <img src="../../backend/<?= htmlspecialchars($pelanggaran['Foto_Bukti']) ?>" class="w-56 mx-auto my-3" alt="">
+                            <h3 class="text-lg my-2"><?= htmlspecialchars($pelanggaran['Nama_Pelanggaran']) ?></h3>
+                            <h4 class="text-blue-600 text-base">Nama dosen</h4>
+                            <p class="text-slate-400 text-sm my-2">
+                                <?= htmlspecialchars(
+                                    $pelanggaran['TanggalDibuat'] instanceof DateTime
+                                        ? $pelanggaran['TanggalDibuat']->format('Y-m-d')
+                                        : $pelanggaran['TanggalDibuat']
+                                ) ?>
+                            </p>
+                            <a href="TerimaPelanggaran.php?ID_Laporan=<?= $pelanggaran['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2">Detail</a>
+                        </div>
+                <?php
+                    }
+                }
+                ?>
             </div>
         </section>
     </main>

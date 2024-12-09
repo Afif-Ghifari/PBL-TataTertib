@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +19,7 @@
 
 <body>
     <?php include 'Navbar.php'; ?>
-
+    <!-- <?= htmlspecialchars($_SESSION['NIP'])?> -->
     <main class="px-28 my-36">
         <h2 class="text-3xl text-center my-2">Form Pelaporan</h2>
         <p class="text-center">Silakan lengkapi form pelaporan ini dengan informasi yang sesuai dan jelas. Pastikan semua data yang dimasukkan valid agar laporan dapat diproses dengan baik.</p>
@@ -31,7 +35,8 @@
                 </span>
                 <span class="w-full hidden">
                     <label for="">Admin Yang Akan Menangani</label>
-                    <input type="text" class="form-control" id="Admin" name="Admin" value="1">
+                    <input type="text" class="form-control" id="Admin" name="ID_Admin" value="1">
+                    <input type="text" class="form-control hidden" id="Admin" name="NIP" value="<?= htmlspecialchars($_SESSION['NIP'])?>">
                 </span>
             </div>
 
@@ -49,7 +54,7 @@
 
             <label for="">Jenis Pelanggaran</label>
             <select name="JenisPelanggaran" class="form-control mb-8" id="JenisPelanggaran" required>
-            <option value="" class="hidden">Pilih Jenis Pelanggaran</option>
+            <option value="" class="hidden" >Pilih Jenis Pelanggaran</option>
                 <?php
                 include "../../backend/database.php";
 

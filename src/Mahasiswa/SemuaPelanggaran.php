@@ -22,7 +22,7 @@
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.ID_Dilapor = ?";
+                    WHERE l.Status = 'Pending' AND l.ID_Dilapor = ?";
         $params = [$_SESSION['NIM']];
         $stmt = sqlsrv_query($conn, $query, $params);
 
@@ -36,15 +36,15 @@
 
             while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
+                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
                     <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan['Tingkat']) ?></div>
                     <h3 class="text-xl"><?= htmlspecialchars($laporan['Nama_Pelanggaran']) ?></h3>
                     <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang dilarang oleh kampus </p>
                     <span class="flex gap-3 items-center">
                         <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan['Nama']) ?></p>
+                        <p class="my-0"><?= htmlspecialchars($laporan['Nama']) ?></p>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.php?id=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">Detail</a>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?id=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }

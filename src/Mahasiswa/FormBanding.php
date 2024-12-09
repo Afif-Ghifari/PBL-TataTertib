@@ -1,3 +1,8 @@
+<?php
+session_start();
+$nim = $_SESSION['NIM'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,18 +27,23 @@
             terdapat ketidaksesuaian dengan fakta yang sebenarnya.</p>
         <img src="../../assets/img/FormBandingImg.png" alt="">
     </section>
+
+    <?php
+
+    ?>
     <form class="w-full flex flex-col justify-evenly bg-blue-700 rounded-l-3xl text-white px-14 py-6" action="" method="post">
         <h2 class="text-3xl my-3">Proses Banding</h2>
         <p>Silakan isi form yang sudah kami sediakan, isi dengan lengkap kalau benar benar anda tidak melakukan nya</p>
 
         <label for="" class="flex flex-col gap-2 my-6">ID Laporan
-            <input type="text" class="border py-2 px-4 rounded-xl bg-slate-300  focus:outline-none w-full" value="" placeholder="ID Laporan" name="ID_Laporan" disabled>
+            <input type="text" class="border py-2 px-4 text-black rounded-xl bg-white w-full" value="<?= htmlspecialchars($_GET['ID_Laporan']) ?>" readonly name="ID_Laporan">
         </label>
+        </select>
         <label for="" class="flex flex-col gap-2 my-6">NIM
-            <input type="text" class="border py-2 px-4 rounded-xl bg-white w-full" value="" placeholder="NIM" name="NIM">
+            <input type="text" class="border py-2 px-4 text-black rounded-xl bg-white w-full" value="<?= htmlspecialchars($nim) ?>" readonly placeholder="NIM" name="NIM">
         </label>
         <label for="" class="flex flex-col gap-2 my-6">Keterangan
-            <textarea type="text" class="border py-2 px-4 rounded-xl bg-white w-full" name="Keterangan"></textarea>
+            <textarea type="text" placeholder="Masukkan keterangan" class="border py-2 px-4 text-black rounded-xl bg-white w-full" name="Keterangan"></textarea>
         </label>
 
         <input type="submit" value="Submit" class="btn btn-primary w-1/2 mx-auto my-8">

@@ -29,7 +29,40 @@
         </nav>
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
+            <?php
+            include "../../backend/database.php";
+            $qry_terimaPelanggaran = "SELECT 
+                            l.ID_Laporan, 
+                            m.NIM, 
+                            m.Nama as NamaMahasiswa, 
+                            -- d.NIP, 
+                            -- d.Nama as NamaDosen,
+                            l.Status,
+                            l.TanggalDibuat, 
+                            p.ID_Pelanggaran, 
+                            p.Nama_Pelanggaran, 
+                            p.Tingkat
+                            FROM Laporan l 
+                            JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                            -- JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                            WHERE ID_Laporan = ?";
+            $params = [$_GET['ID_Laporan']];
+            $stmt = sqlsrv_prepare($conn, $qry_terimaPelanggaran, $params);
 
+            if (!$stmt) {
+                die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+            }
+
+            if (!sqlsrv_execute($stmt)) {
+                die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+            }
+
+            $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+            if (!$row) {
+                die("No data found. ");
+            }
+            ?>
                 <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti</label>
                 <img src="../../assets/img/sample_pelanggaran.png" class="w-96 mx-auto my-3" alt="">
 
@@ -38,13 +71,13 @@
                         <label for="">
                             Nama Terlapor
                         </label>
-                        <input type="text" class="form-control" readonly id="NamaTerlapor">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaMahasiswa']) ?>" readonly name="NamaTerlapor">
                     </span>
                     <span class="w-full">
                         <label for="">
                             NIM
                         </label>
-                        <input type="text" class="form-control" readonly id="Admin">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIM']) ?>" readonly name="Admin">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
@@ -52,27 +85,32 @@
                         <label for="">
                             Nama Pelapor
                         </label>
-                        <input type="text" class="form-control" readonly id="NamaTerlapor">
+                        <input type="text" class="form-control" readonly name="NamaTerlapor">
                     </span>
                     <span class="w-full">
                         <label for="">
                             NIP
                         </label>
-                        <input type="text" class="form-control" readonly id="Admin">
+                        <input type="text" class="form-control" readonly name="Admin">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
                     <span class="w-full">
                         <label for="">
-                            Tempat Kejadian
+                            Status
                         </label>
-                        <input type="text" class="form-control" readonly id="Tempat">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Status']) ?>" readonly name="Tempat">
                     </span>
                     <span class="w-full">
                         <label for="">
                             Tanggal Kejadian
                         </label>
-                        <input type="text" class="form-control" readonly id="Tanggal">
+                        <input type="text" class="form-control" 
+                                value="<?= htmlspecialchars(
+                                    $row['TanggalDibuat'] instanceof DateTime
+                                        ? $row['TanggalDibuat']->format('Y-m-d')
+                                        : $row['TanggalDibuat']
+                                ) ?>" readonly name="Tanggal">
                     </span>
                 </div>
                 <div class="flex justify-between gap-24 w-full my-8">
@@ -80,13 +118,13 @@
                         <label for="">
                             Jenis Pelanggaran
                         </label>
-                        <input type="text" class="form-control" readonly id="Tempat">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Nama_Pelanggaran']) ?>" readonly name="Tempat">
                     </span>
                     <span class="w-1/3">
                         <label for="">
                             Tingkat Pelanggaran
                         </label>
-                        <input type="text" class="form-control" readonly id="Tanggal">
+                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Tingkat']) ?>" readonly name="Tanggal">
                     </span>
                 </div>
                 <!-- <label for="">Jenis Pelanggaran</label>
@@ -99,8 +137,8 @@
                     <option value="">Pelanggaran 5</option>
                 </select> -->
 
-                <label for="">Deskripsi</label>
-                <textarea class="form-control" readonly name="" id="Deskripsi"></textarea>
+                <!-- <label for="">Deskripsi</label>
+                <textarea class="form-control" readonly name="" id="Deskripsi"></textarea> -->
 
                 <input type="submit" value="Terima" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
                 <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2">

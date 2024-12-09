@@ -6,16 +6,18 @@ include "database.php";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $namaTerlapor = htmlspecialchars($_POST['NamaTerlapor']);
     $tanggal = htmlspecialchars($_POST['Tanggal']);
+    $ID_Pelapor = $_POST['NIP']; 
     $jenisPelanggaran = htmlspecialchars($_POST['JenisPelanggaran']);
     $bukti = $_FILES['bukti'];
 
     // Dapatkan ID_Terlapor berdasarkan NamaTerlapor
     $idTerlaporQuery = "
-        SELECT NIM
-        FROM [PelanggaranTataTertib].[dbo].[Mahasiswa]
-        WHERE Nama = ?
-    ";
+    SELECT NIM
+    FROM [PelanggaranTataTertib].[dbo].[Mahasiswa]
+    WHERE Nama LIKE ?";
+
     $stmtTerlapor = sqlsrv_query($conn, $idTerlaporQuery, array($namaTerlapor));
+
 
     if ($stmtTerlapor === false) {
         die(print_r(sqlsrv_errors(), true));
@@ -31,18 +33,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Simpan file bukti
-    $uploadDir = "../../uploads/";
+    $uploadDir = "uploads/";
     $fileName = time() . "_" . basename($bukti["name"]);
     $uploadFilePath = $uploadDir . $fileName;
+    $id_laporan = time();
 
     if (move_uploaded_file($bukti["tmp_name"], $uploadFilePath)) {
         // Masukkan data ke tabel laporan
         $insertQuery = "
-            INSERT INTO [PelanggaranTataTertib].[dbo].[Laporan] 
-            (ID_Dilapor, ID_Pelanggaran, TanggalDibuat, Foto_Bukti, Status) 
-            VALUES (?, ?, GETDATE(), ?, 'Pending')
+            INSERT INTO Laporan 
+            (ID_Laporan, ID_Pelapor, ID_Dilapor, ID_Pelanggaran, TanggalDibuat, Foto_Bukti, Status) 
+            VALUES (?, ?, ?, ?, GETDATE(), ?, 'Pending')
         ";
-        $params = [$idTerlapor, $jenisPelanggaran, $uploadFilePath];
+        $params = [$id_laporan, $ID_Pelapor, $idTerlapor, $jenisPelanggaran, $uploadFilePath];
         $stmt = sqlsrv_query($conn, $insertQuery, $params);
 
         if ($stmt === false) {
@@ -50,34 +53,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         echo "Laporan berhasil ditambahkan!";
+        header("Location: ../src/Dosen/Dashboard.php");
     } else {
         echo "Gagal mengunggah file bukti.";
     }
 }
 
 // Sintaks join untuk mendapatkan data tambahan (termasuk ID Mahasiswa)
-$joinQuery = "
-    SELECT 
-        L.ID_Laporan,
-        L.ID_Dilapor AS ID_Terlapor,
-        M.Nama AS Nama_Terlapor,
-        L.ID_Pelanggaran,
-        PL.Nama_Pelanggaran
-    FROM 
-        [PelanggaranTataTertib].[dbo].[Laporan] L
-    LEFT JOIN [PelanggaranTataTertib].[dbo].[Mahasiswa] M ON L.ID_Dilapor = M.NIM
-    LEFT JOIN [PelanggaranTataTertib].[dbo].[Pelanggaran] PL ON L.ID_Pelanggaran = PL.ID_Pelanggaran
-
-";
-
-$stmtJoin = sqlsrv_query($conn, $joinQuery);
-
-if ($stmtJoin === false) {
-    die(print_r(sqlsrv_errors(), true));
-}
-
-header("Location: ../src/Dosen/Dashboard.php");
-
-// Tutup koneksi
-sqlsrv_close($conn);
-?>
+// c
