@@ -31,7 +31,7 @@ $nim = $_SESSION['NIM'];
     <?php
 
     ?>
-    <form class="w-full flex flex-col justify-evenly bg-blue-700 rounded-l-3xl text-white px-14 py-6" action="" method="post">
+    <form class="w-full flex flex-col justify-evenly bg-blue-700 rounded-l-3xl text-white px-14 py-6" action="../../backend/Banding.php" method="post">
         <h2 class="text-3xl my-3">Proses Banding</h2>
         <p>Silakan isi form yang sudah kami sediakan, isi dengan lengkap kalau benar benar anda tidak melakukan nya</p>
 
