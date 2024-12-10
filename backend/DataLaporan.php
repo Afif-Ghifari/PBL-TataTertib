@@ -12,20 +12,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $Status = $_POST['Status'];
         $Sanksi = $_POST['Sanksi'];
         $IDBukti = $_POST['IDBukti'];
-        $TanggalDibuat = date('Y-m-d H:i:s'); 
+        $TanggalDibuat = date('Y-m-d H:i:s');
 
         $query = "INSERT INTO Laporan (ID_Pelapor, ID_Admin, ID_Pelanggaran, Status, Sanksi, ID_Bukti, TanggalDibuat) 
                   VALUES (?, ?, ?, ?, ?, ?, ?)";
         $params = array($IDPelapor, $IDAdmin, $IDPelanggaran, $Status, $Sanksi, $IDBukti, $TanggalDibuat);
     } elseif ($action === 'update') {
         // Update
-        $ID_Laporan = $_POST['ID_Laporan'];
+        $IDPelapor = $_POST['IDPelapor'];
+        $IDAdmin = $_POST['IDAdmin'];
+        $IDPelanggaran = $_POST['IDPelanggaran'];
         $Status = $_POST['Status'];
         $Sanksi = $_POST['Sanksi'];
-        $TanggalDiupdate = date('Y-m-d H:i:s'); 
+        $IDBukti = $_POST['IDBukti'];
+        $TanggalDibuat = date('Y-m-d H:i:s');
 
-        $query = "UPDATE Laporan SET Status = ?, Sanksi = ?, TanggalDiupdate = ? WHERE ID_Laporan = ?";
-        $params = array($Status, $Sanksi, $TanggalDiupdate, $ID_Laporan);
+        $$query = "INSERT INTO Laporan (ID_Pelapor, ID_Admin, ID_Pelanggaran, Status, Sanksi, ID_Bukti, TanggalDibuat) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $params = array($IDPelapor, $IDAdmin, $IDPelanggaran, $Status, $Sanksi, $IDBukti, $TanggalDibuat);
     }
 
     $stmt = sqlsrv_prepare($conn, $query, $params);
@@ -56,6 +60,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$stmt) {
         die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
     }
-
 }
-?>
