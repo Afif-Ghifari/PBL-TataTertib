@@ -99,7 +99,7 @@
                     Apakah itu anda? kalau itu benar anda silakan konfirmasi!!
                 </p>
                 <div class="flex flex-col gap-3 my-6">
-                    <a href="EditPelaksanaanSanksi.php" class="btn btn-primary w-full">Konfirmasi</a>
+                    <a href="EditPelaksanaanSanksi.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-primary w-full">Konfirmasi</a>
                     <a href="FormBanding.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-light w-full border border-black">Ajukan banding</a>
                 </div>
             </div>
