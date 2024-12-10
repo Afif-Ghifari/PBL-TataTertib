@@ -80,14 +80,18 @@
 
                 <label for="">
                     <h5>Waktu Dilaporkan</h5>
-                    <p><?= htmlspecialchars($banding['TanggalDibuat']) ?></p>
+                    <p class=""><?= htmlspecialchars(
+                                    $banding['TanggalDibuat'] instanceof DateTime
+                                        ? $banding['TanggalDibuat']->format('Y-m-d')
+                                        : $banding['TanggalDibuat']
+                                ) ?></p>
                 </label>
 
                 <label for="">
                     <h5>Alasan Banding</h5>
                     <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
                 </label>
-                <a href="EditDataLaporan.php" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">Tindak Lanjut</a>
+                <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">Tindak Lanjut</a>
                 <a href="DataBanding.php" class="btn btn-warning rounded-xl w-full mx-auto my-3 py-2">Tutup</a>
             </div>
         </section>

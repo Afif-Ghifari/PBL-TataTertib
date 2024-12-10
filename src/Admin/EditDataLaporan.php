@@ -1,3 +1,8 @@
+<?php
+session_start();
+$IdAdmin = $_SESSION['ID_Admin'];
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,6 +35,45 @@
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
 
+                <?php
+                include "../../backend/database.php";
+                $qry_terimaPelanggaran = "SELECT 
+                            l.ID_Laporan,
+                            m.NIM, 
+                            m.Nama as NamaMahasiswa, 
+                            d.NIP, 
+                            d.Nama as NamaDosen,
+                            l.ID_Admin,
+                            l.Status,
+                            l.TanggalDibuat,
+                            l.Sanksi,
+                            p.ID_Pelanggaran, 
+                            p.Nama_Pelanggaran, 
+                            p.Tingkat,
+                            bk.ID_Bukti,
+                            bk.Foto,
+                            bk.Deskripsi
+                            FROM Laporan l 
+                            JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                            JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                            LEFT JOIN Bukti_Pengerjaan bk ON l.ID_Bukti = bk.ID_Bukti
+                            WHERE ID_Laporan = ?";
+                $params = [$_GET['ID_Laporan']];
+                $stmt = sqlsrv_prepare($conn, $qry_terimaPelanggaran, $params);
+
+                if (!$stmt) {
+                    die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                if (!sqlsrv_execute($stmt)) {
+                    die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+                }
+
+                $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+
+                ?>
+
                 <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti</label>
                 <img src="../../assets/img/sample_pelanggaran.png" class="w-96 mx-auto my-3" alt="">
 
@@ -38,13 +82,20 @@
                         <label for="">
                             Nama Terlapor
                         </label>
-                        <select name="ID_Terlapor" class="form-control" id="JenisPelanggaran">
-                            <option value="" selected>Nama Mahasiswa</option>
-                            <option value="">Pelanggaran 1</option>
-                            <option value="">Pelanggaran 2</option>
-                            <option value="">Pelanggaran 3</option>
-                            <option value="">Pelanggaran 4</option>
-                            <option value="">Pelanggaran 5</option>
+                        <select name="ID_Terlapor" class="form-control" id="JenisPelanggaran" name=>
+                            <?php
+                            $qry_mahasiswa = "SELECT * FROM Mahasiswa";
+                            $stmt = sqlsrv_query($conn, $qry_mahasiswa);
+
+                            if (!$stmt) {
+                                die("Query Error: " . print_r(sqlsrv_errors(), true));
+                            }
+
+                            while ($mahasiswa = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $selected = $mahasiswa['NIM'] === $row['NIM'] ? 'selected' : '';
+                                echo "<option value=\"" . htmlspecialchars($mahasiswa['NIM']) . "\" $selected>" . htmlspecialchars($mahasiswa['Nama']) . "</option>";
+                            }
+                            ?>
                         </select>
                     </span>
                 </div>
@@ -54,30 +105,49 @@
                             Nama Pelapor
                         </label>
                         <select name="ID_Pelapor" class="form-control" id="JenisPelanggaran">
-                            <option value="" selected>Nama Dosen</option>
-                            <option value="">Pelanggaran 1</option>
-                            <option value="">Pelanggaran 2</option>
-                            <option value="">Pelanggaran 3</option>
-                            <option value="">Pelanggaran 4</option>
-                            <option value="">Pelanggaran 5</option>
+                            <?php
+                            $qry_dosen = "SELECT * FROM dosen";
+                            $stmt = sqlsrv_query($conn, $qry_dosen);
+
+                            if (!$stmt) {
+                                die("Query Error: " . print_r(sqlsrv_errors(), true));
+                            }
+
+                            while ($dosen = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $selected = $dosen['NIP'] === $row['NIP'] ? 'selected' : '';
+                                echo "<option value=\"" . htmlspecialchars($dosen['NIP']) . "\" $selected>" . htmlspecialchars($dosen['Nama']) . "</option>";
+                            }
+                            ?>
                         </select>
                     </span>
                 </div>
-                <input type="text" class="form-control hidden" name="ID_Admin" value="1" id="Tempat">
+                <input type="text" class="form-control" name="ID_Admin" value="<?= htmlspecialchars(isset($row['ID_Admin']) ? $row['ID_Admin'] : $IdAdmin) ?>" id="Tempat" hidden>
                 <div class="flex justify-between gap-24 w-full my-8">
                     <span class="w-full">
                         <label for="">
                             Tanggal Kejadian
                         </label>
-                        <input type="text" class="form-control" id="Tanggal" name="TanggalDibuat" value="">
+
+                        <input
+                            type="date"
+                            class="form-control"
+                            id="Tanggal"
+                            name="TanggalDibuat"
+                            value="<?= isset($row['TanggalDibuat'])
+                                        ? htmlspecialchars(
+                                            $row['TanggalDibuat'] instanceof DateTime
+                                                ? $row['TanggalDibuat']->format('Y-m-d')
+                                                : (new DateTime($row['TanggalDibuat']))->format('Y-m-d')
+                                        )
+                                        : ''
+                                    ?>">
                     </span>
                     <span class="w-full">
                         <label for="">
                             Status
                         </label>
                         <select name="Status" class="form-control" id="JenisPelanggaran">
-                            <option value="" selected>Pilih Jenis Pelanggaran</option>
-                            <option value="">Pelanggaran 1</option>
+                            <option value="<?= htmlspecialchars($row['Status']) ?>" selected><?= htmlspecialchars($row['Status']) ?></option>
                             <option value="">Pelanggaran 2</option>
                             <option value="">Pelanggaran 3</option>
                             <option value="">Pelanggaran 4</option>
@@ -91,41 +161,52 @@
                             Jenis Pelanggaran
                         </label>
                         <select name="ID_Pelanggaran" class="form-control" id="JenisPelanggaran">
-                            <option value="" selected>Pilih Jenis Pelanggaran</option>
-                            <option value="">Pelanggaran 1</option>
-                            <option value="">Pelanggaran 2</option>
-                            <option value="">Pelanggaran 3</option>
-                            <option value="">Pelanggaran 4</option>
-                            <option value="">Pelanggaran 5</option>
+                            <?php
+                            $qry_pelanggaran = "SELECT * FROM pelanggaran";
+                            $stmt = sqlsrv_query($conn, $qry_pelanggaran);
+
+                            if (!$stmt) {
+                                die("Query Error: " . print_r(sqlsrv_errors(), true));
+                            }
+
+                            while ($pelanggaran = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                                $selected = $pelanggaran['ID_Pelanggaran'] === $row['ID_Pelanggaran'] ? 'selected' : '';
+                                echo "<option value=\"" . htmlspecialchars($pelanggaran['ID_Pelanggaran']) . "\" $selected>" . htmlspecialchars($pelanggaran['Nama_Pelanggaran']) . "</option>";
+                            }
+                            ?>
                         </select>
                     </span>
-                    <!-- <span class="w-1/3">
-                        <label for="">
-                            Tingkat Pelanggaran
-                        </label>
-                        <input type="text" class="form-control" id="Tanggal">
-                    </span> -->
                 </div>
 
                 <label for="">Sanksi</label>
-                <textarea class="form-control" name="" id="Deskripsi"></textarea>
+                <textarea class="form-control" name="Sanksi" id="Deskripsi" placeholder="Isi Sanksi"><?= htmlspecialchars(isset($row['Sanksi']) ? $row['Sanksi'] : '') ?></textarea>
 
-                <div class="flex justify-between gap-24 w-full my-8">
-                    <span class="w-full">
-                        <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti Pengerjaan</label>
-                        <img src="../../assets/img/sample_pelanggaran.png" class="w-96 mx-auto my-3" alt="">
-                    </span>
+                <div class="my-8">
+                    <h4>Bukti Pengerjaan</h4>
+                    <?php
+                    if (isset($row) && is_array($row) && array_key_exists('ID_Bukti', $row) && is_null($row['ID_Bukti'])) { // Jika tidak ada bukti pengerjaan
+                        echo "<h6>Belum mengumpulkan bukti</h6>";
+                    } elseif (isset($row) && is_array($row)) {
+                    ?>
+                        <div class="flex justify-between gap-24 w-full">
+                            <span class="w-full">
+                                <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input">Foto Bukti Pengerjaan</label>
+                                <img src="../../backend/<?= htmlspecialchars($row['Bukti_Pengerjaan']) ?>" class="w-96 mx-auto my-3" alt="Foto Bukti Pengerjaan">
+                            </span>
+                        </div>
+                        <span class="w-1/3">
+                            <label for="Deskripsi">
+                                Deskripsi
+                            </label>
+                            <textarea class="form-control" id="Deskripsi" readonly><?= htmlspecialchars($row['Deskripsi']) ?></textarea>
+                        </span>
                 </div>
-                <span class="w-1/3">
-                    <label for="">
-                        Deskripsi
-                    </label>
-                    <textarea class="form-control" name="" id="Deskripsi" readonly></textarea>
-                    <!-- <input type="text" class="form-control" id="Tanggal"> -->
-                </span>
-
-                <input type="submit" value="Update" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
-                <!-- <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2"> -->
+            <?php
+                    } else {
+                        echo "<h6>Data tidak ditemukan.</h6>";
+                    }
+            ?>
+            <input type="submit" value="Update" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
             </form>
         </section>
     </main>

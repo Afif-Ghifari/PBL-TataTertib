@@ -44,7 +44,7 @@
             $total_semua = 0;
 
             // Query untuk menghitung jumlah laporan yang diverifikasi
-            $qry_laporan_pelanggaran = "SELECT COUNT(*) as total_pelanggaran FROM laporan WHERE Status = 'Diverifikasi'";
+            $qry_laporan_pelanggaran = "SELECT COUNT(*) as total_pelanggaran FROM laporan WHERE Status != 'Pending'";
             $qry_laporan = "SELECT COUNT(*) as total_pelaporan FROM laporan";
             $qry_banding = "SELECT COUNT(*) as total_banding FROM banding";
 
@@ -71,19 +71,23 @@
             <h1 class="text-3xl">Dashboard</h1>
             <div class="grid grid-cols-2 gap-4">
                 <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Pelanggaran</h3>
-                    <h4 class="text-xl text-blue-600"><?= $total_pelanggaran ?></h4> <!--status verifikasi -->
+                    <h3 class="text-2xl">Laporan Terverifikasi</h3>
+                    <p class="text-slate-600 mb-2">Total laporan yang terbukti</p>
+                    <h4 class="text-xl text-blue-600"><?= $total_pelanggaran ?></h4>
                 </div>
                 <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Laporan</h3>
-                    <h4 class="text-xl text-blue-600"><?= $total_pelaporan ?></h4><!--jml laporan dari dosen -->
+                    <h3 class="text-2xl">Total Laporan</h3>
+                    <p class="text-slate-600 mb-2">Total semua laporan</p>
+                    <h4 class="text-xl text-blue-600"><?= $total_pelaporan ?></h4>
                 </div>
                 <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Banding</h3>
-                    <h4 class="text-xl text-blue-600"><?= $total_banding ?></h4> <!--jml banding -->
+                    <h3 class="text-2xl">Total Banding</h3>
+                    <p class="text-slate-600 mb-2">Total banding dari Mahasiswa</p>
+                    <h4 class="text-xl text-blue-600"><?= $total_banding ?></h4>
                 </div>
                 <div class="w-96 bg-white rounded-xl mx-auto px-6 py-3">
-                    <h3 class="text-2xl mb-6">Total Keseluruhan</h3><!--total dari 3 itu -->
+                    <h3 class="text-2xl">Total Keseluruhan</h3>
+                    <p class="text-slate-600 mb-2">Total keseluruhan</p>
                     <h4 class="text-xl text-blue-600"><?= $total_semua ?></h4>
                 </div>
             </div>

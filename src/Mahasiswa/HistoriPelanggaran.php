@@ -58,17 +58,17 @@
                 <button id="BtnProses" class="w-full px-12 py-2 text-black rounded-3xl">Proses</button>
             </div>
 
-            <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
+            <div class="gap-4 my-12" id="gridList">
 
-                <div id="listSemua" class="inline">
+                <div id="listSemua" class="inline w-full">
                     <?php include 'SemuaPelanggaran.php' ?>
                 </div>
-                <!-- <div id="listBanding" class="hidden">
+                <div id="listBanding" class="hidden">
                     <?php include 'Banding.php' ?>
                 </div>
                 <div id="listProses" class="hidden">
                     <?php include 'Sanksi.php' ?>
-                </div> -->
+                </div>
             </div>
         </section>
 

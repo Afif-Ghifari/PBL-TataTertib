@@ -66,7 +66,7 @@
                         <td><?= htmlspecialchars($dosen['Alamat'])?></td>
                         <td><?= htmlspecialchars($dosen['No_Tlp'])?></td>
                         <td>
-                            <a href="EditDataDosen.php?NIP=<?= $dosen['NIP']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
+                            <a href="EditDataDosen.php?NIP=<?= $dosen['NIP']?>" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a href="../../backend/hapusDataDosen.php?NIP=<?= $dosen['NIP']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>

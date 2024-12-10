@@ -1,3 +1,7 @@
+<?php
+session_start();
+$IdAdmin = $_SESSION['ID_Admin'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,16 +32,20 @@
             </a>
         </nav>
         <section class="flex flex-col w-full px-14 py-12 gap-10">
-            <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
-            <?php
-            include "../../backend/database.php";
-            $qry_terimaPelanggaran = "SELECT 
+            <div class="w-full flex flex-col w-full px-20 py-12 rounded-xl shadow-lg">
+
+                <form class="" action="../../backend/TerimaPelanggaran.php" method="post">
+                    <?php
+                    include "../../backend/database.php";
+                    $qry_terimaPelanggaran = "SELECT 
                             l.ID_Laporan, 
                             m.NIM, 
                             m.Nama as NamaMahasiswa, 
-                            -- d.NIP, 
-                            -- d.Nama as NamaDosen,
+                            d.NIP, 
+                            d.Nama as NamaDosen,
                             l.Status,
+                            l.Sanksi,
+                            l.Foto_Bukti,
                             l.TanggalDibuat, 
                             p.ID_Pelanggaran, 
                             p.Nama_Pelanggaran, 
@@ -45,104 +53,209 @@
                             FROM Laporan l 
                             JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                             JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
-                            -- JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                            LEFT JOIN Dosen d ON l.ID_Pelapor = d.NIP
                             WHERE ID_Laporan = ?";
-            $params = [$_GET['ID_Laporan']];
-            $stmt = sqlsrv_prepare($conn, $qry_terimaPelanggaran, $params);
+                    $params = [$_GET['ID_Laporan']];
+                    $stmt = sqlsrv_prepare($conn, $qry_terimaPelanggaran, $params);
 
-            if (!$stmt) {
-                die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
-            }
+                    if (!$stmt) {
+                        die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+                    }
 
-            if (!sqlsrv_execute($stmt)) {
-                die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
-            }
+                    if (!sqlsrv_execute($stmt)) {
+                        die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+                    }
 
-            $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
-            if (!$row) {
-                die("No data found. ");
-            }
-            ?>
-                <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti</label>
-                <img src="../../assets/img/sample_pelanggaran.png" class="w-96 mx-auto my-3" alt="">
+                    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+                    if (!$row) {
+                        die("No data found. ");
+                    }
+                    ?>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti</label>
+                    <img src="../../backend/<?= htmlspecialchars($row['Foto_Bukti']) ?>" class="w-96 mx-auto my-3" alt="">
+                    <input type="text" class="form-control hidden" value="<?= htmlspecialchars($row['ID_Laporan']) ?>" readonly name="ID_Laporan">
+                    <!-- <input type="text" class="form-control hidden" value=" " readonly name="Sanksi" hidden> -->
 
-                <div class="flex justify-between gap-24 w-full my-8">
-                    <span class="w-full">
-                        <label for="">
-                            Nama Terlapor
-                        </label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaMahasiswa']) ?>" readonly name="NamaTerlapor">
-                    </span>
-                    <span class="w-full">
-                        <label for="">
-                            NIM
-                        </label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIM']) ?>" readonly name="Admin">
-                    </span>
-                </div>
-                <div class="flex justify-between gap-24 w-full my-8">
-                    <span class="w-full">
-                        <label for="">
-                            Nama Pelapor
-                        </label>
-                        <input type="text" class="form-control" readonly name="NamaTerlapor">
-                    </span>
-                    <span class="w-full">
-                        <label for="">
-                            NIP
-                        </label>
-                        <input type="text" class="form-control" readonly name="Admin">
-                    </span>
-                </div>
-                <div class="flex justify-between gap-24 w-full my-8">
-                    <span class="w-full">
-                        <label for="">
-                            Status
-                        </label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Status']) ?>" readonly name="Tempat">
-                    </span>
-                    <span class="w-full">
-                        <label for="">
-                            Tanggal Kejadian
-                        </label>
-                        <input type="text" class="form-control" 
+                    <div class="flex justify-between gap-24 w-full my-8">
+                        <span class="w-full">
+                            <label for="">
+                                Nama Terlapor
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaMahasiswa']) ?>" readonly name="NamaTerlapor">
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                NIM
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIM']) ?>" readonly name="ID_Dilapor">
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8">
+                        <span class="w-full">
+                            <label for="">
+                                Nama Pelapor
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaDosen']) ?>" readonly name="NamaTerlapor">
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                NIP
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIP']) ?>" readonly name="ID_Pelapor">
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($IdAdmin) ?>" readonly name="ID_Admin" hidden>
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8">
+                        <span class="w-full">
+                            <label for="">
+                                Status
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Status']) ?>" readonly>
+                            <input type="text" class="form-control" value="Dikonfirmasi" readonly name="Status" hidden>
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                Tanggal Kejadian
+                            </label>
+                            <input type="text" class="form-control"
                                 value="<?= htmlspecialchars(
-                                    $row['TanggalDibuat'] instanceof DateTime
-                                        ? $row['TanggalDibuat']->format('Y-m-d')
-                                        : $row['TanggalDibuat']
-                                ) ?>" readonly name="Tanggal">
-                    </span>
-                </div>
-                <div class="flex justify-between gap-24 w-full my-8">
-                    <span class="w-full">
-                        <label for="">
-                            Jenis Pelanggaran
-                        </label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Nama_Pelanggaran']) ?>" readonly name="Tempat">
-                    </span>
-                    <span class="w-1/3">
-                        <label for="">
-                            Tingkat Pelanggaran
-                        </label>
-                        <input type="text" class="form-control" value="<?= htmlspecialchars($row['Tingkat']) ?>" readonly name="Tanggal">
-                    </span>
-                </div>
-                <!-- <label for="">Jenis Pelanggaran</label>
-                <select name="" class="form-control mb-8" id="JenisPelanggaran">
-                    <option value="" selected>Pilih Jenis Pelanggaran</option>
-                    <option value="">Pelanggaran 1</option>
-                    <option value="">Pelanggaran 2</option>
-                    <option value="">Pelanggaran 3</option>
-                    <option value="">Pelanggaran 4</option>
-                    <option value="">Pelanggaran 5</option>
-                </select> -->
+                                            $row['TanggalDibuat'] instanceof DateTime
+                                                ? $row['TanggalDibuat']->format('d/m/Y')
+                                                : $row['TanggalDibuat']
+                                        ) ?>" readonly name="TanggalDibuat">
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8">
+                        <span class="w-full">
+                            <label for="">
+                                Jenis Pelanggaran
+                            </label>
+                            <input type="text" class="form-control hidden" value="<?= htmlspecialchars($row['ID_Pelanggaran']) ?>" readonly name="ID_Pelanggaran" hidden>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Nama_Pelanggaran']) ?>" readonly name="Tempat">
+                        </span>
+                        <span class="w-1/3">
+                            <label for="">
+                                Tingkat Pelanggaran
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Tingkat']) ?>" readonly>
+                        </span>
+                    </div>
 
-                <!-- <label for="">Deskripsi</label>
-                <textarea class="form-control" readonly name="" id="Deskripsi"></textarea> -->
+                    <input type="submit" name="Konfirmasi" value="Konfirmasi" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
+                    <!-- <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2"> -->
+                </form>
+                 
+                <form class="" action="../../backend/TerimaPelanggaran.php" method="post">
+                    <?php
+                    include "../../backend/database.php";
+                    $qry_terimaPelanggaran = "SELECT 
+                            l.ID_Laporan, 
+                            m.NIM, 
+                            m.Nama as NamaMahasiswa, 
+                            d.NIP, 
+                            d.Nama as NamaDosen,
+                            l.Status,
+                            l.Sanksi,
+                            l.Foto_Bukti,
+                            l.TanggalDibuat, 
+                            p.ID_Pelanggaran, 
+                            p.Nama_Pelanggaran, 
+                            p.Tingkat
+                            FROM Laporan l 
+                            JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                            LEFT JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                            WHERE ID_Laporan = ?";
+                    $params = [$_GET['ID_Laporan']];
+                    $stmt = sqlsrv_prepare($conn, $qry_terimaPelanggaran, $params);
 
-                <input type="submit" value="Terima" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">
-                <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2">
-            </form>
+                    if (!$stmt) {
+                        die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+                    }
+
+                    if (!sqlsrv_execute($stmt)) {
+                        die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
+                    }
+
+                    $row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
+                    if (!$row) {
+                        die("No data found. ");
+                    }
+                    ?>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 hidden" for="file_input">Foto Bukti</label>
+                    <img src="../../backend/<?= htmlspecialchars($row['Foto_Bukti']) ?>" class="w-96 mx-auto my-3 hidden" alt="">
+                    <input type="text" class="form-control hidden" value="<?= htmlspecialchars($row['ID_Laporan']) ?>" readonly name="ID_Laporan" hidden>
+                    <!-- <input type="text" class="form-control hidden" value=" " readonly name="Sanksi" hidden> -->
+
+                    <div class="flex justify-between gap-24 w-full my-8 hidden">
+                        <span class="w-full">
+                            <label for="">
+                                Nama Terlapor
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaMahasiswa']) ?>" readonly name="NamaTerlapor">
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                NIM
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIM']) ?>" readonly name="ID_Dilapor">
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8 hidden">
+                        <span class="w-full">
+                            <label for="">
+                                Nama Pelapor
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NamaDosen']) ?>" readonly name="NamaTerlapor">
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                NIP
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['NIP']) ?>" readonly name="ID_Pelapor">
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($IdAdmin) ?>" readonly name="ID_Admin" hidden>
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8 hidden">
+                        <span class="w-full">
+                            <label for="">
+                                Status
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Status']) ?>" readonly>
+                            <input type="text" class="form-control" value="Ditolak" readonly name="Status" hidden>
+                        </span>
+                        <span class="w-full">
+                            <label for="">
+                                Tanggal Kejadian
+                            </label>
+                            <input type="text" class="form-control"
+                                value="<?= htmlspecialchars(
+                                            $row['TanggalDibuat'] instanceof DateTime
+                                                ? $row['TanggalDibuat']->format('d/m/Y')
+                                                : $row['TanggalDibuat']
+                                        ) ?>" readonly name="TanggalDibuat">
+                        </span>
+                    </div>
+                    <div class="flex justify-between gap-24 w-full my-8 hidden">
+                        <span class="w-full">
+                            <label for="">
+                                Jenis Pelanggaran
+                            </label>
+                            <input type="text" class="form-control hidden" value="<?= htmlspecialchars($row['ID_Pelanggaran']) ?>" readonly name="ID_Pelanggaran" hidden>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Nama_Pelanggaran']) ?>" readonly name="Tempat">
+                        </span>
+                        <span class="w-1/3">
+                            <label for="">
+                                Tingkat Pelanggaran
+                            </label>
+                            <input type="text" class="form-control" value="<?= htmlspecialchars($row['Tingkat']) ?>" readonly>
+                        </span>
+                    </div>
+
+                    <!-- <input type="submit" name="Konfirmasi" value="Konfirmasi" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2"> -->
+                    <input type="submit" value="Tolak" class="btn btn-danger rounded-xl w-full mx-auto my-3 py-2">
+                </form>
+            </div>
         </section>
     </main>
 </body>

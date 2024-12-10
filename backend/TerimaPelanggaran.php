@@ -1,28 +1,37 @@
 <?php
 include 'database.php'; 
 
-$Nama_Terlapor = $_POST['NamaTerlapor'];
-$NIM_Terlapor = $_POST['NIM'];
-$Nama_Pelapor = $_POST['NamaPelapor'];
-$NIP_Pelapor = $_POST['NIP'];
-$Tempat_Kejadian = $_POST['Tempat'];
-$Tanggal_Kejadian = $_POST['Tanggal'];
-$Jenis_Pelanggaran = $_POST['JenisPelanggaran'];
-$Tingkat_Pelanggaran = $_POST['TingkatPelanggaran'];
-$Deskripsi = $_POST['Deskripsi'];
+// Update
+$IDLaporan = $_POST['ID_Laporan'];
+$IDPelapor = $_POST['ID_Pelapor'];
+$IDAdmin = $_POST['ID_Admin'];
+$IDPelanggaran = $_POST['ID_Pelanggaran'];
+$Status = $_POST['Status'];
+$Sanksi = $_POST['Sanksi'];
+$IDBukti = $_POST['ID_Bukti'];
+$TanggalDibuat = date('Y-m-d H:i:s');
 
-$query = "INSERT INTO Pelanggaran (Nama_Terlapor, NIM_Terlapor, Nama_Pelapor, NIP_Pelapor, Tempat_Kejadian, Tanggal_Kejadian, Jenis_Pelanggaran, Tingkat_Pelanggaran, Deskripsi) 
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-$params = array($Nama_Terlapor, $NIM_Terlapor, $Nama_Pelapor, $NIP_Pelapor, $Tempat_Kejadian, $Tanggal_Kejadian, $Jenis_Pelanggaran, $Tingkat_Pelanggaran, $Deskripsi);
+$query = "UPDATE Laporan 
+  SET ID_Pelapor = ?, 
+      ID_Admin = ?, 
+      ID_Pelanggaran = ?, 
+      Status = ?, 
+      Sanksi = ?, 
+      ID_Bukti = ?, 
+      TanggalDibuat = ?,
+      TanggalDiupdate = GETDATE() 
+  WHERE ID_Laporan = ?";
+$params = array($IDPelapor, $IDAdmin, $IDPelanggaran, $Status, $Sanksi, $IDBukti, $TanggalDibuat, $IDLaporan);
+
 
 $stmt = sqlsrv_prepare($conn, $query, $params);
 if (!$stmt) {
-    die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
 }
 
 if (!sqlsrv_execute($stmt)) {
-    echo "<script>alert('Gagal menerima pelanggaran');location.href='../src/Admin/DataPelanggaran.php';</script>";
+echo "<script>alert('Operasi gagal');location.href='../src/Admin/DataLaporan.php';</script>";
 } else {
-    echo "<script>alert('Pelanggaran berhasil diterima');location.href='../src/Admin/DataPelanggaran.php';</script>";
+echo "<script>alert('Operasi berhasil');location.href='../src/Admin/DataLaporan.php';</script>";
 }
 ?>

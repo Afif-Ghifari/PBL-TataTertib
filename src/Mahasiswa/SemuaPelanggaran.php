@@ -22,7 +22,7 @@
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.Status = 'Pending' AND l.ID_Dilapor = ?";
+                    WHERE l.Status != 'Pending' AND l.ID_Dilapor = ?";
         $params = [$_SESSION['NIM']];
         $stmt = sqlsrv_query($conn, $query, $params);
 

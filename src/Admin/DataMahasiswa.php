@@ -69,7 +69,7 @@
                         <td><?= htmlspecialchars($mhs['Alamat'])?></td>
                         <td><?= htmlspecialchars($mhs['No_Tlp'])?></td>
                         <td>
-                            <a href="EditDataMahasiswa.php?NIM=<?= $mhs['NIM']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
+                            <a href="EditDataMahasiswa.php?NIM=<?= $mhs['NIM']?>" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
                             <a href="../../backend/hapusDataMahasiswa.php?NIM=<?= $mhs['NIM']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a>
                         </td>
                     </tr>

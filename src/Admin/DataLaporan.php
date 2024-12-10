@@ -29,24 +29,25 @@
         </nav>
         <section class="flex flex-col w-full h-full bg-slate-100 px-14 py-12 gap-10">
             <h1 class="text-3xl">Manajemen Data Laporan</h1>
-            <a href="TambahDataDosen.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a>
+            <!-- <a href="TambahDataDosen.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a> -->
             
-            <table class="w-full table-fixed bg-white max-w-4xl mx-auto">
+            <table class="w-full table-fixed bg-white max-w-4xl mx-auto border-separate border border-slate-500">
                 <thead class="bg-blue-600 text-white">
                     <tr>
-                        <th class=" px-3 py-2">Pelapor</th>
-                        <th>Dilapor</th>
-                        <th>Pelanggaran</th>
-                        <th>Sanksi</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
+                        <th class="px-3 py-2">Pelapor</th>
+                        <th class="px-3 py-2">Dilapor</th>
+                        <th class="px-3 py-2">Pelanggaran</th>
+                        <th class="px-3 py-2">Sanksi</th>
+                        <th class="px-3 py-2">Status</th>
+                        <th class="px-3 py-2">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php
                     include "../../backend/database.php";
               
-                    $qry_mahasiswa = "SELECT l.ID_Pelanggaran, 
+                    $qry_mahasiswa = "SELECT l.ID_Laporan,
+                                            l.ID_Pelanggaran, 
                                             d.NIP, 
                                             d.Nama as NamaDosen,
                                             m.NIM,
@@ -58,7 +59,8 @@
                                             FROM Laporan l
                                             JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                                             JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM";
+                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                                            WHERE l.Status != 'pending'";
 
                     $stmt = sqlsrv_query($conn, $qry_mahasiswa);
 
@@ -70,18 +72,18 @@
                         echo "<p>No data found.</p>";
                     } else {
 
-                        while ($pelanggaran = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                        while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                         
                     ?>
                     <tr>
-                        <td class=" p-3"><?= htmlspecialchars($pelanggaran['NamaDosen'])?></td>
-                        <td><?= htmlspecialchars($pelanggaran['NamaMahasiswa'])?></td>
-                        <td><?= htmlspecialchars($pelanggaran['Nama_Pelanggaran'])?></td>
-                        <td><?= htmlspecialchars($pelanggaran['Sanksi'])?></td>
-                        <td><?= htmlspecialchars($pelanggaran['Status'])?></td>
-                        <td>
-                            <a href="EditDataDosen.php?NIP=<?= $pelanggaran['ID_Pelanggaran']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
-                            <!-- <a href="../../backend/hapusDataDosen.php?NIP=<?= $pelanggaran['NIP']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a> -->
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaDosen'])?></td>
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaMahasiswa'])?></td>
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Nama_Pelanggaran'])?></td>
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Sanksi'] ?? 'Sanksi belum ditentukan') ?></td>
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Status'])?></td>
+                        <td class="border border-slate-700 px-3">
+                            <a href="EditDataLaporan.php?ID_Laporan=<?= $laporan['ID_Laporan']?>" class="btn btn-success mx-auto"><i class="bi bi-pencil-square"></i></a>
+                            <!-- <a href="../../backend/hapusDataDosen.php?NIP=<?= $laporan['NIP']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a> -->
                         </td>
                     </tr>
                 <?php

@@ -68,7 +68,7 @@
                         <td><?= htmlspecialchars($banding['Nama'])?></td>
                         <td><?= htmlspecialchars($banding['Nama_Kelas'])?></td>
                         <td>
-                            <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
+                            <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan']?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
                         </td>
                         <td>
                             <a href="DetailBanding.php?ID_Banding=<?= $banding['ID_Banding']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>

@@ -34,10 +34,10 @@
                 <?php
                 include "../../backend/database.php";
 
-                $qry_pelanggaran = "SELECT l.ID_Laporan, p.ID_Pelanggaran, p.Nama_Pelanggaran, l.TanggalDibuat, l.Foto_Bukti
+                $qry_pelanggaran = "SELECT l.ID_Laporan, p.ID_Pelanggaran, p.Nama_Pelanggaran, l.TanggalDibuat, l.Foto_Bukti, d.NIP, d.Nama
                                         FROM laporan l
-                                        JOIN pelanggaran p 
-                                        ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                                        JOIN pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                                        JOIN dosen d ON l.ID_Pelapor = d.NIP
                                         WHERE l.Status = 'Pending'";
 
                 $stmt = sqlsrv_query($conn, $qry_pelanggaran);
@@ -55,7 +55,7 @@
                         <div class="w-72 bg-white rounded-xl mx-auto px-6 py-3">
                             <img src="../../backend/<?= htmlspecialchars($pelanggaran['Foto_Bukti']) ?>" class="w-56 mx-auto my-3" alt="">
                             <h3 class="text-lg my-2"><?= htmlspecialchars($pelanggaran['Nama_Pelanggaran']) ?></h3>
-                            <h4 class="text-blue-600 text-base">Nama dosen</h4>
+                            <h4 class="text-blue-600 text-base"><?= htmlspecialchars($pelanggaran['Nama']) ?></h4>
                             <p class="text-slate-400 text-sm my-2">
                                 <?= htmlspecialchars(
                                     $pelanggaran['TanggalDibuat'] instanceof DateTime
