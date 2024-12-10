@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['NIM'])) {
+    header("Location: ../Login.php");
+}
+
 $nim = $_SESSION['NIM'];
 ?>
 

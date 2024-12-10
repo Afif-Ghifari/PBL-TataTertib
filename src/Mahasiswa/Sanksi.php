@@ -13,14 +13,13 @@
 </head>
 
 <body>
-    <div class="grid grid-cols-2 justify-between gap-4 my-12" id="gridSanksi">
+    <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridSanksi">
         <?php
         include "../../backend/database.php";
 
-        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat 
+        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, l.Sanksi, b.ID_Bukti, b.Foto, b.Deskripsi 
                     FROM Laporan l
-                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
-                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    JOIN Bukti_Pengerjaan b ON l.ID_Bukti = b.ID_Bukti
                     WHERE l.ID_Dilapor = ?";
         $params = [$_SESSION['NIM']];
         $stmt = sqlsrv_query($conn, $query, $params);
@@ -36,11 +35,11 @@
             while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
         ?>
                 <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
-                    <h2 class="text-black">Nama Sanksi</h2>
-                    <img src="../../assets/img/pp_sample.jpg" class="mx-auto rounded-xl max-w-52" alt="">
-                    <p class="text-black">Deskripsi</p>
-                    <a href="../Mahasiswa/EditPelaksanaanSanksi.php" class="btn btn-primary w-24"
-                        style="font-family: 'product Sans Bold';">Detail</a>
+                    <h2 class="text-black text-xl"><?= htmlspecialchars($laporan['Sanksi']) ?></h2>
+                    <img src="../../backend/<?= htmlspecialchars($laporan['Foto']) ?>" class="mx-auto rounded-xl w-full" alt="">
+                    <p class="text-black text-base"><?= htmlspecialchars($laporan['Deskripsi']) ?></p>
+                    <a href="../Mahasiswa/EditPelaksanaanSanksi.php?ID_Laporan=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24"
+                        style="font-family: 'product Sans Bold';">Edit</a>
                 </div>
         <?php
             }
@@ -48,5 +47,7 @@
         ?>
     </div>
 </body>
+<script>
 
+</script>
 </html>

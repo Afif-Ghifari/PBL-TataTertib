@@ -1,3 +1,9 @@
+<?php
+session_start();
+if (!isset($_SESSION['ID_Admin'])) {
+    header("Location: ../Login.php");
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,7 +37,7 @@
             <h1 class="text-3xl">Manajemen Data Laporan</h1>
             <!-- <a href="TambahDataDosen.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a> -->
             
-            <table class="w-full table-fixed bg-white max-w-4xl mx-auto border-separate border border-slate-500">
+            <table class="w-full table-fixed bg-white max-w-5xl mx-auto border-separate border border-slate-500">
                 <thead class="bg-blue-600 text-white">
                     <tr>
                         <th class="px-3 py-2">Pelapor</th>
@@ -78,7 +84,7 @@
                     <tr>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaDosen'])?></td>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaMahasiswa'])?></td>
-                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Nama_Pelanggaran'])?></td>
+                        <td class="border border-slate-700 px-3" id="Shortened"><?= htmlspecialchars($laporan['Nama_Pelanggaran'])?></td>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Sanksi'] ?? 'Sanksi belum ditentukan') ?></td>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Status'])?></td>
                         <td class="border border-slate-700 px-3">
@@ -95,5 +101,18 @@
         </section>
     </main>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    const shortened = document.querySelectorAll('.border.border-slate-700.px-3');
 
+    shortened.forEach(element => {
+        const maxLength = 30;
+        const text = element.textContent.trim();
+
+        if (text.length > maxLength) {
+            element.textContent = text.substring(0, maxLength) + '...';
+        }
+    });
+});
+</script>
 </html>

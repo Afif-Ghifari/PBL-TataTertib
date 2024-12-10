@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['ID_Admin'])) {
+    header("Location: ../Login.php");
+}
 $IdAdmin = $_SESSION['ID_Admin'];
 ?>
 
@@ -23,18 +26,11 @@ $IdAdmin = $_SESSION['ID_Admin'];
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-fullbg-slate-200 ml-72">
-        <nav class="flex gap-10 w-full items-center justify-end px-28 py-6 bg-white">
-            <button class="relative inline-flex items-center" id="NotifBtn">
-                <i class="bi bi-bell text-3xl text-slate-300"></i>
-                <div class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900"></div>
-            </button>
-            <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
-                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-            </a>
-        </nav>
+        <?php include "Navbar.php"; ?>
+        
         <section class="flex flex-col w-full px-14 py-12 gap-10">
-            <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
-
+            <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="../../backend/TerimaPelanggaran.php" method="post">
+                
                 <?php
                 include "../../backend/database.php";
                 $qry_terimaPelanggaran = "SELECT 
@@ -47,6 +43,7 @@ $IdAdmin = $_SESSION['ID_Admin'];
                             l.Status,
                             l.TanggalDibuat,
                             l.Sanksi,
+                            l.Foto_Bukti,
                             p.ID_Pelanggaran, 
                             p.Nama_Pelanggaran, 
                             p.Tingkat,
@@ -75,14 +72,14 @@ $IdAdmin = $_SESSION['ID_Admin'];
                 ?>
 
                 <label class="block mb-2 text-sm font-medium text-gray-900 " for="file_input">Foto Bukti</label>
-                <img src="../../assets/img/sample_pelanggaran.png" class="w-96 mx-auto my-3" alt="">
-
+                <img src="../../backend/<?= htmlspecialchars($row['Foto_Bukti']) ?>" class="w-96 mx-auto my-3" alt="">
+                <input type="text" value="<?= htmlspecialchars($row['ID_Laporan']) ?>" class="hidden" name="ID_Laporan">
                 <div class="flex justify-between gap-24 w-full my-8">
                     <span class="w-full">
                         <label for="">
                             Nama Terlapor
                         </label>
-                        <select name="ID_Terlapor" class="form-control" id="JenisPelanggaran" name=>
+                        <select name="ID_Dilapor" class="form-control" id="JenisPelanggaran" name="ID_Dilapor">
                             <?php
                             $qry_mahasiswa = "SELECT * FROM Mahasiswa";
                             $stmt = sqlsrv_query($conn, $qry_mahasiswa);
@@ -148,10 +145,10 @@ $IdAdmin = $_SESSION['ID_Admin'];
                         </label>
                         <select name="Status" class="form-control" id="JenisPelanggaran">
                             <option value="<?= htmlspecialchars($row['Status']) ?>" selected><?= htmlspecialchars($row['Status']) ?></option>
-                            <option value="">Pelanggaran 2</option>
-                            <option value="">Pelanggaran 3</option>
-                            <option value="">Pelanggaran 4</option>
-                            <option value="">Pelanggaran 5</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Dikonfirmasi">Dikonfirmasi</option>
+                            <option value="Ditolak">Ditolak</option>
+                            <option value="Selesai">Selesai</option>
                         </select>
                     </span>
                 </div>
@@ -191,7 +188,7 @@ $IdAdmin = $_SESSION['ID_Admin'];
                         <div class="flex justify-between gap-24 w-full">
                             <span class="w-full">
                                 <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input">Foto Bukti Pengerjaan</label>
-                                <img src="../../backend/<?= htmlspecialchars($row['Bukti_Pengerjaan']) ?>" class="w-96 mx-auto my-3" alt="Foto Bukti Pengerjaan">
+                                <img src="../../backend/<?= htmlspecialchars($row['Foto']) ?>" class="w-96 mx-auto my-3" alt="Foto Bukti Pengerjaan">
                             </span>
                         </div>
                         <span class="w-1/3">

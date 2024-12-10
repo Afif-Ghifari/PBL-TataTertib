@@ -13,6 +13,7 @@
 </head>
 
 <body>
+    <h2>Laporan Dikonfirmasi</h2>
     <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTunggu">
         <?php
         include "../../backend/database.php";
@@ -21,7 +22,7 @@
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.Status = 'Baru' AND l.ID_Dilapor = ?";
+                    WHERE l.Status = 'Dikonfirmasi' AND l.ID_Dilapor = ?";
         $params1 = [$_SESSION['NIM']];
         $stmt1 = sqlsrv_query($conn, $query1, $params1);
 
@@ -33,28 +34,26 @@
             echo "<p>No data found.</p>";
         } else {
 
-            while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            while ($laporan1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border"
+                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan['Tingkat']) ?>
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan1['Tingkat']) ?>
                     </div>
-                    <p class="text-sm text-amber-600">Mohon Tunggu Konformasi Admin</p>
-                    <h3 class="text-xl"><?= htmlspecialchars($laporan['Nama_Pelanggaran']) ?></h3>
-                    <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang
-                        dilarang oleh kampus </p>
+                    <p class="text-sm text-amber-600">Laporan terhadap anda dikonfirmasi</p>
+                    <h3 class="text-xl"><?= htmlspecialchars($laporan1['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
                         <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan['Nama']) ?></p>
+                        <p><?= htmlspecialchars($laporan1['Nama']) ?></p>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24"
-                        style="font-family: 'product Sans Bold';">Detail</a>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan1['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }
         }
         ?>
     </div>
+    <h2>Laporan Selesai Dikerjakan</h2>
     <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListKonfirmasi">
         <?php
         include "../../backend/database.php";
@@ -63,7 +62,7 @@
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.Status = 'Diverifikasi' AND l.ID_Dilapor = ?";
+                    WHERE l.Status = 'Selesai' AND l.ID_Dilapor = ?";
         $params2 = [$_SESSION['NIM']];
         $stmt2 = sqlsrv_query($conn, $query2, $params2);
 
@@ -75,31 +74,28 @@
             echo "<p>No data found.</p>";
         } else {
 
-            while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+            while ($laporan2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border"
+                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">II
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan2['Tingkat']) ?>
                     </div>
-                    <p class="text-sm text-green-600">Banding anda sudah diverifikasi admin</p>
-                    <h3 class="text-xl">Ketahuan merokok ditempat yang dilarang</h3>
-                    <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang
-                        dilarang oleh kampus </p>
+                    <p class="text-sm text-green-600">Pengerjaan laporan telah selesai</p>
+                    <h3 class="text-xl"><?= htmlspecialchars($laporan2['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
                         <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p>Dosen</p>
+                        <p><?= htmlspecialchars($laporan2['Nama']) ?></p>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24"
-                        style="font-family: 'product Sans Bold';">Detail</a>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan2['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }
         }
         ?>
     </div>
-    <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTolak">
+    <!-- <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTolak">
 
-        <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border"
+        <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
             id="cardPelanggaran">
             <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">II
             </div>
@@ -115,7 +111,7 @@
                 style="font-family: 'product Sans Bold';">Detail</a>
         </div>
 
-    </div>
+    </div> -->
 </body>
 
 </html>

@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if (!isset($_SESSION['NIM'])) {
+        header("Location: ../Login.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,14 +40,13 @@
     <main class="mx-28 mb-32 mt-8 flex">
     <?php
     include "../../backend/database.php";
-    session_start();
 
     $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.ID_Dilapor = ?";
-    $params = [$_SESSION['NIM']];
+                    WHERE l.ID_Laporan = ?";
+    $params = [$_GET['ID_Laporan']];
     $stmt = sqlsrv_prepare($conn, $qry_detail, $params);
 
     if (!$stmt) {

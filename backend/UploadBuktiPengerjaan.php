@@ -47,8 +47,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Jika semua berhasil
             echo "Laporan pengerjaan berhasil diunggah!";
-            header("Location: ../src/Mahasiswa/Dashboard.php"); // Redirect setelah sukses
-            exit;
+            // exit;
+            header("Location: ../src/Mahasiswa/HistoriPelanggaran.php"); // Redirect setelah sukses
         } else {
             echo "Gagal mengunggah file bukti. Periksa izin direktori atau coba lagi.";
         }

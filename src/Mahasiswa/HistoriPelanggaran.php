@@ -1,5 +1,8 @@
 <?php
     session_start();
+    if (!isset($_SESSION['NIM'])) {
+        header("Location: ../Login.php");
+    }
 ?>
 <html lang="en">
 
@@ -64,7 +67,7 @@
                     <?php include 'SemuaPelanggaran.php' ?>
                 </div>
                 <div id="listBanding" class="hidden">
-                    <?php include 'Banding.php' ?>
+                    <?php include 'ListStatus.php' ?>
                 </div>
                 <div id="listProses" class="hidden">
                     <?php include 'Sanksi.php' ?>

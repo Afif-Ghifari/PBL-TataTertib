@@ -1,5 +1,8 @@
 <?php
 session_start();
+if (!isset($_SESSION['ID_Admin'])) {
+    header("Location: ../Login.php");
+}
 $IdAdmin = $_SESSION['ID_Admin'];
 ?>
 <!DOCTYPE html>
@@ -22,15 +25,8 @@ $IdAdmin = $_SESSION['ID_Admin'];
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-fullbg-slate-200 ml-72">
-        <nav class="flex gap-10 w-full items-center justify-end px-28 py-6 bg-white">
-            <button class="relative inline-flex items-center" id="NotifBtn">
-                <i class="bi bi-bell text-3xl text-slate-300"></i>
-                <div class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900"></div>
-            </button>
-            <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
-                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-            </a>
-        </nav>
+    <?php include "Navbar.php"; ?>
+
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <div class="w-full flex flex-col w-full px-20 py-12 rounded-xl shadow-lg">
 

@@ -4,24 +4,26 @@ include 'database.php';
 // Update
 $IDLaporan = $_POST['ID_Laporan'];
 $IDPelapor = $_POST['ID_Pelapor'];
+$IDDilapor = $_POST['ID_Dilapor'];
 $IDAdmin = $_POST['ID_Admin'];
 $IDPelanggaran = $_POST['ID_Pelanggaran'];
 $Status = $_POST['Status'];
 $Sanksi = $_POST['Sanksi'];
-$IDBukti = $_POST['ID_Bukti'];
+// $IDBukti = $_POST['ID_Bukti'];
 $TanggalDibuat = date('Y-m-d H:i:s');
 
 $query = "UPDATE Laporan 
   SET ID_Pelapor = ?, 
+      ID_Dilapor = ?, 
       ID_Admin = ?, 
       ID_Pelanggaran = ?, 
       Status = ?, 
       Sanksi = ?, 
-      ID_Bukti = ?, 
+      -- ID_Bukti = ?, 
       TanggalDibuat = ?,
       TanggalDiupdate = GETDATE() 
   WHERE ID_Laporan = ?";
-$params = array($IDPelapor, $IDAdmin, $IDPelanggaran, $Status, $Sanksi, $IDBukti, $TanggalDibuat, $IDLaporan);
+$params = array($IDPelapor, $IDDilapor, $IDAdmin, $IDPelanggaran, $Status, $Sanksi, $TanggalDibuat, $IDLaporan); // $IDBukti,
 
 
 $stmt = sqlsrv_prepare($conn, $query, $params);
