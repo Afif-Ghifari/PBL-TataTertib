@@ -6,6 +6,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['Deskripsi']) && isset($_FILES['bukti'])) {
         $Deskripsi = htmlspecialchars($_POST['Deskripsi']);
         $bukti = $_FILES['bukti'];
+        $ID_Bukti = time();
+        $ID_Laporan = htmlspecialchars($_POST['ID_Laporan']);
 
         // Tentukan direktori penyimpanan file bukti
         $uploadDir = "UploadBuktiPengerjaan/";
@@ -23,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Simpan data ke database
             $insertQuery = "
                 INSERT INTO Bukti_Pengerjaan 
-                (Foto, Deskripsi) 
-                VALUES (?, ?)";
+                (ID_Bukti, Foto, Deskripsi) 
+                VALUES (?, ?, ?)";
 
-            $params = [$uploadFilePath, $Deskripsi];
+            $params = [$ID_Bukti,$uploadFilePath, $Deskripsi];
             $stmt = sqlsrv_query($conn, $insertQuery, $params);
 
             if ($stmt === false) {

@@ -26,7 +26,8 @@
         <!-- Form untuk upload -->
         <form 
             class="w-full px-20 py-12 rounded-xl shadow-lg my-20" action="../../backend/UploadBuktiPengerjaan.php" method="POST" enctype="multipart/form-data"> <!-- Diperlukan untuk file upload -->
-             <!-- Input File -->
+            <input type="text" class="hidden" name="ID_Laporan" value="<?= htmlspecialchars($_GET['ID_Laporan']) ?>"> 
+            <!-- Input File -->
             <label class="block mb-2 text-sm font-medium text-gray-900" for="file_input">Upload Bukti</label>
             <input class="form-control mb-5" id="file_input" type="file" name="bukti" required>
 
