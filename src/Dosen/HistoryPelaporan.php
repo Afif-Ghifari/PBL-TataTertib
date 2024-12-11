@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (!isset($_SESSION['NIP'])) {
-        header("Location: ../Login.php");
+        header("Location: ../Login.html");
     }
 ?>
 
