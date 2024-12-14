@@ -20,7 +20,6 @@
 <body>
     <?php
         include "../../backend/database.php";
-        session_start();
 
         $qry_profil = "SELECT * FROM Dosen WHERE NIP = ?";
         $params = [$_SESSION['NIP']];

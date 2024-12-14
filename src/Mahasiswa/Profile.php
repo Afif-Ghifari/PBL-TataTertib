@@ -22,7 +22,6 @@
 <body>
     <?php
     include "../../backend/database.php";
-    session_start();
 
     $qry_profil = "SELECT * FROM Mahasiswa WHERE NIM = ?";
     $params = [$_SESSION['NIM']];
