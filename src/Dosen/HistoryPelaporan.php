@@ -29,11 +29,11 @@
                 jenis pelanggaran, tanggal, dan status penyelesaiannya.</p>
         </header>
 
-        <section class="flex flex-col my-36" id="listPelanggaran">
-            <div class="flex px-6 py-2 justify-between gap-3 bg-slate-300 rounded-full" style="font-family: 'product Sans Bold';" id="filterList">
+        <section class="flex flex-col my-3" id="listPelanggaran">
+            <!-- <div class="flex px-6 py-2 justify-between gap-3 bg-slate-300 rounded-full" style="font-family: 'product Sans Bold';" id="filterList">
                 <button class="w-full px-12 py-2 bg-blue-600 text-white rounded-3xl">Semua</button>
                 <button class="w-full px-12 py-2 hover:bg-slate-400 text-black rounded-3xl">Proses</button>
-            </div>
+            </div> -->
 
             <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridList">
                 <?php
@@ -49,7 +49,9 @@
                         l.ID_Dilapor,
                         m.Nama,
                         p.Nama_Pelanggaran, 
-                        p.Tingkat 
+                        p.Tingkat,
+                        l.TanggalDibuat,
+                        l.Status
                     FROM 
                         laporan l 
                     JOIN 
@@ -84,13 +86,30 @@
                     // Loop through the records
                     while ($data_laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                 ?>
-                        <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
-                            <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">
+                        <div class="flex flex-col justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
+                            <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl mb-2">
                                 <?= htmlspecialchars($data_laporan['Tingkat']) ?>
                             </div>
                             <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
-
-                            <h4>Terlapor: <?= htmlspecialchars($data_laporan['Nama']) ?></h4>
+                            <p class="text-blue-600">Dibuat: <?= htmlspecialchars(
+                                    $data_laporan['TanggalDibuat'] instanceof DateTime
+                                        ? $data_laporan['TanggalDibuat']->format('Y-m-d')
+                                        : $data_laporan['TanggalDibuat']
+                                ) ?></p>
+                            <p>
+                            <?php
+                            if ($data_laporan['Status'] == 'Pending') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-slate-600 ">Pending</span>';
+                            } elseif ($data_laporan['Status'] == 'Dikonfirmasi') {
+                                echo '<span class="px-2 py-1 rounded-lg text-black bg-amber-600">Dikonfirmasi</span>';
+                            } elseif ($data_laporan['Status'] == 'Ditolak') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-red-600">Ditolak</span>';
+                            } elseif ($data_laporan['Status'] == 'Selesai') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-green-600">Selesai</span>';
+                            }
+                            ?>
+                            </p>
+                            <h6>Terlapor: <?= htmlspecialchars($data_laporan['Nama']) ?></h6>
                             <!-- <span class="flex gap-3 items-center">
                                 <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
                                     Detail

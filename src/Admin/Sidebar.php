@@ -13,15 +13,18 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="../../assets/faq-style.css">
 </head>
-<aside class="fixed flex-col flex gap-2 w-72 h-screen bg-white py-3 ">
-    <a href="#" class="flex justify-center text-black no-underline items-center text-xl"><img src="../../assets/img/LOGO BREN.pdf.png" class="w-16" alt="">TertibHub</a>
-    <a href="Dashboard.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-house-door text-2xl"></i>Dashboard</a>
-    <a href="PelanggaranPage.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-exclamation-triangle text-2xl"></i>Laporan Baru</a>
-    <a href="DataLaporan.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Data Laporan</a>
-    <a href="DataBanding.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Banding</a>
-    <a href="DataMahasiswa.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Mahasiswa</a>
-    <a href="DataDosen.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Dosen</a>
-    <a href="../../backend/logout.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-box-arrow-in-right text-2xl"></i>Logout</a>
+<aside class="fixed flex-col flex justify-between gap-2 w-72 h-screen bg-white py-3 ">
+    <span>
+        <a href="#" class="flex justify-center text-black no-underline items-center text-xl"><img src="../../assets/img/LOGO BREN.pdf.png" class="w-16" alt="">TertibHub</a>
+        <a href="Dashboard.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-house-door text-2xl"></i>Dashboard</a>
+        <a href="PelanggaranPage.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-exclamation-triangle text-2xl"></i>Laporan Baru</a>
+        <a href="DataLaporan.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Data Laporan</a>
+        <a href="DataBanding.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-clipboard text-2xl"></i>Banding</a>
+        <a href="DataMahasiswa.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Mahasiswa</a>
+        <a href="DataDosen.php" class="flex justify-start text-black no-underline items-center py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-person text-2xl"></i>Dosen</a>
+    </span>
+
+    <a href="../../backend/logout.php" class="flex justify-start text-black no-underline items-center mb-6 py-2 px-14 gap-3 hover:bg-gradient-to-r hover:from-blue-400 hover:to-transparent"><i class="bi bi-box-arrow-in-right text-2xl"></i>Logout</a>
 
 </aside>
 

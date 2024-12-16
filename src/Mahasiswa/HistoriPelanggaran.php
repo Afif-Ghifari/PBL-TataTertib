@@ -57,8 +57,9 @@
         <section class="flex flex-col my-36" id="listPelanggaran">
             <div class="flex px-6 py-2 justify-between gap-3 bg-slate-300 rounded-full" style="font-family: 'product Sans Bold';" id="filterList">
                 <button id="BtnSemua" class="w-full px-12 py-2 bg-blue-600 text-white rounded-3xl">Semua</button>
+                <button id="BtnStatus" class="w-full px-12 py-2 text-black rounded-3xl">Status Sanksi</button>
                 <button id="BtnBanding" class="w-full px-12 py-2 text-black rounded-3xl">Banding</button>
-                <button id="BtnProses" class="w-full px-12 py-2 text-black rounded-3xl">Proses</button>
+                <button id="BtnProses" class="w-full px-12 py-2 text-black rounded-3xl">Pengerjaan Sanksi</button>
             </div>
 
             <div class="gap-4 my-12" id="gridList">
@@ -66,8 +67,11 @@
                 <div id="listSemua" class="inline w-full">
                     <?php include 'SemuaPelanggaran.php' ?>
                 </div>
-                <div id="listBanding" class="hidden">
+                <div id="listStatus" class="hidden">
                     <?php include 'ListStatus.php' ?>
+                </div>
+                <div id="listBanding" class="hidden">
+                    <?php include 'Banding.php' ?>
                 </div>
                 <div id="listProses" class="hidden">
                     <?php include 'Sanksi.php' ?>
@@ -80,30 +84,49 @@
 </body>
 <script>
     const BtnSemua = document.getElementById("BtnSemua");
+    const BtnStatus = document.getElementById("BtnStatus");
     const BtnBanding = document.getElementById("BtnBanding");
     const BtnProses = document.getElementById("BtnProses");
 
     const listSemua = document.getElementById("listSemua");
+    const listStatus = document.getElementById("listStatus");
     const listBanding = document.getElementById("listBanding");
     const listProses = document.getElementById("listProses");
 
     BtnSemua.addEventListener("click", () => {
         BtnSemua.classList.add("bg-blue-600", "text-white");
+        BtnStatus.classList.remove("bg-blue-600", "text-white");
         BtnBanding.classList.remove("bg-blue-600", "text-white");
         BtnProses.classList.remove("bg-blue-600", "text-white");
 
         listSemua.classList.remove("hidden");
         listSemua.classList.add("inline");
+        listStatus.classList.add("hidden");
+        listBanding.classList.add("hidden");
+        listProses.classList.add("hidden");
+    })
+
+    BtnStatus.addEventListener("click", () => {
+        BtnSemua.classList.remove("bg-blue-600", "text-white");
+        BtnStatus.classList.add("bg-blue-600", "text-white");
+        BtnBanding.classList.remove("bg-blue-600", "text-white");
+        BtnProses.classList.remove("bg-blue-600", "text-white");
+
+        listSemua.classList.add("hidden");
+        listStatus.classList.remove("hidden");
+        listStatus.classList.add("inline");
         listBanding.classList.add("hidden");
         listProses.classList.add("hidden");
     })
 
     BtnBanding.addEventListener("click", () => {
         BtnSemua.classList.remove("bg-blue-600", "text-white");
+        BtnStatus.classList.remove("bg-blue-600", "text-white");
         BtnBanding.classList.add("bg-blue-600", "text-white");
         BtnProses.classList.remove("bg-blue-600", "text-white");
 
         listSemua.classList.add("hidden");
+        listStatus.classList.add("hidden");
         listBanding.classList.remove("hidden");
         listBanding.classList.add("inline");
         listProses.classList.add("hidden");
@@ -111,10 +134,12 @@
 
     BtnProses.addEventListener("click", () => {
         BtnSemua.classList.remove("bg-blue-600", "text-white");
+        BtnStatus.classList.remove("bg-blue-600", "text-white");
         BtnBanding.classList.remove("bg-blue-600", "text-white");
         BtnProses.classList.add("bg-blue-600", "text-white");
 
         listSemua.classList.add("hidden");
+        listStatus.classList.add("hidden");
         listBanding.classList.add("hidden");
         listProses.classList.remove("hidden");
         listProses.classList.add("inline");

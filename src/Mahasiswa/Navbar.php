@@ -34,7 +34,7 @@
             <a href="../../backend/logout.php" class="relative inline-flex items-center" id="LogoutBtn">
                 <i class="bi bi-box-arrow-in-right text-3xl text-slate-300"></i>
             </a>
-            <div class="absolute flex flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6" id="NotifList">
+            <div class="absolute flex flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6 border" id="NotifList">
                 <div class="w-full flex justify-between text-black text-xl">
                     <h4>Notifikasi</h4>
                     <button id="closeNotif">
@@ -42,18 +42,66 @@
                     </button>
                 </div>
                 <div class="flex flex-col gap-4 mt-4 overflow-auto max-h-80">
-                    <div class="flex flex-col gap-2 text-black border-b-2 pb-3">
-                        <span class="flex items-center gap-3">
-                            <h3>Aditya Nathanael</h3>
-                            <p class="text-sm text-red-600">Peringatan!</p>
-                        </span>
-                        <span class="flex items-center justify-between text-sm text-slate-500">
-                            <p>Jumat 12.30PM</p>
-                            <p>2 Jam yang lalu</p>
-                        </span>
-                        <a href="../Mahasiswa/DetailPelanggaran.php" class="btn btn-primary">Detail</a>
-                    </div>
 
+                    <?php
+                    include "../../backend/database.php";
+                    // $nim = $_SESSION['NIM'];
+                    $query_notif = "SELECT 
+                                    l.ID_Laporan,
+                                    m.NIM, 
+                                    m.Nama as NamaMahasiswa,
+                                    l.Status,
+                                    l.TanggalDibuat,
+                                    p.ID_Pelanggaran,
+                                    p.Nama_Pelanggaran
+                                    FROM laporan l
+                                    JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                                    WHERE l.ID_Dilapor = ?";
+                    $params = [$_SESSION['NIM']];
+                    $stmt = sqlsrv_query($conn, $query_notif, $params);
+
+                    if (!$stmt) {
+                        die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+                    }
+
+                    if (!sqlsrv_has_rows($stmt)) {
+                        echo "<p class='text-black'>Tidak ada notifikasi.</p>";
+                    } else {
+                        while ($notif = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
+                    ?>
+
+                            <div class="flex flex-col gap-2 text-black border-b-2 pb-3">
+                                <span class="flex justify-between items-center gap-3">
+                                    <h5><?= htmlspecialchars($notif['NamaMahasiswa']) ?></h5>
+                                    <?php
+                                    if ($notif['Status'] == 'Pending') {
+                                        echo '<p class="text-sm text-red-600">Laporan Baru</p>';
+                                    } else if ($notif['Status'] == 'Dikonfirmasi') {
+                                        echo '<p class="text-sm text-amber-600">Dikonfirmasi</p>';
+                                    } else if ($notif['Status'] == 'Ditolak') {
+                                        echo '<p class="text-sm text-slate-600">Ditolak</p>';
+                                    } else if ($notif['Status'] == 'Selesai') {
+                                        echo '<p class="text-sm text-green-600">Selesai</p>';
+                                    }
+                                    ?>
+                                </span>
+                                <p class="ShortDesc"><?= htmlspecialchars($notif['Nama_Pelanggaran']) ?></p>
+                                <span class="flex items-center justify-between text-sm text-slate-500">
+                                    <p><?= htmlspecialchars(
+                                            $notif['TanggalDibuat'] instanceof DateTime
+                                                ? $notif['TanggalDibuat']->format('Y-m-d')
+                                                : $notif['TanggalDibuat']
+                                        ) ?></p>
+                                    <!-- <p>2 Jam yang lalu</p> -->
+                                </span>
+                                <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $notif['ID_Laporan'] ?>" class="btn btn-primary">Detail</a>
+                            </div>
+
+                    <?php
+                        }
+                    }
+                    ?>
                 </div>
             </div>
 
@@ -62,49 +110,21 @@
             </a>
         </div>
     </nav>
+
     <script>
-        
+        document.addEventListener('DOMContentLoaded', () => {
+            const shortDescElements = document.querySelectorAll('.ShortDesc');
+            const maxLength = 40;
 
-        const filterButtons = document.querySelectorAll("#filterList button");
-        const gridTunggu = document.getElementById("gridListTunggu");
-        const gridKonfirmasi = document.getElementById("gridListKonfirmasi");
-        const gridTolak = document.getElementById("gridListTolak");
+            shortDescElements.forEach(shortDesc => {
+                const text = shortDesc.textContent;
 
-        function resetGrids() {
-            gridTunggu.style.display = "none";
-            gridKonfirmasi.style.display = "none";
-            gridTolak.style.display = "none";
-        }
-
-        filterButtons.forEach((button, index) => {
-            button.addEventListener("click", () => {
-                resetGrids();
-
-                switch (index) {
-                    case 0:
-                        gridTunggu.style.display = "grid";
-                        gridKonfirmasi.style.display = "grid";
-                        gridTolak.style.display = "grid";
-                        break;
-                    case 1:
-                        gridTunggu.style.display = "grid";
-                        break;
-                    case 2:
-                        gridKonfirmasi.style.display = "grid";
-                        break;
+                if (text.length > maxLength) {
+                    shortDesc.textContent = text.substring(0, maxLength) + '...';
                 }
-
-                filterButtons.forEach((btn) => btn.classList.remove("bg-blue-600", "text-white"));
-                button.classList.add("bg-blue-600", "text-white");
             });
         });
 
-        resetGrids();
-        gridTunggu.style.display = "grid";
-        gridKonfirmasi.style.display = "grid";
-        gridTolak.style.display = "grid";
-    </script>
-    <script>
         document.addEventListener("DOMContentLoaded", () => {
             const closeNotifButton = document.getElementById("closeNotif");
             const notifList = document.getElementById("NotifList");

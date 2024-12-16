@@ -32,8 +32,8 @@ die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
 }
 
 if (!sqlsrv_execute($stmt)) {
-echo "<script>alert('Operasi gagal');location.href='../src/Admin/DataLaporan.php';</script>";
+echo "<script>alert('Operasi gagal');window.history.back();</script>";
 } else {
-echo "<script>alert('Operasi berhasil');location.href='../src/Admin/DataLaporan.php';</script>";
+echo "<script>alert('Operasi berhasil');window.history.back();</script>";
 }
 ?>

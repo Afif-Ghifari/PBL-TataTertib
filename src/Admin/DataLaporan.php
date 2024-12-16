@@ -24,15 +24,8 @@ if (!isset($_SESSION['ID_Admin'])) {
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-screen bg-slate-200 ml-72">
-        <nav class="flex top-0 gap-10 items-center justify-end px-28 py-6 bg-white">
-            <button class="relative inline-flex items-center" id="NotifBtn">
-                <i class="bi bi-bell text-3xl text-slate-300"></i>
-                <div class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900"></div>
-            </button>
-            <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
-                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-            </a>
-        </nav>
+    <?php include "Navbar.php"; ?>
+
         <section class="flex flex-col w-full h-full bg-slate-100 px-14 py-12 gap-10">
             <h1 class="text-3xl">Manajemen Data Laporan</h1>
             <!-- <a href="TambahDataDosen.php" class="btn btn-primary w-fit"><i class="bi bi-plus"></i> Tambah Data</a> -->
@@ -65,8 +58,7 @@ if (!isset($_SESSION['ID_Admin'])) {
                                             FROM Laporan l
                                             JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                                             JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
-                                            WHERE l.Status != 'pending'";
+                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM";
 
                     $stmt = sqlsrv_query($conn, $qry_mahasiswa);
 
@@ -86,7 +78,20 @@ if (!isset($_SESSION['ID_Admin'])) {
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaMahasiswa'])?></td>
                         <td class="border border-slate-700 px-3" id="Shortened"><?= htmlspecialchars($laporan['Nama_Pelanggaran'])?></td>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Sanksi'] ?? 'Sanksi belum ditentukan') ?></td>
-                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Status'])?></td>
+                        <td class="border border-slate-700 px-3">
+                            <?php
+                            if ($laporan['Status'] == 'Pending') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-slate-600 ">Pending</span>';
+                            } elseif ($laporan['Status'] == 'Dikonfirmasi') {
+                                echo '<span class="px-2 py-1 rounded-lg text-black bg-amber-600">Dikonfirmasi</span>';
+                            } elseif ($laporan['Status'] == 'Ditolak') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-red-600">Ditolak</span>';
+                            } elseif ($laporan['Status'] == 'Selesai') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-green-600">Selesai</span>';
+                            }
+                            ?>
+                            <!-- <?= htmlspecialchars($laporan['Status'])?> -->
+                        </td>
                         <td class="border border-slate-700 px-3">
                             <a href="EditDataLaporan.php?ID_Laporan=<?= $laporan['ID_Laporan']?>" class="btn btn-success mx-auto"><i class="bi bi-pencil-square"></i></a>
                             <!-- <a href="../../backend/hapusDataDosen.php?NIP=<?= $laporan['NIP']?>" class="btn btn-danger"><i class="bi bi-trash"></i></a> -->

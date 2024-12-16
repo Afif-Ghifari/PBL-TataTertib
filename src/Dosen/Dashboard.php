@@ -22,33 +22,7 @@
 
 <body>
     <?php include 'Navbar.php'; ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const closeNotifButton = document.getElementById("closeNotif");
-            const notifList = document.getElementById("NotifList");
-            const notifBtn = document.getElementById("NotifBtn");
-
-            function saveNotifStatus(isHidden) {
-                localStorage.setItem("notifStatus", isHidden ? "hidden" : "visible");
-            }
-
-            const savedStatus = localStorage.getItem("notifStatus");
-            if (savedStatus === "hidden") {
-                notifList.classList.add("hidden");
-            }
-
-            closeNotifButton.addEventListener("click", () => {
-                notifList.classList.add("hidden");
-                saveNotifStatus(true);
-            });
-
-            notifBtn.addEventListener("click", () => {
-                notifList.classList.toggle("hidden");
-                saveNotifStatus(notifList.classList.contains("hidden"));
-            });
-        });
-
-    </script>
+    
 
     <header class="flex flex-col justify-center items-center w-full h-full text-center text-white px-24">
         <h1 class="text-6xl font-bold text-blue-600 my-8">
