@@ -145,7 +145,7 @@
         listProses.classList.add("inline");
     })
 </script>
-<script>
+<!-- <script>
     const filterButtons = document.querySelectorAll("#filterList button");
     const gridTunggu = document.getElementById("gridListTunggu");
     const gridKonfirmasi = document.getElementById("gridListKonfirmasi");
@@ -184,6 +184,6 @@
     gridTunggu.style.display = "grid";
     gridKonfirmasi.style.display = "grid";
     gridTolak.style.display = "grid";
-</script>
+</script> -->
 
 </html>

@@ -91,6 +91,7 @@
                                 <?= htmlspecialchars($data_laporan['Tingkat']) ?>
                             </div>
                             <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
+                            <h3 class="text-xl"><?= htmlspecialchars($data_laporan['ID_Dilapor']) ?></h3>
                             <p class="text-blue-600">Dibuat: <?= htmlspecialchars(
                                     $data_laporan['TanggalDibuat'] instanceof DateTime
                                         ? $data_laporan['TanggalDibuat']->format('Y-m-d')

@@ -10,7 +10,7 @@ $IDPelanggaran = $_POST['ID_Pelanggaran'];
 $Status = $_POST['Status'];
 $Sanksi = $_POST['Sanksi'];
 // $IDBukti = $_POST['ID_Bukti'];
-$TanggalDibuat = date('Y-m-d H:i:s');
+$TanggalDibuat = $_POST['TanggalDibuat'];
 
 $query = "UPDATE Laporan 
   SET ID_Pelapor = ?, 

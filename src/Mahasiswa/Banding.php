@@ -18,100 +18,58 @@
         <?php
         include "../../backend/database.php";
 
-        $query1 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
-                    FROM Laporan l
+        $query_banding = "SELECT b.ID_Banding, b.Keterangan, l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+                    FROM Banding b
+                    JOIN Laporan l ON b.ID_Laporan = l.ID_Laporan
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.Status = 'Dikonfirmasi' AND l.ID_Dilapor = ?";
-        $params1 = [$_SESSION['NIM']];
-        $stmt1 = sqlsrv_query($conn, $query1, $params1);
+                    WHERE l.ID_Dilapor = ?";
+        $params_banding = [$_SESSION['NIM']];
+        $stmt_banding = sqlsrv_query($conn, $query_banding, $params_banding);
 
-        if (!$stmt1) {
+        if (!$stmt_banding) {
             die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
         }
 
-        if (!sqlsrv_has_rows($stmt1)) {
+        if (!sqlsrv_has_rows($stmt_banding)) {
             echo "<p>No data found.</p>";
         } else {
 
-            while ($laporan1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
+            while ($banding = sqlsrv_fetch_array($stmt_banding, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
+                <div class="flex flex-col gap-2 mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan1['Tingkat']) ?>
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($banding['Tingkat']) ?>
                     </div>
-                    <p class="text-sm text-amber-600">Laporan terhadap anda dikonfirmasi</p>
-                    <h3 class="text-xl"><?= htmlspecialchars($laporan1['Nama_Pelanggaran']) ?></h3>
+                    <p class="text-sm text-amber-600 my-1">Laporan terhadap anda dikonfirmasi</p>
+                    <h3 class="text-xl"><?= htmlspecialchars($banding['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
-                        <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan1['Nama']) ?></p>
+                        <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
+                        <p><b>Pelapor: </b><?= htmlspecialchars($banding['Nama']) ?></p>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan1['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
+                    <h6>Keterangan Banding: </h6>
+                    <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
+                    <a href="" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }
         }
         ?>
     </div>
-    <h2>Banding Laporan Diterima</h2>
-    <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListKonfirmasi">
-        <?php
-        include "../../backend/database.php";
-
-        $query2 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
-                    FROM Laporan l
-                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
-                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                    WHERE l.Status = 'Selesai' AND l.ID_Dilapor = ?";
-        $params2 = [$_SESSION['NIM']];
-        $stmt2 = sqlsrv_query($conn, $query2, $params2);
-
-        if (!$stmt2) {
-            die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
-        }
-
-        if (!sqlsrv_has_rows($stmt2)) {
-            echo "<p>No data found.</p>";
-        } else {
-
-            while ($laporan2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
-        ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
-                    id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan2['Tingkat']) ?>
-                    </div>
-                    <p class="text-sm text-green-600">Pengerjaan laporan telah selesai</p>
-                    <h3 class="text-xl"><?= htmlspecialchars($laporan2['Nama_Pelanggaran']) ?></h3>
-                    <span class="flex gap-3 items-center">
-                        <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan2['Nama']) ?></p>
-                    </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan2['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
-                </div>
-        <?php
-            }
-        }
-        ?>
-    </div>
-    <!-- <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTolak">
-
-        <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
-            id="cardPelanggaran">
-            <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">II
-            </div>
-            <p class="text-sm text-red-600">Banding anda ditolak admin </p>
-            <h3 class="text-xl">Ketahuan merokok ditempat yang dilarang</h3>
-            <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang
-                dilarang oleh kampus </p>
-            <span class="flex gap-3 items-center">
-                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                <p>Dosen</p>
-            </span>
-            <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24"
-                style="font-family: 'product Sans Bold';">Detail</a>
-        </div>
-
-    </div> -->
+    
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const shortDescElements = document.querySelectorAll('.text-xl');
+            const maxLength = 60;
 
+            shortDescElements.forEach(shortDesc => {
+                const text = shortDesc.textContent;
+
+                if (text.length > maxLength) {
+                    shortDesc.textContent = text.substring(0, maxLength) + '...';
+                }
+            });
+        });
+</script>
 </html>

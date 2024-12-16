@@ -13,6 +13,47 @@
 </head>
 
 <body>
+    <h2>Laporan Baru</h2>
+    <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListKonfirmasi">
+        <?php
+        include "../../backend/database.php";
+
+        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+                    FROM Laporan l
+                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    WHERE l.Status = 'Pending' AND l.ID_Dilapor = ?";
+        $params4 = [$_SESSION['NIM']];
+        $stmt4 = sqlsrv_query($conn, $query4, $params4);
+
+        if (!$stmt4) {
+            die("Query Execution Error: " . print_r(sqlsrv_errors(), true));
+        }
+
+        if (!sqlsrv_has_rows($stmt4)) {
+            echo "<p>No data found.</p>";
+        } else {
+
+            while ($laporan4 = sqlsrv_fetch_array($stmt4, SQLSRV_FETCH_ASSOC)) {
+        ?>
+                <div class="flex flex-col mx-auto gap-2 justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
+                    id="cardPelanggaran">
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan4['Tingkat']) ?>
+                    </div>
+                    <p class="text-sm text-amber-600">Laporan menunggu konfirmasi</p>
+                    <h3 class="text-xl"><?= htmlspecialchars($laporan4['Nama_Pelanggaran']) ?></h3>
+                    <span class="flex gap-3 items-center">
+                        <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
+                        <p> <b>Pelapor: </b><?= htmlspecialchars($laporan4['Nama']) ?></p>
+                    </span>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan4['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
+                </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
+
     <h2>Laporan Dikonfirmasi</h2>
     <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTunggu">
         <?php
@@ -36,15 +77,15 @@
 
             while ($laporan1 = sqlsrv_fetch_array($stmt1, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
+                <div class="flex flex-col mx-auto gap-2 justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
                     <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan1['Tingkat']) ?>
                     </div>
                     <p class="text-sm text-amber-600">Laporan terhadap anda dikonfirmasi</p>
                     <h3 class="text-xl"><?= htmlspecialchars($laporan1['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
-                        <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan1['Nama']) ?></p>
+                        <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
+                        <p><b>Pelapor: </b><?= htmlspecialchars($laporan1['Nama']) ?></p>
                     </span>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan1['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
@@ -58,16 +99,16 @@
         <?php
         include "../../backend/database.php";
 
-        $query2 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query3 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
                     WHERE l.Status = 'Selesai' AND l.ID_Dilapor = ?";
         $params2 = [$_SESSION['NIM']];
-        $stmt2 = sqlsrv_query($conn, $query2, $params2);
+        $stmt2 = sqlsrv_query($conn, $query3, $params2);
 
         if (!$stmt2) {
-            die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
+            die("Query Execution Error: " . print_r(sqlsrv_errors(), true));
         }
 
         if (!sqlsrv_has_rows($stmt2)) {
@@ -76,15 +117,15 @@
 
             while ($laporan2 = sqlsrv_fetch_array($stmt2, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
+                <div class="flex flex-col mx-auto gap-2 justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
                     <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan2['Tingkat']) ?>
                     </div>
                     <p class="text-sm text-green-600">Pengerjaan laporan telah selesai</p>
                     <h3 class="text-xl"><?= htmlspecialchars($laporan2['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
-                        <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                        <p><?= htmlspecialchars($laporan2['Nama']) ?></p>
+                        <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
+                        <p><b>Pelapor: </b><?= htmlspecialchars($laporan2['Nama']) ?></p>
                     </span>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan2['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
@@ -93,25 +134,48 @@
         }
         ?>
     </div>
-    <!-- <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListTolak">
 
-        <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
-            id="cardPelanggaran">
-            <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl">II
-            </div>
-            <p class="text-sm text-red-600">Banding anda ditolak admin </p>
-            <h3 class="text-xl">Ketahuan merokok ditempat yang dilarang</h3>
-            <p class="text-base text-slate-600">Anda di laporan oleh dosen karena melakukan merokok ditempat yang
-                dilarang oleh kampus </p>
-            <span class="flex gap-3 items-center">
-                <div class="w-8 h-8 rounded-full bg-slate-300"></div>
-                <p>Dosen</p>
-            </span>
-            <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24"
-                style="font-family: 'product Sans Bold';">Detail</a>
-        </div>
 
-    </div> -->
+    <h2>Laporan Ditolak</h2>
+    <div class="grid grid-cols-3 justify-between gap-4 my-12" id="gridListKonfirmasi">
+        <?php
+        include "../../backend/database.php";
+
+        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+                    FROM Laporan l
+                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
+                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    WHERE l.Status = 'Ditolak' AND l.ID_Dilapor = ?";
+        $params4 = [$_SESSION['NIM']];
+        $stmt4 = sqlsrv_query($conn, $query4, $params4);
+
+        if (!$stmt4) {
+            die("Query Execution Error: " . print_r(sqlsrv_errors(), true));
+        }
+
+        if (!sqlsrv_has_rows($stmt4)) {
+            echo "<p>No data found.</p>";
+        } else {
+
+            while ($laporan4 = sqlsrv_fetch_array($stmt4, SQLSRV_FETCH_ASSOC)) {
+        ?>
+                <div class="flex flex-col mx-auto gap-2 justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
+                    id="cardPelanggaran">
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan4['Tingkat']) ?>
+                    </div>
+                    <p class="text-sm text-slate-600">Laporan ditolak admin</p>
+                    <h3 class="text-xl"><?= htmlspecialchars($laporan4['Nama_Pelanggaran']) ?></h3>
+                    <span class="flex gap-3 items-center">
+                        <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
+                        <p> <b>Pelapor: </b><?= htmlspecialchars($laporan4['Nama']) ?></p>
+                    </span>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan4['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
+                </div>
+        <?php
+            }
+        }
+        ?>
+    </div>
 </body>
 
 </html>

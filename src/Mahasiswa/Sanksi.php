@@ -17,9 +17,10 @@
         <?php
         include "../../backend/database.php";
 
-        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, l.Sanksi, b.ID_Bukti, b.Foto, b.Deskripsi 
+        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, l.Sanksi, b.ID_Bukti, b.Foto, b.Deskripsi, p.ID_Pelanggaran, p.Nama_Pelanggaran
                     FROM Laporan l
                     JOIN Bukti_Pengerjaan b ON l.ID_Bukti = b.ID_Bukti
+                    JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     WHERE l.ID_Dilapor = ?";
         $params = [$_SESSION['NIM']];
         $stmt = sqlsrv_query($conn, $query, $params);
@@ -34,10 +35,10 @@
 
             while ($laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
         ?>
-                <div class="flex flex-col mx-auto justify-between w-80 h-96 px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
+                <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
                     <h2 class="text-black text-xl"><?= htmlspecialchars($laporan['Sanksi']) ?></h2>
                     <img src="../../backend/<?= htmlspecialchars($laporan['Foto']) ?>" class="mx-auto rounded-xl w-full" alt="">
-                    <p class="text-black text-base"><?= htmlspecialchars($laporan['Deskripsi']) ?></p>
+                    <p class="text-black text-base my-4"><?= htmlspecialchars($laporan['Nama_Pelanggaran']) ?></p>
                     <a href="../Mahasiswa/EditPelaksanaanSanksi.php?ID_Laporan=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24"
                         style="font-family: 'product Sans Bold';">Edit</a>
                 </div>
@@ -48,6 +49,17 @@
     </div>
 </body>
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+            const shortDescElements = document.querySelectorAll('.text-black.text-base.my-4');
+            const maxLength = 70;
 
+            shortDescElements.forEach(shortDesc => {
+                const text = shortDesc.textContent;
+
+                if (text.length > maxLength) {
+                    shortDesc.textContent = text.substring(0, maxLength) + '...';
+                }
+            });
+        });
 </script>
 </html>
