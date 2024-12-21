@@ -24,9 +24,12 @@ if (!isset($_SESSION['ID_Admin'])) {
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-fullbg-slate-200 ml-72">
-    <?php include "Navbar.php"; ?>
+        <?php include "Navbar.php"; ?>
 
         <section class="flex flex-col w-full px-14 py-12 gap-10">
+            <button onclick="history.back()" id="backButton" class="text-xl w-fit btn btn-transparent font-bold">
+                <i class="bi bi-chevron-left"></i> Kembali
+            </button>
             <h1 class="text-3xl">Laporan Pelanggaran Baru</h1>
 
             <div class="grid grid-cols-3 gap-4">

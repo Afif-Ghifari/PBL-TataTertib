@@ -17,7 +17,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, l.Sanksi, b.ID_Bukti, b.Foto, b.Deskripsi, p.ID_Pelanggaran, p.Nama_Pelanggaran
+        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, l.Sanksi, l.TanggalDibuat, b.ID_Bukti, b.Foto, b.Deskripsi, p.ID_Pelanggaran, p.Nama_Pelanggaran
                     FROM Laporan l
                     JOIN Bukti_Pengerjaan b ON l.ID_Bukti = b.ID_Bukti
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
@@ -37,6 +37,11 @@
         ?>
                 <div class="flex flex-col mx-auto justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardSanksi">
                     <h2 class="text-black text-xl"><?= htmlspecialchars($laporan['Sanksi']) ?></h2>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan['TanggalDibuat']
+                                                                        ) ?></p>
                     <img src="../../backend/<?= htmlspecialchars($laporan['Foto']) ?>" class="mx-auto rounded-xl w-full" alt="">
                     <p class="text-black text-base my-4"><?= htmlspecialchars($laporan['Nama_Pelanggaran']) ?></p>
                     <a href="../Mahasiswa/EditPelaksanaanSanksi.php?ID_Laporan=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24"
@@ -49,17 +54,18 @@
     </div>
 </body>
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-            const shortDescElements = document.querySelectorAll('.text-black.text-base.my-4');
-            const maxLength = 70;
+    document.addEventListener('DOMContentLoaded', () => {
+        const shortDescElements = document.querySelectorAll('.text-black.text-base.my-4');
+        const maxLength = 50;
 
-            shortDescElements.forEach(shortDesc => {
-                const text = shortDesc.textContent;
+        shortDescElements.forEach(shortDesc => {
+            const text = shortDesc.textContent;
 
-                if (text.length > maxLength) {
-                    shortDesc.textContent = text.substring(0, maxLength) + '...';
-                }
-            });
+            if (text.length > maxLength) {
+                shortDesc.textContent = text.substring(0, maxLength) + '...';
+            }
         });
+    });
 </script>
+
 </html>

@@ -41,7 +41,7 @@ if (!isset($_SESSION['NIM'])) {
         <?php
         include "../../backend/database.php";
 
-        $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, l.ID_Admin, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status, l.Sanksi
+        $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, l.ID_Admin, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status, l.Sanksi, l.Foto_Bukti
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -63,9 +63,9 @@ if (!isset($_SESSION['NIM'])) {
             die("No data found.");
         }
         ?>
-        <section class="w-2/3 h-fit">
-            <img src="../../assets/img/sample_pelanggaran.png" class="max-w-2xl rounded-2xl mb-10" alt="">
-            <div class="pr-24">
+        <section class="w-2/3 h-fit pr-24">
+            <img src="../../backend/<?= htmlspecialchars($row['Foto_Bukti']) ?>" class="max-w-2xl rounded-2xl mb-10 mx-auto" alt="">
+            <div class="">
                 <h2 class="text-xl"><?= htmlspecialchars($row['Nama_Pelanggaran']) ?></h2>
                 <h4 class="text-sm text-slate-600">Pelanggaran Tingkat <?= htmlspecialchars($row['Tingkat']) ?></h4>
                 <span class="flex items-center gap-3 my-7">
@@ -136,7 +136,11 @@ if (!isset($_SESSION['NIM'])) {
                     <?php if ($row['Status'] == 'Dikonfirmasi') { ?>
                         <a href="EditPelaksanaanSanksi.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-primary w-full">Pengerjaan Sanksi</a>
                     <?php } ?>
+                    <?php if ($row['Status'] == 'Pending') {?>
                     <a href="FormBanding.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-light w-full border border-black">Ajukan banding</a>
+                    <?php
+                    }
+                    ?>
                 </div>
             </div>
         </aside>

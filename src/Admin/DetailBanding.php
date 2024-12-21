@@ -24,13 +24,13 @@ if (!isset($_SESSION['ID_Admin'])) {
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-fullbg-slate-200 ml-72">
-    <?php include "Navbar.php"; ?>
+        <?php include "Navbar.php"; ?>
 
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <?php
             include "../../backend/database.php";
 
-            $qry_banding = "SELECT b.ID_Banding, l.ID_Laporan, l.TanggalDibuat, p.ID_Pelanggaran, p.Nama_Pelanggaran, m.NIM, m.Nama, k.id_Kelas, k.Nama_Kelas, b.Keterangan
+            $qry_banding = "SELECT b.ID_Banding, l.ID_Laporan, l.TanggalDibuat, p.ID_Pelanggaran, p.Nama_Pelanggaran, m.NIM, m.Nama, k.id_Kelas, k.Nama_Kelas, b.Keterangan, b.Status
                                 FROM banding b
                                 JOIN mahasiswa m
                                 ON b.NIM = m.NIM
@@ -42,7 +42,7 @@ if (!isset($_SESSION['ID_Admin'])) {
                                 ON m.ID_Kelas = k.ID_Kelas
                                 WHERE b.ID_Banding = ?";
             $params = [$_GET['ID_Banding']];
-            
+
             $stmt = sqlsrv_prepare($conn, $qry_banding, $params);
             if (!$stmt) {
                 die("Query Prepare Error: " . print_r(sqlsrv_errors(), true));
@@ -54,6 +54,9 @@ if (!isset($_SESSION['ID_Admin'])) {
 
             $banding = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
             ?>
+            <button onclick="history.back()" id="backButton" class="text-xl w-96 btn btn-transparent font-bold">
+                <i class="bi bi-chevron-left"></i> Kembali
+            </button>
             <h3>Pengajuan Banding</h3>
             <div class="flex flex-col w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
                 <label for="" class="flex w-1/2 justify-between">
@@ -90,8 +93,22 @@ if (!isset($_SESSION['ID_Admin'])) {
                     <h5>Alasan Banding</h5>
                     <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
                 </label>
-                <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-primary rounded-xl w-full mx-auto my-3 py-2">Tindak Lanjut</a>
-                <a href="DataBanding.php" class="btn btn-warning rounded-xl w-full mx-auto my-3 py-2">Tutup</a>
+
+                <form action="" method="post">
+                    <label class="w-full" for="">
+                        <h5>Status</h5>
+                        <select name="Status" class="form-control" id="JenisPelanggaran">
+                            <!-- <option value="<?= htmlspecialchars($banding['Status']) ?>" selected><?= htmlspecialchars($banding['Status']) ?></option> -->
+                            <option value="Pending">Pending</option>
+                            <option value="Diterima">Terima</option>
+                            <option value="Ditolak">Tolak</option>
+                        </select>
+                    </label>
+
+                    <input type="submit" value="Update" class="btn btn-primary rounded-xl w-full mx-auto mt-10 py-2">
+                </form>
+                <!-- <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-success rounded-xl w-full mx-auto mt-3 py-2">Laporan</a> -->
+                <!-- <a href="DataBanding.php" class="btn btn-warning rounded-xl w-full mx-auto my-2 py-2">Tutup</a> -->
             </div>
         </section>
     </main>

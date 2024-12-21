@@ -51,5 +51,18 @@
         ?>
     </div>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+            const shortDescElements = document.querySelectorAll('.text-xl');
+            const maxLength = 50;
 
+            shortDescElements.forEach(shortDesc => {
+                const text = shortDesc.textContent;
+
+                if (text.length > maxLength) {
+                    shortDesc.textContent = text.substring(0, maxLength) + '...';
+                }
+            });
+        });
+</script>
 </html>

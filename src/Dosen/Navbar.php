@@ -24,10 +24,10 @@
             class="border-2 pb-1 border-transparent hover:border-b-2 hover:border-b-white no-underline">History Pelaporan</a>
     </div>
     <div class="relative w-1/3 flex justify-end items-center gap-8" id="LoginBtn">
-        <button class="relative inline-flex items-center" id="NotifBtn">
+        <!-- <button class="relative inline-flex items-center" id="NotifBtn">
             <i class="bi bi-bell text-3xl text-slate-300"></i>
             <div class="absolute inline-flex items-center justify-center w-3 h-3 bg-red-500 rounded-full -top-1 -end-1 dark:border-gray-900"></div>
-        </button>
+        </button> -->
         <a href="../../backend/logout.php" class="relative inline-flex items-center" id="LogoutBtn">
             <i class="bi bi-box-arrow-in-right text-3xl text-slate-300"></i>
         </a>

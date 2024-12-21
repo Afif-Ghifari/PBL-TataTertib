@@ -27,10 +27,14 @@ $IdAdmin = $_SESSION['ID_Admin'];
 
     <main class="w-full h-fullbg-slate-200 ml-72">
         <?php include "Navbar.php"; ?>
-        
+
         <section class="flex flex-col w-full px-14 py-12 gap-10">
+            <button onclick="history.back()" id="backButton" class="text-xl w-fit btn btn-transparent font-bold">
+                <i class="bi bi-chevron-left"></i> Kembali
+            </button>
+            <h1 class="text-3xl">Edit Data Laporan Pelanggaran</h1>
             <form class="w-full px-20 py-12 rounded-xl shadow-lg" action="../../backend/TerimaPelanggaran.php" method="post">
-                
+
                 <?php
                 include "../../backend/database.php";
                 $qry_terimaPelanggaran = "SELECT 

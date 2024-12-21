@@ -18,7 +18,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query_banding = "SELECT b.ID_Banding, b.Keterangan, l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query_banding = "SELECT b.ID_Banding, b.Keterangan, b.Status as StatusBanding, l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
                     FROM Banding b
                     JOIN Laporan l ON b.ID_Laporan = l.ID_Laporan
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
@@ -42,11 +42,22 @@
                     <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($banding['Tingkat']) ?>
                     </div>
                     <p class="text-sm text-amber-600 my-1">Laporan terhadap anda dikonfirmasi</p>
-                    <h3 class="text-xl"><?= htmlspecialchars($banding['Nama_Pelanggaran']) ?></h3>
+                    <h3 class="text-xl text-2xl"><?= htmlspecialchars($banding['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
                         <p><b>Pelapor: </b><?= htmlspecialchars($banding['Nama']) ?></p>
                     </span>
+                    <h6> Status: 
+                    <?php
+                            if ($banding['StatusBanding'] == 'Pending') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-slate-600 ">Pending</span>';
+                            } elseif ($banding['StatusBanding'] == 'Diterima') {
+                                echo '<span class="px-2 py-1 rounded-lg text-black bg-amber-600">Diterima</span>';
+                            } elseif ($banding['StatusBanding'] == 'Ditolak') {
+                                echo '<span class="px-2 py-1 rounded-lg text-white bg-red-600">Ditolak</span>';
+                            }
+                            ?>
+                    </h6>
                     <h6>Keterangan Banding: </h6>
                     <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
                     <a href="" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
@@ -60,8 +71,8 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-            const shortDescElements = document.querySelectorAll('.text-xl');
-            const maxLength = 60;
+            const shortDescElements = document.querySelectorAll('.text-xl.text-2xl');
+            const maxLength = 50;
 
             shortDescElements.forEach(shortDesc => {
                 const text = shortDesc.textContent;

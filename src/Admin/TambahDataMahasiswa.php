@@ -24,9 +24,12 @@ if (!isset($_SESSION['ID_Admin'])) {
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-screen bg-slate-200 ml-72">
-    <?php include "Navbar.php"; ?>
+        <?php include "Navbar.php"; ?>
 
         <section class="flex flex-col h-fit bg-slate-100 w-full px-14 py-12 gap-10">
+            <button onclick="history.back()" id="backButton" class="text-xl w-fit btn btn-transparent font-bold">
+                <i class="bi bi-chevron-left"></i> Kembali
+            </button>
             <h1 class="text-3xl">Tambah Data Mahasiswa</h1>
 
             <form action="../../backend/tambahDataMahasiswa.php" method="POST" class="flex flex-col h-full justify-between">
@@ -57,7 +60,7 @@ if (!isset($_SESSION['ID_Admin'])) {
                         while ($kelas = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                             echo "<option value=\"" . htmlspecialchars($kelas['ID_Kelas']) . "\">" . htmlspecialchars($kelas['Nama_Kelas']) . "</option>";
                         }
-                        
+
                         ?>
                     </select>
                 </label>

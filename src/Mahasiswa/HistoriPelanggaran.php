@@ -50,7 +50,7 @@
     <main class="flex flex-col px-28 my-36">
         <header class="flex flex-col gap-4 justify-start text-start w-1/2">
             <h1 class="text-4xl font-bold">Histori Pelanggaran</h1>
-            <p class="text-xl">History Pelanggaran adalah fitur untuk melihat riwayat pelanggaran mahasiswa, mencakup detail seperti
+            <p class="text-lg">History Pelanggaran adalah fitur untuk melihat riwayat pelanggaran mahasiswa, mencakup detail seperti
                 jenis pelanggaran, tanggal, dan status penyelesaiannya.</p>
         </header>
 
@@ -82,6 +82,7 @@
     </main>
     <?php include '../Footer.php' ?>
 </body>
+
 <script>
     const BtnSemua = document.getElementById("BtnSemua");
     const BtnStatus = document.getElementById("BtnStatus");
