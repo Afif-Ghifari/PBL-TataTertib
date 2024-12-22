@@ -31,7 +31,7 @@
         <a href="../../backend/logout.php" class="relative inline-flex items-center" id="LogoutBtn">
             <i class="bi bi-box-arrow-in-right text-3xl text-slate-300"></i>
         </a>
-        <div class="absolute flex flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6" id="NotifList">
+        <!-- <div class="absolute flex flex-col min-h-96 w-96 bg-white rounded-xl top-10 left-2 px-8 py-6" id="NotifList">
             <div class="w-full flex justify-between text-black text-xl">
                 <h4>Notifikasi</h4>
                 <button id="closeNotif">
@@ -51,12 +51,12 @@
                     <a href="../Dosen/DetailPelanggaran.html" class="btn btn-primary">Detail</a>
                 </div>
 
-            </div>
+            </div> -->
+            <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
+                <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
+            </a>
         </div>
 
-        <a href="../Dosen/Profile.php" class="size-10 rounded-full border overflow-hidden">
-            <img src="../../assets/img/pp_sample.jpg" class="w-full h-full object-cover" alt="">
-        </a>
     </div>
 </nav>
 <script>

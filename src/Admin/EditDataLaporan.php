@@ -94,7 +94,7 @@ $IdAdmin = $_SESSION['ID_Admin'];
 
                             while ($mahasiswa = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                                 $selected = $mahasiswa['NIM'] === $row['NIM'] ? 'selected' : '';
-                                echo "<option value=\"" . htmlspecialchars($mahasiswa['NIM']) . "\" $selected>" . htmlspecialchars($mahasiswa['Nama']) . "</option>";
+                                echo "<option value=\"" . htmlspecialchars($mahasiswa['NIM']) . "\" $selected>" . htmlspecialchars($mahasiswa['NIM']) .' - '. htmlspecialchars($mahasiswa['Nama']) . "</option>";
                             }
                             ?>
                         </select>

@@ -86,19 +86,18 @@
                     // Loop through the records
                     while ($data_laporan = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
                 ?>
-                        <div class="flex flex-col justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
+                        <div class="flex flex-col justify-between w-fit h-fit px-8 py-6 rounded-xl shadow-xl border" id="cardPelanggaran">
                             <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl mb-2">
                                 <?= htmlspecialchars($data_laporan['Tingkat']) ?>
                             </div>
                             <h3 class="text-xl"><?= htmlspecialchars($data_laporan['Nama_Pelanggaran']) ?></h3>
-                            <h3 class="text-xl"><?= htmlspecialchars($data_laporan['ID_Dilapor']) ?></h3>
                             <p class="text-blue-600">Dibuat: <?= htmlspecialchars(
-                                    $data_laporan['TanggalDibuat'] instanceof DateTime
-                                        ? $data_laporan['TanggalDibuat']->format('Y-m-d')
-                                        : $data_laporan['TanggalDibuat']
+                                $data_laporan['TanggalDibuat'] instanceof DateTime
+                                ? $data_laporan['TanggalDibuat']->format('Y-m-d')
+                                : $data_laporan['TanggalDibuat']
                                 ) ?></p>
                             <p>
-                            <?php
+                                <?php
                             if ($data_laporan['Status'] == 'Pending') {
                                 echo '<span class="px-2 py-1 rounded-lg text-white bg-slate-600 ">Pending</span>';
                             } elseif ($data_laporan['Status'] == 'Dikonfirmasi') {
@@ -111,11 +110,12 @@
                             ?>
                             </p>
                             <h6>Terlapor: <?= htmlspecialchars($data_laporan['Nama']) ?></h6>
-                            <!-- <span class="flex gap-3 items-center">
-                                <a href="../Mahasiswa/DetailPelanggaran.html" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
+                            <h6 class="text-base">NIM: <?= htmlspecialchars($data_laporan['ID_Dilapor']) ?></h6>
+                            <span class="flex gap-3 items-center">
+                                <a href="DetailPelanggaran.php?ID_Laporan=<?= $data_laporan['ID_Laporan'] ?>" class="btn btn-primary w-24" style="font-family: 'product Sans Bold';">
                                     Detail
                                 </a>
-                            </span> -->
+                            </span>
                         </div>
                 <?php
                     } // End of while loop
