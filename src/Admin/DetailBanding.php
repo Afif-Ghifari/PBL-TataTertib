@@ -95,6 +95,7 @@ if (!isset($_SESSION['ID_Admin'])) {
                 </label>
 
                 <form action="" method="post">
+                    <input type="hidden" name="ID_Banding" value="<?= $banding['ID_Banding'] ?>">
                     <label class="w-full" for="">
                         <h5>Status</h5>
                         <select name="Status" class="form-control" id="JenisPelanggaran">

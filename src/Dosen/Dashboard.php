@@ -79,7 +79,7 @@
         </div>
     </section>
 
-    <section class="px-28 my-36" id="importantNotification">
+    <!-- <section class="px-28 my-36" id="importantNotification">
         <div class="flex justify-between items-center w-full h-64 bg-gradient-to-r from-blue-900 to-black rounded-2xl">
             <div class="w-3/4 text-white px-12 flex flex-col gap-2">
                 <h6 class="text-red-600">Warning</h6>
@@ -119,7 +119,7 @@
             <h1 class="text-4xl">05</h1>
             <a href="" class="btn btn-primary" style="font-family: 'product Sans Bold'">Lihat</a>
         </div>
-    </section>
+    </section> -->
 
     <section class="flex justify-between gap-10 px-28 my-36" id="importantInfo">
         <div class="w-1/2 relative">

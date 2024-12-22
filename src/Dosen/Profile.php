@@ -39,9 +39,13 @@
             die("No data found.");
         }
     ?>
-    <nav class="w-full px-28 py-10">
-        <a class="text-xl btn btn-transparent font-bold" href="../Mahasiswa/Dashboard.php"><i class="bi bi-chevron-left"></i> Kembali</a>
-    </nav>
+<?php include 'Navbar.php'; ?>
+
+    <div class="w-full px-28 py-6 mt-24">
+        <button onclick="history.back()" id="backButton" class="text-xl btn btn-transparent font-bold">
+            <i class="bi bi-chevron-left"></i> Kembali
+        </button>
+    </div>
     <header class="flex flex-col justify-between items-center w-full px-28 h-80">
         <div class="w-full h-1/2 bg-slate-600 rounded-t-xl"></div>
         <span class="flex flex-col items-center">    

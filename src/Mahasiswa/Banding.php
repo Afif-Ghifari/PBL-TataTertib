@@ -60,7 +60,7 @@
                     </h6>
                     <h6>Keterangan Banding: </h6>
                     <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
-                    <a href="" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
+                    <a href="DetailBanding.php?ID_Banding=<?= $banding['ID_Banding'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }

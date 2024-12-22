@@ -27,6 +27,7 @@ class FormPelaporan
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Form Pelaporan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../../assets/HistoriPelanggaran.css">
     <link rel="icon" href="../../assets/img/LOGO BREN.pdf.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
@@ -40,6 +41,7 @@ HTML;
     public function renderForm()
     {
         $pelanggaranOptions = $this->getPelanggaranOptions();
+        $MahasiswaOptions = $this->getNamaMhs();
         echo <<<HTML
 <main class="px-28 my-36">
     <h2 class="text-3xl text-center my-2">Form Pelaporan</h2>
@@ -50,10 +52,19 @@ HTML;
         <input class="form-control" id="file_input" type="file" name="bukti" required>
 
         <div class="flex justify-between gap-24 w-full my-8">
+            <!-- <span class="w-1/4">
+                <label for="">NIM Terlapor</label>
+                <input type="text" class="form-control" id="NamaTerlapor" name="NIM" required>
+            </span> -->
             <span class="w-full">
                 <label for="">Nama Terlapor</label>
-                <input type="text" class="form-control" id="NamaTerlapor" name="NamaTerlapor" required>
+                <select class="form-control" id="NamaTerlapor" name="NamaTerlapor" required>
+                    <option value="" class="hidden">Pilih Nama Terlapor</option>
+                    $MahasiswaOptions
+                </select>
+                
             </span>
+            
             <span class="w-full hidden">
                 <label for="">Admin Yang Akan Menangani</label>
                 <input type="text" class="form-control" id="Admin" name="ID_Admin" value="1">
@@ -84,6 +95,25 @@ HTML;
 HTML;
     }
 
+    private function getNamaMhs()
+    {
+        $options_mhs = "";
+        $query_mhs = "SELECT * FROM mahasiswa ORDER BY Nama ASC";
+        $stmt_mhs = sqlsrv_query($this->dbConnection, $query_mhs);
+
+        if ($stmt_mhs === false) {
+            die("Query Error: " . print_r(sqlsrv_errors(), true));
+        }
+
+        while ($mhs = sqlsrv_fetch_array($stmt_mhs, SQLSRV_FETCH_ASSOC)) {
+            $id = htmlspecialchars($mhs['NIM']);
+            $name = htmlspecialchars($mhs['Nama']);
+            $options_mhs .= "<option class=\"w-96\" value=\"$name\">$id - $name </option>";
+        }
+
+        return $options_mhs;
+    }
+
     private function getPelanggaranOptions()
     {
         $options = "";
@@ -108,39 +138,7 @@ HTML;
         include '../Footer.php';
         echo <<<HTML
 </body>
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const faqItems = document.querySelectorAll(".faq-item");
 
-        faqItems.forEach(item => {
-            const header = item.querySelector(".faq-header");
-            const content = item.querySelector(".faq-content");
-            const icon = header.querySelector(".icon");
-
-            header.addEventListener("click", () => {
-                faqItems.forEach(i => {
-                    const otherContent = i.querySelector(".faq-content");
-                    const otherIcon = i.querySelector(".icon");
-                    if (otherContent !== content && otherContent.classList.contains("show")) {
-                        otherContent.classList.remove("show");
-                        otherContent.style.maxHeight = null;
-                        otherIcon.classList.remove("rotate");
-                    }
-                });
-
-                if (content.classList.contains("show")) {
-                    content.classList.remove("show");
-                    content.style.maxHeight = null;
-                    icon.classList.remove("rotate");
-                } else {
-                    content.classList.add("show");
-                    content.style.maxHeight = content.scrollHeight + "px";
-                    icon.classList.add("rotate");
-                }
-            });
-        });
-    });
-</script>
 </html>
 HTML;
     }

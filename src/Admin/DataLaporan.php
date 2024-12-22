@@ -35,6 +35,7 @@ if (!isset($_SESSION['ID_Admin'])) {
                     <tr>
                         <th class="px-3 py-2">Pelapor</th>
                         <th class="px-3 py-2">Dilapor</th>
+                        <th class="px-3 py-2">Tanggal Dibuat</th>
                         <th class="px-3 py-2">Pelanggaran</th>
                         <th class="px-3 py-2">Sanksi</th>
                         <th class="px-3 py-2">Status</th>
@@ -46,7 +47,8 @@ if (!isset($_SESSION['ID_Admin'])) {
                     include "../../backend/database.php";
               
                     $qry_mahasiswa = "SELECT l.ID_Laporan,
-                                            l.ID_Pelanggaran, 
+                                            l.ID_Pelanggaran,
+                                            l.TanggalDibuat, 
                                             d.NIP, 
                                             d.Nama as NamaDosen,
                                             m.NIM,
@@ -58,7 +60,8 @@ if (!isset($_SESSION['ID_Admin'])) {
                                             FROM Laporan l
                                             JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                                             JOIN Dosen d ON l.ID_Pelapor = d.NIP
-                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM";
+                                            JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
+                                            ORDER BY l.TanggalDibuat DESC";
 
                     $stmt = sqlsrv_query($conn, $qry_mahasiswa);
 
@@ -76,8 +79,13 @@ if (!isset($_SESSION['ID_Admin'])) {
                     <tr>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaDosen'])?></td>
                         <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['NamaMahasiswa'])?></td>
+                        <td class="border border-slate-700 px-3"><p class=""><?= htmlspecialchars(
+                                    $laporan['TanggalDibuat'] instanceof DateTime
+                                        ? $laporan['TanggalDibuat']->format('Y-m-d')
+                                        : $laporan['TanggalDibuat']
+                                ) ?></p></td>
                         <td class="border border-slate-700 px-3" id="Shortened"><?= htmlspecialchars($laporan['Nama_Pelanggaran'])?></td>
-                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Sanksi'] ?? 'Sanksi belum ditentukan') ?></td>
+                        <td class="border border-slate-700 px-3"><?= htmlspecialchars($laporan['Sanksi']==null ? 'Sanksi belum ditentukan' : $laporan['Sanksi']) ?></td>
                         <td class="border border-slate-700 px-3">
                             <?php
                             if ($laporan['Status'] == 'Pending') {

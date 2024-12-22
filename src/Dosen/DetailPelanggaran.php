@@ -1,8 +1,8 @@
 <?php
-session_start();
-if (!isset($_SESSION['NIM'])) {
-    header("Location: ../Login.html");
-}
+    session_start();
+    if (!isset($_SESSION['NIP'])) {
+        header("Location: ../Login.html");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,30 +23,21 @@ if (!isset($_SESSION['NIM'])) {
 <?php include 'Navbar.php'; ?>
 
     <div class="w-full px-28 py-6 mt-24">
-        <a href="../Mahasiswa/HistoriPelanggaran.php" id="backButton" class="text-xl btn btn-transparent font-bold">
+        <button onclick="history.back()" id="backButton" class="text-xl btn btn-transparent font-bold">
             <i class="bi bi-chevron-left"></i> Kembali
-        </a>
+        </button>
     </div>
-    <script>
-        document.getElementById("backButton").addEventListener("click", () => {
-            const previousPage = sessionStorage.getItem("previousPage");
-            if (previousPage) {
-                window.location.href = previousPage;
-            } else {
-                history.back();
-            }
-        });
-    </script>
+    
 
 
     <main class="mx-28 mb-32 mt-8 flex">
         <?php
         include "../../backend/database.php";
 
-        $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, l.ID_Admin, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status, l.Sanksi, l.Foto_Bukti
+        $qry_detail = "SELECT l.ID_Laporan, l.ID_Dilapor, l.ID_Admin, p.ID_Pelanggaran, m.NIM, m.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat, l.Status, l.Sanksi, l.Foto_Bukti
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
-                    JOIN Dosen d ON l.ID_Pelapor = d.NIP
+                    JOIN Mahasiswa m ON l.ID_Dilapor = m.NIM
                     WHERE l.ID_Laporan = ?";
         $params = [$_GET['ID_Laporan']];
         $stmt = sqlsrv_prepare($conn, $qry_detail, $params);
@@ -104,47 +95,7 @@ if (!isset($_SESSION['NIM'])) {
                                                         : $row['TanggalDibuat']
                                                 ) ?></p>
                 </div>
-                <?php if ($row['Status'] == 'Pending') { ?>
-                    <p class="text-red-600">
-                        Apakah itu anda? kalau itu benar anda silakan konfirmasi!!
-                    </p>
-                <?php } ?>
-                <div class="flex flex-col gap-3 my-6">
-                    <?php if ($row['Status'] == 'Pending') { ?>
-                        <form action="../../backend/TerimaPelanggaran.php" method="post">
-                            <input type="hidden" value="<?= htmlspecialchars($row['ID_Laporan']) ?>" name="ID_Laporan" id="">
-                            <input type="hidden" value="<?= htmlspecialchars($row['ID_Dilapor']) ?>" name="ID_Dilapor" id="">
-                            <input type="hidden" value="<?= htmlspecialchars($row['NIP']) ?>" name="ID_Pelapor" id="">
-                            <input type="hidden" value="<?= htmlspecialchars($row['ID_Admin']) ?>" name="ID_Admin" id="">
-                            <input type="hidden" value="<?= htmlspecialchars($row['ID_Pelanggaran']) ?>" name="ID_Pelanggaran" id="">
-                            <input type="hidden" value="Dikonfirmasi" name="Status" id="">
-                            <input type="hidden" value="<?= htmlspecialchars($row['Sanksi']) ?>" name="Sanksi" id="">
-                            <input
-                            type="date"
-                            class="hidden"
-                            id="Tanggal"
-                            name="TanggalDibuat"
-                            value="<?= isset($row['TanggalDibuat'])
-                                        ? htmlspecialchars(
-                                            $row['TanggalDibuat'] instanceof DateTime
-                                                ? $row['TanggalDibuat']->format('Y-m-d')
-                                                : (new DateTime($row['TanggalDibuat']))->format('Y-m-d')
-                                        )
-                                        : ''
-                                    ?>">
-                            
-                            <input type="submit" class="btn btn-primary w-full" value="Konfirmasi">
-                        </form>
-                    <?php } ?>
-                    <?php if ($row['Status'] == 'Dikonfirmasi') { ?>
-                        <a href="EditPelaksanaanSanksi.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-primary w-full">Pengerjaan Sanksi</a>
-                    <?php } ?>
-                    <?php if ($row['Status'] == 'Pending') {?>
-                    <a href="FormBanding.php?ID_Laporan=<?= $row['ID_Laporan'] ?>" class="btn btn-light w-full border border-black">Ajukan banding</a>
-                    <?php
-                    }
-                    ?>
-                </div>
+                
             </div>
         </aside>
     </main>
