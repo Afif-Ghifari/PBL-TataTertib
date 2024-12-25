@@ -24,7 +24,7 @@ if (!isset($_SESSION['ID_Admin'])) {
     <?php include "Sidebar.php"; ?>
 
     <main class="w-full h-screen bg-slate-200 ml-72">
-    <?php include "Navbar.php"; ?>
+        <?php include "Navbar.php"; ?>
 
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <h1 class="text-3xl">Manajemen Data Banding</h1>
@@ -35,15 +35,16 @@ if (!isset($_SESSION['ID_Admin'])) {
                         <th class=" px-3 py-2">NIM</th>
                         <th>Nama</th>
                         <th>Kelas</th>
+                        <th>Status</th>
                         <th>Laporan Terkait</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                <?php
+                    <?php
                     include "../../backend/database.php";
-              
-                    $qry_banding = "SELECT b.ID_Banding, b.ID_Laporan, m.NIM, m.Nama, k.id_Kelas, k.Nama_Kelas
+
+                    $qry_banding = "SELECT b.ID_Banding, b.ID_Laporan, b.Status, m.NIM, m.Nama, k.id_Kelas, k.Nama_Kelas
                                         FROM banding b
                                         JOIN mahasiswa m
                                         ON b.NIM = m.NIM
@@ -60,23 +61,34 @@ if (!isset($_SESSION['ID_Admin'])) {
                     } else {
 
                         while ($banding = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
-                        
+
                     ?>
-                    <tr>
-                        <td class=" p-3"><?= htmlspecialchars($banding['NIM'])?></td>
-                        <td><?= htmlspecialchars($banding['Nama'])?></td>
-                        <td><?= htmlspecialchars($banding['Nama_Kelas'])?></td>
-                        <td>
-                            <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan']?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
-                        </td>
-                        <td>
-                            <a href="DetailBanding.php?ID_Banding=<?= $banding['ID_Banding']?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
-                        </td>
-                    </tr>
-                <?php
+                            <tr>
+                                <td class=" p-3"><?= htmlspecialchars($banding['NIM']) ?></td>
+                                <td><?= htmlspecialchars($banding['Nama']) ?></td>
+                                <td>
+                                    <?php
+                                    if ($banding['Status'] == 'Pending') {
+                                        echo '<span class="px-2 py-1 rounded-lg text-white bg-slate-600 ">Pending</span>';
+                                    } elseif ($banding['Status'] == 'Diterima') {
+                                        echo '<span class="px-2 py-1 rounded-lg text-black bg-green-600">Diterima</span>';
+                                    } elseif ($banding['Status'] == 'Ditolak') {
+                                        echo '<span class="px-2 py-1 rounded-lg text-white bg-red-600">Ditolak</span>';
+                                    }
+                                    ?>
+                                </td>
+                                <td><?= htmlspecialchars($banding['Nama_Kelas']) ?></td>
+                                <td>
+                                    <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                </td>
+                                <td>
+                                    <a href="DetailBanding.php?ID_Banding=<?= $banding['ID_Banding'] ?>" class="btn btn-success"><i class="bi bi-clipboard"></i></a>
+                                </td>
+                            </tr>
+                    <?php
+                        }
                     }
-                }
-                ?>
+                    ?>
                 </tbody>
             </table>
         </section>

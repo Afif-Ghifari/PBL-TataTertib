@@ -18,7 +18,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status, l.TanggalDibuat
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -34,19 +34,24 @@
             echo "<p>No data found.</p>";
         } else {
 
-            while ($laporan4 = sqlsrv_fetch_array($stmt4, SQLSRV_FETCH_ASSOC)) {
+            while ($laporan5 = sqlsrv_fetch_array($stmt4, SQLSRV_FETCH_ASSOC)) {
         ?>
                 <div class="flex flex-col mx-auto gap-2 justify-between w-80 h-fit px-8 py-6 rounded-xl shadow-xl border"
                     id="cardPelanggaran">
-                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan4['Tingkat']) ?>
+                    <div class="flex items-center justify-center w-14 h-14 bg-blue-600 rounded-full text-white text-3xl"><?= htmlspecialchars($laporan5['Tingkat']) ?>
                     </div>
                     <p class="text-sm text-amber-600">Laporan menunggu konfirmasi</p>
-                    <h3 class="text-xl"><?= htmlspecialchars($laporan4['Nama_Pelanggaran']) ?></h3>
+                    <h3 class="text-xl"><?= htmlspecialchars($laporan5['Nama_Pelanggaran']) ?></h3>
                     <span class="flex gap-3 items-center">
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
-                        <p> <b>Pelapor: </b><?= htmlspecialchars($laporan4['Nama']) ?></p>
+                        <p> <b>Pelapor: </b><?= htmlspecialchars($laporan5['Nama']) ?></p>
                     </span>
-                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan4['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan5['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan5['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan5['TanggalDibuat']
+                                                                        ) ?></p>
+                    <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan5['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
             }
@@ -59,7 +64,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query1 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query1 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status, l.TanggalDibuat
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -87,6 +92,11 @@
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
                         <p><b>Pelapor: </b><?= htmlspecialchars($laporan1['Nama']) ?></p>
                     </span>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan1['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan1['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan1['TanggalDibuat']
+                                                                        ) ?></p>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan1['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
@@ -99,7 +109,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query3 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query3 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status, l.TanggalDibuat
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -127,6 +137,11 @@
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
                         <p><b>Pelapor: </b><?= htmlspecialchars($laporan2['Nama']) ?></p>
                     </span>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan2['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan2['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan2['TanggalDibuat']
+                                                                        ) ?></p>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan2['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
@@ -141,7 +156,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status 
+        $query4 = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.Status, l.TanggalDibuat
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -169,6 +184,11 @@
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
                         <p> <b>Pelapor: </b><?= htmlspecialchars($laporan4['Nama']) ?></p>
                     </span>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan4['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan4['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan4['TanggalDibuat']
+                                                                        ) ?></p>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan4['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php

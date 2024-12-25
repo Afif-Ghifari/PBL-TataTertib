@@ -1,9 +1,10 @@
 <?php
-session_start();
-if (!isset($_SESSION['ID_Admin'])) {
-    header("Location: ../Login.html");
-}
+    session_start();
+    if (!isset($_SESSION['NIM'])) {
+        header("Location: ../Login.html");
+    }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,10 +22,9 @@ if (!isset($_SESSION['ID_Admin'])) {
 </head>
 
 <body class="flex">
-    <?php include "Sidebar.php"; ?>
+<?php include 'Navbar.php'; ?>
 
-    <main class="w-full h-fullbg-slate-200 ml-72">
-        <?php include "Navbar.php"; ?>
+    <main class="w-full h-fullbg-slate-200 mt-24">
 
         <section class="flex flex-col w-full px-14 py-12 gap-10">
             <?php
@@ -54,9 +54,9 @@ if (!isset($_SESSION['ID_Admin'])) {
 
             $banding = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC);
             ?>
-            <button onclick="history.back()" id="backButton" class="text-xl w-fit btn btn-transparent font-bold">
+            <!-- <button onclick="history.back()" id="backButton" class="text-xl w-96 btn btn-transparent font-bold">
                 <i class="bi bi-chevron-left"></i> Kembali
-            </button>
+            </button> -->
             <h3>Pengajuan Banding</h3>
             <div class="flex flex-col w-full px-20 py-12 rounded-xl shadow-lg" action="" method="post">
                 <label for="" class="flex w-1/2 justify-between">
@@ -94,22 +94,21 @@ if (!isset($_SESSION['ID_Admin'])) {
                     <p><?= htmlspecialchars($banding['Keterangan']) ?></p>
                 </label>
 
-                <form action="../../backend/EditBanding.php" method="post">
-                    <input type="hidden" name="ID_Banding" value="<?= $banding['ID_Banding'] ?>">
                     <label class="w-full" for="">
                         <h5>Status</h5>
-                        <select name="Status" class="form-control" id="JenisPelanggaran">
+                        <p><?= htmlspecialchars($banding['Status']) ?></p>
+
+                        <!-- <select name="Status" class="form-control" id="JenisPelanggaran">
                             <option value="<?= htmlspecialchars($banding['Status']) ?>" selected><?= htmlspecialchars($banding['Status']) ?></option>
                             <option value="Pending">Pending</option>
                             <option value="Diterima">Terima</option>
                             <option value="Ditolak">Tolak</option>
-                        </select>
+                        </select> -->
                     </label>
 
-                    <input type="submit" value="Update" class="btn btn-primary rounded-xl w-full mx-auto mt-10 py-2">
-                </form>
-                <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-success rounded-xl w-full mx-auto mt-3 py-2">Laporan</a>
-                <!-- <a href="DataBanding.php" class="btn btn-warning rounded-xl w-full mx-auto my-2 py-2">Tutup</a> -->
+                    <!-- <input type="submit" value="Update" class="btn btn-primary rounded-xl w-full mx-auto mt-10 py-2"> -->
+                <!-- <a href="EditDataLaporan.php?ID_Laporan=<?= $banding['ID_Laporan'] ?>" class="btn btn-success rounded-xl w-full mx-auto mt-3 py-2">Laporan</a> -->
+                <button onclick="history.back()" class="btn btn-warning rounded-xl w-full mx-auto my-2 py-2">Tutup</button>
             </div>
         </section>
     </main>

@@ -5,7 +5,7 @@ if (!isset($_SESSION['ID_Admin'])) {
     exit();
 }
 
-include "../../backend/database.php";
+include "database.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idBanding = $_POST['ID_Banding'];
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (sqlsrv_execute($stmt)) {
-        echo "<script>alert('Status berhasil diupdate!'); window.location.href = 'DataBanding.php';</script>";
+        echo "<script>alert('Status berhasil diupdate!');  history.back();</script>";
     } else {
         die("Query Execute Error: " . print_r(sqlsrv_errors(), true));
     }

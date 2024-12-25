@@ -18,7 +18,7 @@
         <?php
         include "../../backend/database.php";
 
-        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat 
+        $query = "SELECT l.ID_Laporan, l.ID_Dilapor, p.ID_Pelanggaran, d.NIP, d.Nama, p.Nama_Pelanggaran, p.Tingkat, l.TanggalDibuat
                     FROM Laporan l
                     JOIN Pelanggaran p ON l.ID_Pelanggaran = p.ID_Pelanggaran
                     JOIN Dosen d ON l.ID_Pelapor = d.NIP
@@ -43,6 +43,11 @@
                         <!-- <div class="w-8 h-8 rounded-full bg-slate-300"></div> -->
                         <p class="my-0"><b>Pelapor: </b><?= htmlspecialchars($laporan['Nama']) ?></p>
                     </span>
+                    <p class="text-black text-base">Tanggal Dilaporkan: <?= htmlspecialchars(
+                                                                            $laporan['TanggalDibuat'] instanceof DateTime
+                                                                                ? $laporan['TanggalDibuat']->format('d-m-Y')
+                                                                                : $laporan['TanggalDibuat']
+                                                                        ) ?></p>
                     <a href="../Mahasiswa/DetailPelanggaran.php?ID_Laporan=<?= $laporan['ID_Laporan'] ?>" class="btn btn-primary w-24 my-2" style="font-family: 'product Sans Bold';">Detail</a>
                 </div>
         <?php
